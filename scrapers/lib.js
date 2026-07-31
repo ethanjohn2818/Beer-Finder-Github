@@ -159,8 +159,11 @@ const BEER_STYLE_WORDS = [
 
 
 // Does this product actually look like a beer (and not a same-named
-// piece of furniture, dessert, etc.)? True if it names the brewery,
-// mentions a beer style, or is sold by liquid volume (ml/cl/litre/pint).
+// card, book, toy, sideboard, dessert...)?
+//   - If the brewery is named in the title, it's the beer.
+//   - Otherwise (supermarket dropped the brewery) require BOTH a beer
+//     style AND a liquid volume. A toy might list "50ml" of glitter but
+//     has no beer style; a book/card has neither.
 function looksLikeDrink(text, brewery) {
 
     const breweryWords = words(brewery);
@@ -168,15 +171,11 @@ function looksLikeDrink(text, brewery) {
         return true;
     }
 
-    if (BEER_STYLE_WORDS.some(style => text.includes(style))) {
-        return true;
-    }
+    // Whole-word match so "ale" doesn't match inside "kALEidoscope".
+    const hasStyle = BEER_STYLE_WORDS.some(style => hasWord(text, style));
+    const hasVolume = /\d\s?(ml|cl|litre|litres|pint|pints)\b/.test(text);
 
-    if (/\d\s?(ml|cl|litre|litres|pint|pints)\b/.test(text)) {
-        return true;
-    }
-
-    return false;
+    return hasStyle && hasVolume;
 }
 
 
