@@ -10,3 +10,6 @@ npm-debug.log*
 
 # Local backup made by `npm run prune`
 data/beers.full.json
+
+# Debug screenshot from `npm run debug`
+debug-page.png

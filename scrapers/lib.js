@@ -212,6 +212,33 @@ function packRank(label) {
 }
 
 
+// Click through a cookie-consent banner if one is shown. Best-effort:
+// tries a few common "accept" buttons and quietly gives up if none exist.
+async function dismissCookieBanner(page) {
+
+    const selectors = [
+        "#onetrust-accept-btn-handler",              // OneTrust (Tesco et al.)
+        "button#accept-all-cookies",
+        "button[aria-label*='accept' i]",
+        "button:has-text('Accept all cookies')",
+        "button:has-text('Accept all')",
+        "button:has-text('I accept')"
+    ];
+
+    for (const selector of selectors) {
+        try {
+            const button = page.locator(selector).first();
+            await button.click({ timeout: 2000 });
+            // Give the page a moment to re-render after accepting
+            await page.waitForTimeout(500);
+            return;
+        } catch {
+            // this selector wasn't present; try the next
+        }
+    }
+}
+
+
 // Make a link/image URL absolute against a base site.
 function absolute(baseUrl, url) {
     if (!url) return null;
@@ -272,6 +299,11 @@ function createScraper(config) {
                 timeout: 20000
             });
 
+            // Dismiss a cookie-consent banner if one appears, otherwise
+            // the product grid may never render. Covers Tesco's OneTrust
+            // banner and common "Accept all cookies" buttons. Best-effort.
+            await dismissCookieBanner(page);
+
             // Give products a chance to appear. If none show up, that
             // usually just means Tesco doesn't stock this beer (zero
             // results) - NOT an error - so we don't fail here; we let
@@ -279,7 +311,7 @@ function createScraper(config) {
             await page
                 .locator(config.productSelector)
                 .first()
-                .waitFor({ timeout: 7000 })
+                .waitFor({ timeout: 12000 })
                 .catch(() => {});
 
             // Grab several product tiles off the search page
@@ -332,7 +364,8 @@ function createScraper(config) {
                 matchesBeer(searchTerm, brewery, tile.text)
             );
 
-            // Debug: show every product on the page and whether it matched
+            // Debug: show every product on the page and whether it matched,
+            // and save a screenshot so you can SEE what the scraper sees.
             if (process.env.DEBUG) {
                 console.log(`\n[debug] ${config.name} "${searchTerm}" — ${tiles.length} products on page:`);
                 if (tiles.length === 0) {
@@ -343,7 +376,8 @@ function createScraper(config) {
                     const hit = matchesBeer(searchTerm, brewery, tile.text) ? "MATCH " : "  --  ";
                     console.log(`   ${hit}| ${firstLine}`);
                 });
-                console.log("");
+                await page.screenshot({ path: "debug-page.png", fullPage: true }).catch(() => {});
+                console.log("   (saved a screenshot of the page to debug-page.png)\n");
             }
 
             // One buy option per pack size
