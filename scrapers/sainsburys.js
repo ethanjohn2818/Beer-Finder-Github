@@ -11,6 +11,10 @@ module.exports = createScraper({
 
     name: "Sainsbury's",
 
+    // Set to false to switch this supermarket off (stops it being
+    // searched and silences its errors).
+    enabled: true,
+
     cacheFile: path.join(__dirname, "../cache/sainsburys.json"),
 
     baseUrl: "https://www.sainsburys.co.uk",

@@ -24,12 +24,14 @@ const scrapers = [
 ];
 
 
-// Search every supermarket for a beer, in parallel.
+// Search every ENABLED supermarket for a beer, in parallel.
 // Returns one result per store that actually has it.
 async function searchAll(term) {
 
+    const active = scrapers.filter(store => store.enabled);
+
     const results = await Promise.all(
-        scrapers.map(store =>
+        active.map(store =>
             store.search(term).catch(error => {
                 console.log(store.name, "error:", error.message);
                 return null;
