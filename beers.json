@@ -1,0 +1,481 @@
+[
+  {
+    "name": "Beavertown Gamma Ray",
+    "brewery": "Beavertown",
+    "style": "American Pale Ale",
+    "abv": 5.4,
+    "hops": [
+      "Columbus",
+      "Bravo",
+      "Amarillo",
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Vienna"
+    ],
+    "flavours": [
+      "Tropical",
+      "Mango",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Beavertown Lazer Crush",
+    "brewery": "Beavertown",
+    "style": "Hazy IPA",
+    "abv": 4.5,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "El Dorado"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Tropical",
+      "Juicy",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Beavertown Neck Oil",
+    "brewery": "Beavertown",
+    "style": "Session IPA",
+    "abv": 4.3,
+    "hops": [
+      "Mosaic",
+      "Columbus"
+    ],
+    "malts": [
+      "Pale",
+      "Caramalt"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Pine"
+    ]
+  },
+  {
+    "name": "BrewDog Elvis Juice",
+    "brewery": "BrewDog",
+    "style": "Grapefruit IPA",
+    "abv": 6.5,
+    "hops": [
+      "Amarillo",
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Caramalt"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Orange",
+      "Pine"
+    ]
+  },
+  {
+    "name": "BrewDog Hazy Jane",
+    "brewery": "BrewDog",
+    "style": "New England IPA",
+    "abv": 5,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Juicy",
+      "Tropical",
+      "Soft"
+    ]
+  },
+  {
+    "name": "BrewDog Punk IPA",
+    "brewery": "BrewDog",
+    "style": "IPA",
+    "abv": 5.4,
+    "hops": [
+      "Ahtanum",
+      "Chinook",
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Extra Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Pine",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Buxton Axe Edge",
+    "brewery": "Buxton",
+    "style": "IPA",
+    "abv": 6.8,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Juicy",
+      "Pine",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Cloudwater Pale Ale",
+    "brewery": "Cloudwater",
+    "style": "Pale Ale",
+    "abv": 4.5,
+    "hops": [
+      "Mosaic",
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Orange",
+      "Peach",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Five Points Pale",
+    "brewery": "Five Points",
+    "style": "Pale Ale",
+    "abv": 4.4,
+    "hops": [
+      "Cascade",
+      "Centennial"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral",
+      "Balanced"
+    ]
+  },
+  {
+    "name": "Magic Rock High Wire",
+    "brewery": "Magic Rock",
+    "style": "Pale Ale",
+    "abv": 5.5,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Centennial"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Pine",
+      "Citrus",
+      "Biscuit"
+    ]
+  },
+  {
+    "name": "Magic Rock Saucery",
+    "brewery": "Magic Rock",
+    "style": "Session IPA",
+    "abv": 3.9,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Lemon",
+      "Light",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Northern Monk Faith",
+    "brewery": "Northern Monk",
+    "style": "Hazy Pale Ale",
+    "abv": 5.4,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Juicy",
+      "Orange",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Northern Monk Heathen",
+    "brewery": "Northern Monk",
+    "style": "IPA",
+    "abv": 7.2,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Resin",
+      "Tropical",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Siren Lumina",
+    "brewery": "Siren",
+    "style": "Session IPA",
+    "abv": 4.2,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Azacca"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Lime",
+      "Mango",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Siren Soundwave",
+    "brewery": "Siren",
+    "style": "IPA",
+    "abv": 5.6,
+    "hops": [
+      "Citra",
+      "Simcoe",
+      "Columbus"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Pine",
+      "Resin"
+    ]
+  },
+  {
+    "name": "The Kernel Citra Pale Ale",
+    "brewery": "The Kernel",
+    "style": "Pale Ale",
+    "abv": 5.2,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Lime",
+      "Fresh"
+    ]
+  },
+  {
+    "name": "Thornbridge Green Mountain",
+    "brewery": "Thornbridge",
+    "style": "Session IPA",
+    "abv": 4.3,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Fresh"
+    ]
+  },
+  {
+    "name": "Thornbridge Jaipur",
+    "brewery": "Thornbridge",
+    "style": "IPA",
+    "abv": 5.9,
+    "hops": [
+      "Centennial",
+      "Chinook",
+      "Ahtanum",
+      "Simcoe",
+      "Columbus"
+    ],
+    "malts": [
+      "Maris Otter"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Pine",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Clwb Tropica",
+    "brewery": "Tiny Rebel",
+    "style": "Tropical IPA",
+    "abv": 5.5,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Pineapple",
+      "Mango",
+      "Passionfruit"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Easy Livin'",
+    "brewery": "Tiny Rebel",
+    "style": "Session IPA",
+    "abv": 4.3,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Light",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Track Sonoma",
+    "brewery": "Track",
+    "style": "Pale Ale",
+    "abv": 3.8,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Light",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Verdant Lightbulb",
+    "brewery": "Verdant",
+    "style": "Extra Pale Ale",
+    "abv": 4.5,
+    "hops": [
+      "Mosaic",
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Juicy",
+      "Soft",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Vocation Bread & Butter",
+    "brewery": "Vocation",
+    "style": "Amber Ale",
+    "abv": 3.9,
+    "hops": [
+      "Cascade",
+      "Centennial"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Caramel",
+      "Biscuit",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Vocation Heart & Soul",
+    "brewery": "Vocation",
+    "style": "Session IPA",
+    "abv": 4.4,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Light"
+    ]
+  },
+  {
+    "name": "Vocation Life & Death",
+    "brewery": "Vocation",
+    "style": "IPA",
+    "abv": 6.5,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Mango",
+      "Citrus",
+      "Pine"
+    ]
+  }
+]
