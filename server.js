@@ -88,6 +88,34 @@ function loadTescoCache() {
 
 
 
+app.get("/beers", (req,res)=>{
+
+    try {
+
+        const beers = JSON.parse(
+            fs.readFileSync(
+                "./data/beers.json",
+                "utf8"
+            )
+        );
+
+        res.json(beers);
+
+    } catch(error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error:"Could not load beers"
+        });
+
+    }
+
+});
+
+
+
+
 app.get("/recommend", async (req,res)=>{
 
 
