@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "warm": "node scripts/buildBeerDatabase.js",
+    "prune": "node scripts/pruneBeers.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
