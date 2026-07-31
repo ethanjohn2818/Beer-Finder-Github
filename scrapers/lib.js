@@ -131,14 +131,54 @@ function words(text) {
 }
 
 
+// Whole-word match, so "sonoma" doesn't hide inside another word and a
+// short beer word can't match part of an unrelated product.
+function hasWord(text, word) {
+    return new RegExp(`\\b${word}\\b`).test(text);
+}
+
+
+// Beer style words that mark a product as an actual beer.
+const BEER_STYLE_WORDS = [
+    "ale", "ipa", "lager", "stout", "porter", "bitter", "pilsner",
+    "pils", "sour", "cider", "saison", "gose", "weisse", "hefeweizen",
+    "witbier", "tripel", "dubbel", "helles", "kolsch", "bock", "dunkel",
+    "pale", "session", "wheat beer", "abv"
+];
+
+
+// Does this product actually look like a beer (and not a same-named
+// piece of furniture, dessert, etc.)? True if it names the brewery,
+// mentions a beer style, or is sold by liquid volume (ml/cl/litre/pint).
+function looksLikeDrink(text, brewery) {
+
+    const breweryWords = words(brewery);
+    if (breweryWords.length && breweryWords.every(word => hasWord(text, word))) {
+        return true;
+    }
+
+    if (BEER_STYLE_WORDS.some(style => text.includes(style))) {
+        return true;
+    }
+
+    if (/\d\s?(ml|cl|litre|litres|pint|pints)\b/.test(text)) {
+        return true;
+    }
+
+    return false;
+}
+
+
 // Does a product tile match the beer we're looking for?
 //
-// We match on the beer's DISTINCTIVE words (e.g. "Neck Oil", "Lost",
-// "Punk") — the name minus the brewery and minus generic style words —
-// because supermarkets often drop the brewery from the product title
-// ("Lost Lager", not "BrewDog Lost Lager"). Requiring those distinctive
-// words avoids both false negatives (brewery missing) and false
-// positives (matching a different beer from the same brewery).
+// Two checks must BOTH pass:
+//  1. The tile contains the beer's DISTINCTIVE words (name minus the
+//     brewery and generic style words) — e.g. "Neck Oil", "Lost",
+//     "Punk". Supermarkets often drop the brewery from the title, so we
+//     don't require it; but requiring the distinctive words avoids
+//     matching a different beer from the same brewery.
+//  2. The product actually looks like a beer (looksLikeDrink), so a
+//     "Sonoma" sideboard or a "Strawberry Sundae" dessert is rejected.
 function matchesBeer(name, brewery, productText) {
 
     if (!productText) return false;
@@ -153,17 +193,20 @@ function matchesBeer(name, brewery, productText) {
         word => !breweryWords.has(word) && !GENERIC_WORDS.has(word)
     );
 
+    let wordsMatch;
+
     if (productWords.length > 0) {
         // Every distinctive word must be present
-        return productWords.every(word => text.includes(word));
+        wordsMatch = productWords.every(word => hasWord(text, word));
+    } else {
+        // Name is only brewery + generic words (e.g. "Cloudwater Pale
+        // Ale"). Then we DO need the brewery, plus the style words.
+        const styleWords = nameWords.filter(word => !breweryWords.has(word));
+        const breweryPresent = [...breweryWords].every(word => hasWord(text, word));
+        wordsMatch = breweryPresent && styleWords.every(word => hasWord(text, word));
     }
 
-    // Name is only brewery + generic words (e.g. "Cloudwater Pale Ale").
-    // Then we DO need the brewery, plus the style words, to be sure.
-    const styleWords = nameWords.filter(word => !breweryWords.has(word));
-    const breweryPresent = [...breweryWords].every(word => text.includes(word));
-
-    return breweryPresent && styleWords.every(word => text.includes(word));
+    return wordsMatch && looksLikeDrink(text, brewery);
 }
 
 
