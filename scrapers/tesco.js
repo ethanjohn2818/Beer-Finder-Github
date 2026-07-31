@@ -170,7 +170,12 @@ async function getBrowser() {
 
     browser = await chromium.launch({
 
-        headless:false,
+        // Headless is faster and won't pop a window open.
+        // Set HEADED=true if you want to watch the browser work.
+        headless: process.env.HEADED !== "true",
+
+        // Let the environment point at a specific Chromium if needed.
+        executablePath: process.env.CHROMIUM_PATH || undefined,
 
         args:[
             "--disable-blink-features=AutomationControlled"
@@ -203,13 +208,18 @@ async function getBrowser() {
 
 
 
+            // Block heavy resources we don't need. We still read the
+            // product image URL from the page's HTML, so we never need
+            // the image bytes to actually download.
             if(
 
                 type === "font" ||
 
                 type === "media" ||
 
-                type === "stylesheet"
+                type === "stylesheet" ||
+
+                type === "image"
 
             ) {
 
@@ -527,8 +537,20 @@ async function searchTesco(searchTerm) {
 
 
 
+// Launch the browser ahead of time so the first search is fast.
+async function warmUp() {
+    try {
+        await getBrowser();
+    } catch (error) {
+        console.log("Browser warm-up skipped:", error.message);
+    }
+}
+
+
 module.exports = {
 
-    searchTesco
+    searchTesco,
+
+    warmUp
 
 };

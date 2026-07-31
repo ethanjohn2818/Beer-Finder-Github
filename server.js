@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 
-const { searchTesco } = require("./scrapers/tesco");
+const { searchTesco, warmUp } = require("./scrapers/tesco");
 
 const app = express();
 
@@ -201,7 +201,7 @@ app.get("/recommend", async (req,res)=>{
 
             matches,
 
-            3,
+            5,
 
             async (beer)=>{
 
@@ -353,6 +353,10 @@ app.listen(PORT,()=>{
         `Beer Finder running at http://localhost:${PORT}`
 
     );
+
+
+    // Pre-launch the browser so the first search isn't slow.
+    warmUp();
 
 
 });
