@@ -146,6 +146,84 @@ function matchesSearch(searchTerm,name) {
 
 
 
+// Pull just the money value out of a messy price string.
+// "£5.50 Clubcard Price" -> "£5.50", "Now £3 was £4" -> "£3"
+function extractPrice(text) {
+
+    if (!text) return null;
+
+    const match = text.match(/£\s?\d+(?:\.\d{1,2})?/);
+
+    return match
+        ? match[0].replace(/\s/g, "")
+        : null;
+
+}
+
+
+
+
+// Work out the pack size from a product name.
+// "Beavertown Neck Oil 4 x 330ml" -> "4 × 330ml"
+function detectPackLabel(text) {
+
+    if (!text) return "Pack";
+
+    const t = text.toLowerCase();
+
+    // e.g. "4 x 330ml", "10x440ml", "12 × 330 ml"
+    const multi = t.match(/(\d+)\s*[x×]\s*(\d+)\s*ml/);
+    if (multi) {
+        const count = Number(multi[1]);
+        const vol = multi[2];
+        if (count === 1) return `Single (${vol}ml)`;
+        return `${count} × ${vol}ml`;
+    }
+
+    // "case" / "crate" wording
+    if (/\b(case|crate)\b/.test(t)) return "Case";
+
+    // "4 pack" / "4-pack"
+    const pack = t.match(/(\d+)\s*-?\s*pack/);
+    if (pack) return `${pack[1]} pack`;
+
+    // A single volume, e.g. "440ml" or "568ml"
+    const single = t.match(/(\d+)\s*ml/);
+    if (single) return `Single (${single[1]}ml)`;
+
+    return "Pack";
+
+}
+
+
+
+
+// Order options: singles first, then packs, then cases.
+function packRank(label) {
+
+    if (/single/i.test(label)) return 0;
+    if (/case/i.test(label)) return 2;
+    return 1;
+
+}
+
+
+
+
+// Make a Tesco link/image URL absolute.
+function absoluteTescoUrl(url) {
+
+    if (!url) return null;
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("//")) return "https:" + url;
+    if (url.startsWith("/")) return "https://www.tesco.com" + url;
+    return url;
+
+}
+
+
+
+
 
 async function getBrowser() {
 
@@ -311,7 +389,10 @@ async function searchTesco(searchTerm) {
 
         link:null,
 
-        available:false
+        available:false,
+
+        // Different buy options (single / 4-pack / case) for this beer
+        options:[]
 
 
     };
@@ -349,128 +430,111 @@ async function searchTesco(searchTerm) {
 
 
 
-        const product =
-            page.locator(
-
-                [
-
-                ".O4snBtRqGukX0i4 > .online-components-product-tile-product-link__link",
-
-                "a[href*='/products/']"
-
-                ].join(",")
-
-            )
-            .first();
+        // Wait for at least one product link to show up
+        await page
+            .locator("a[href*='/products/']")
+            .first()
+            .waitFor({ timeout:7000 });
 
 
 
 
+        // Pull several product tiles off the search page so we can
+        // offer the different pack sizes (single, 4-pack, case...).
+        const tiles = await page.evaluate(() => {
 
-        await product.waitFor({
+            const anchors = Array.from(
+                document.querySelectorAll("a[href*='/products/']")
+            );
 
-            timeout:7000
+            const seen = new Set();
+            const out = [];
 
+            for (const a of anchors) {
+
+                const href = a.getAttribute("href");
+                if (!href || seen.has(href)) continue;
+                seen.add(href);
+
+                const tile =
+                    a.closest("li, article, [class*='tile'], [class*='product']")
+                    || a.parentElement;
+
+                const text = (tile.innerText || "").trim();
+
+                let image = null;
+                const img = tile.querySelector("img");
+                if (img) {
+                    const candidates = [
+                        img.getAttribute("src"),
+                        img.src,
+                        img.currentSrc,
+                        img.getAttribute("data-src")
+                    ].filter(Boolean);
+
+                    image =
+                        candidates.find(s => s.includes("digitalcontent"))
+                        || candidates[0]
+                        || null;
+                }
+
+                out.push({ text, href, image });
+
+                if (out.length >= 8) break;
+            }
+
+            return out;
         });
 
 
 
 
-
-
-        const name =
-            await product
-            .locator("xpath=../..")
-            .innerText()
-            .catch(()=>null);
-
-
-
-
-
-        console.log(
-            "PRODUCT:",
-            name
+        // Keep only the tiles that actually match the beer we searched
+        const matching = tiles.filter(tile =>
+            matchesSearch(searchTerm, tile.text)
         );
 
 
 
 
+        // Turn each matching tile into a buy option (one per pack size)
+        const options = [];
+        const usedLabels = new Set();
 
-        if(
-            matchesSearch(
-                searchTerm,
-                name
-            )
-        ) {
+        for (const tile of matching) {
+
+            const label = detectPackLabel(tile.text);
+
+            if (usedLabels.has(label)) continue;
+            usedLabels.add(label);
+
+            options.push({
+                label,
+                price: extractPrice(tile.text),
+                image: absoluteTescoUrl(tile.image),
+                link: absoluteTescoUrl(tile.href),
+                name: tile.text.split("\n")[0] || tile.text
+            });
+        }
 
 
 
-            result.name = name;
 
+        if (options.length > 0) {
+
+            options.sort((a, b) =>
+                packRank(a.label) - packRank(b.label)
+            );
+
+            result.options = options;
             result.available = true;
 
-
-
-
-            result.link =
-                await product
-                .getAttribute("href");
-
-
-
-
-
-            const images =
-                await page
-                .locator("img")
-                .evaluateAll(imgs =>
-
-                    imgs
-                    .map(img=>img.src)
-                    .filter(src =>
-                        src &&
-                        src.includes(
-                            "digitalcontent.api.tesco.com"
-                        )
-                    )
-
-                )
-                .catch(()=>[]);
-
-
-
-
-
-            result.image =
-                images[0] || null;
-
-
-
-
-
-
-            const prices =
-                await page
-                .locator("text=/£/")
-                .evaluateAll(nodes =>
-
-                    nodes.map(n =>
-                        n.textContent.trim()
-                    )
-
-                )
-                .catch(()=>[]);
-
-
-
-
-
-            result.price =
-                prices[0] || null;
-
-
-
+            // The first option fills the top-level fields (default view)
+            const first = options[0];
+            result.name = first.name;
+            result.price = first.price;
+            result.image = first.image;
+            result.link = first.link;
         }
 
 

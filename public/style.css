@@ -226,6 +226,42 @@ main {
     margin: 6px 0 14px;
 }
 
+
+/* Pack-size toggle (single / 4-pack / case) */
+.opt-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+.opt-btn {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: #f9fafb;
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+}
+
+.opt-btn:hover {
+    border-color: var(--amber);
+    transform: translateY(-1px);
+}
+
+.opt-btn.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: #fff;
+}
+
+.beer-card img {
+    transition: opacity 0.15s ease;
+}
+
 .buy-btn {
     margin-top: auto;
     display: inline-block;

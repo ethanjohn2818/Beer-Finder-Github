@@ -150,39 +150,14 @@ async function searchBeers() {
             return;
         }
 
-        beers.forEach(result => {
+        // Remember each card's buy options so the toggle can look them up
+        cardOptions = [];
 
-            const beer = result.beer;
-            const tesco = result.tesco;
+        const html = beers
+            .map((result, index) => renderCard(result, index))
+            .join("");
 
-            resultsDiv.innerHTML += `
-
-                <div class="beer-card">
-
-                    <img src="${tesco.image || ''}" alt="${beer.name}">
-
-                    <h2>${beer.name}</h2>
-
-                    <p class="beer-style">
-                        ${beer.style || "Beer"}
-                        ${beer.abv ? beer.abv + "%" : ""}
-                    </p>
-
-                    <p class="beer-hops">
-                        🌿 ${beer.hops.join(", ")}
-                    </p>
-
-                    <p class="beer-price">
-                        💷 Tesco: ${tesco.price}
-                    </p>
-
-                    <a class="buy-btn" href="${tesco.link}" target="_blank">
-                        Buy at Tesco
-                    </a>
-
-                </div>
-            `;
-        });
+        resultsDiv.innerHTML = html;
 
     } catch (error) {
         console.error(error);
@@ -190,6 +165,120 @@ async function searchBeers() {
             "<p class='searching'>Something went wrong. Please try again.</p>";
     }
 }
+
+
+// Holds the buy options for each card currently on screen
+let cardOptions = [];
+
+
+// Show just the money value, whatever mess the price string is in
+function cleanPrice(text) {
+    const match = String(text || "").match(/£\s?\d+(?:\.\d{1,2})?/);
+    return match ? match[0].replace(/\s/g, "") : "—";
+}
+
+
+// Build one beer card, with a pack-size toggle if there are options
+function renderCard(result, index) {
+
+    const beer = result.beer;
+    const tesco = result.tesco;
+
+    // Old cached results have no options array, so make a single one
+    const options = (tesco.options && tesco.options.length)
+        ? tesco.options
+        : [{
+            label: "Buy",
+            price: tesco.price,
+            image: tesco.image,
+            link: tesco.link
+        }];
+
+    cardOptions[index] = options;
+
+    const first = options[0];
+
+    // Toggle buttons (only shown when there's more than one option)
+    const toggle = options.length > 1
+        ? `<div class="opt-row">
+                ${options.map((opt, i) => `
+                    <button
+                        class="opt-btn ${i === 0 ? "active" : ""}"
+                        data-card="${index}"
+                        data-opt="${i}">
+                        ${opt.label}
+                    </button>
+                `).join("")}
+           </div>`
+        : "";
+
+    return `
+        <div class="beer-card">
+
+            <img id="img-${index}" src="${first.image || ""}" alt="${beer.name}">
+
+            <h2>${beer.name}</h2>
+
+            <p class="beer-style">
+                ${beer.style || "Beer"}
+                ${beer.abv ? beer.abv + "%" : ""}
+            </p>
+
+            <p class="beer-hops">
+                🌿 ${beer.hops.join(", ")}
+            </p>
+
+            ${toggle}
+
+            <p class="beer-price">
+                💷 Tesco: <span id="price-${index}">${cleanPrice(first.price)}</span>
+            </p>
+
+            <a id="buy-${index}" class="buy-btn" href="${first.link || "#"}" target="_blank">
+                Buy at Tesco
+            </a>
+
+        </div>
+    `;
+}
+
+
+// When a pack-size button is clicked, swap the price / image / link
+function selectOption(cardIndex, optIndex) {
+
+    const options = cardOptions[cardIndex];
+    if (!options) return;
+
+    const opt = options[optIndex];
+    if (!opt) return;
+
+    const img = document.getElementById("img-" + cardIndex);
+    const price = document.getElementById("price-" + cardIndex);
+    const buy = document.getElementById("buy-" + cardIndex);
+
+    if (img) img.src = opt.image || "";
+    if (price) price.textContent = cleanPrice(opt.price);
+    if (buy) buy.href = opt.link || "#";
+
+    // Highlight the chosen button
+    document
+        .querySelectorAll(`.opt-btn[data-card="${cardIndex}"]`)
+        .forEach((btn, i) => {
+            btn.classList.toggle("active", i === optIndex);
+        });
+}
+
+
+// One listener handles clicks for every pack-size button
+document.getElementById("results")
+    .addEventListener("click", event => {
+        const btn = event.target.closest(".opt-btn");
+        if (!btn) return;
+        selectOption(
+            Number(btn.dataset.card),
+            Number(btn.dataset.opt)
+        );
+    });
 
 
 // Let people press Enter in the search box
