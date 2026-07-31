@@ -29,23 +29,10 @@ async function getContext() {
         // Set HEADED=true to watch the browser work.
         headless: process.env.HEADED !== "true",
         executablePath: process.env.CHROMIUM_PATH || undefined,
-        args: [
-            "--disable-blink-features=AutomationControlled",
-            // Some sites (e.g. Waitrose) reject automated HTTP/2
-            // connections with ERR_HTTP2_PROTOCOL_ERROR. Forcing the
-            // older HTTP/1.1 protocol avoids that.
-            "--disable-http2"
-        ]
+        args: ["--disable-blink-features=AutomationControlled"]
     });
 
-    context = await browser.newContext({
-        locale: "en-GB",
-        // Identify as a normal desktop Chrome so sites are less likely
-        // to block us as an obvious bot.
-        userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-            "AppleWebKit/537.36 (KHTML, like Gecko) " +
-            "Chrome/122.0.0.0 Safari/537.36"
-    });
+    context = await browser.newContext({ locale: "en-GB" });
 
     // Skip heavy resources we don't need. We still read image URLs
     // from the HTML, so we never need the image bytes to download.
