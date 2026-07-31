@@ -373,7 +373,10 @@ function createScraper(config) {
                     }
 
                     out.push({ text, href, image });
-                    if (out.length >= 8) break;
+                    // Scan a good chunk of the results so every pack size
+                    // (single / 4-pack / case) is captured even when
+                    // unrelated products are mixed in.
+                    if (out.length >= 24) break;
                 }
 
                 return out;
