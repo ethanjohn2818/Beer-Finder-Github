@@ -25,14 +25,21 @@ async function getContext() {
     console.log("Starting scraper browser...");
 
     browser = await chromium.launch({
-        // Headless is faster and won't pop a window open.
-        // Set HEADED=true to watch the browser work.
-        headless: process.env.HEADED !== "true",
+        // Tesco blocks headless browsers with an "Access Denied" page,
+        // so run a VISIBLE browser by default (a window will open while
+        // it works). Set HEADLESS=true to hide it - e.g. on a server -
+        // but expect Tesco to block that.
+        headless: process.env.HEADLESS === "true",
         executablePath: process.env.CHROMIUM_PATH || undefined,
         args: ["--disable-blink-features=AutomationControlled"]
     });
 
     context = await browser.newContext({ locale: "en-GB" });
+
+    // Hide the main "I'm automated" signal that bot-blockers check.
+    await context.addInitScript(() => {
+        Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+    });
 
     // Skip heavy resources we don't need. We still read image URLs
     // from the HTML, so we never need the image bytes to download.

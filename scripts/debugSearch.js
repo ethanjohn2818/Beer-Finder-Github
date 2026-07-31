@@ -7,7 +7,7 @@
 // comes back "not found".
 //
 // Run it with:   npm run debug "BrewDog Lost Lager"
-// (Tip: set HEADED=true to also watch the browser: HEADED=true npm run debug "...")
+// A browser window will open while it works (Tesco blocks hidden ones).
 // ---------------------------------------------------------------
 
 process.env.DEBUG = "1";
