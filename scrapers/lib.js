@@ -272,12 +272,13 @@ function absolute(baseUrl, url) {
 
 function createScraper(config) {
 
-    async function search(searchTerm, brewery = "") {
+    async function search(searchTerm, brewery = "", force = false) {
 
         const cache = loadCache(config.cacheFile);
 
-        // In debug mode, always re-scrape so we can see what's on the page.
-        if (!process.env.DEBUG && cacheValid(cache[searchTerm])) {
+        // Use the cache unless we're forcing a fresh scrape (warm run)
+        // or in debug mode.
+        if (!force && !process.env.DEBUG && cacheValid(cache[searchTerm])) {
             return cache[searchTerm].result;
         }
 

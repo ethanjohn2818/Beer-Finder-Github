@@ -33,7 +33,9 @@ const beersPath = path.join(__dirname, "../data/beers.json");
     // two searches at once (the stores are still searched in parallel).
     for (const beer of beers) {
 
-        const offers = await searchAll(beer.name, beer.brewery);
+        // force = true: always re-scrape, ignoring any cached result,
+        // so warming genuinely refreshes every beer.
+        const offers = await searchAll(beer.name, beer.brewery, true);
 
         done++;
 
