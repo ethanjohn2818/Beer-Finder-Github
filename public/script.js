@@ -132,7 +132,7 @@ async function searchBeers() {
 
     const resultsDiv = document.getElementById("results");
 
-    resultsDiv.innerHTML = "<p class='searching'>Searching Tesco... 🍺</p>";
+    resultsDiv.innerHTML = "<p class='searching'>Searching supermarkets... 🍺</p>";
 
     try {
 
@@ -150,8 +150,9 @@ async function searchBeers() {
             return;
         }
 
-        // Remember each card's buy options so the toggle can look them up
-        cardOptions = [];
+        // Reset the per-card state, then render every beer
+        cardData = [];
+        cardState = [];
 
         const html = beers
             .map((result, index) => renderCard(result, index))
@@ -167,8 +168,11 @@ async function searchBeers() {
 }
 
 
-// Holds the buy options for each card currently on screen
-let cardOptions = [];
+// Per-card data and current selection.
+//   cardData[i]  = [ { supermarket, options:[...] }, ... ]   (one per store)
+//   cardState[i] = { storeIndex, optIndex }
+let cardData = [];
+let cardState = [];
 
 
 // Show just the money value, whatever mess the price string is in
@@ -178,44 +182,82 @@ function cleanPrice(text) {
 }
 
 
-// Build one beer card, with a pack-size toggle if there are options
+// Normalise a store's offer into { supermarket, options[] }.
+// Older cached results have no options array, so make a single one.
+function normalizeOffer(offer) {
+
+    const options = (offer.options && offer.options.length)
+        ? offer.options
+        : [{
+            label: "Buy",
+            price: offer.price,
+            image: offer.image,
+            link: offer.link
+        }];
+
+    return { supermarket: offer.supermarket, options };
+}
+
+
+// Supermarket selector buttons (only when more than one store has it)
+function renderStoreButtons(index) {
+
+    const offers = cardData[index];
+    const state = cardState[index];
+
+    if (offers.length <= 1) return "";
+
+    return `<div class="store-row">
+        ${offers.map((offer, i) => `
+            <button
+                class="store-btn ${i === state.storeIndex ? "active" : ""}"
+                data-card="${index}"
+                data-store="${i}">
+                ${offer.supermarket}
+            </button>
+        `).join("")}
+    </div>`;
+}
+
+
+// Pack-size buttons for the currently selected store
+function renderOptButtons(index) {
+
+    const offers = cardData[index];
+    const state = cardState[index];
+    const options = offers[state.storeIndex].options;
+
+    if (options.length <= 1) return "";
+
+    return options.map((opt, i) => `
+        <button
+            class="opt-btn ${i === state.optIndex ? "active" : ""}"
+            data-card="${index}"
+            data-opt="${i}">
+            ${opt.label}
+        </button>
+    `).join("");
+}
+
+
+// Build one beer card: supermarket selector + pack-size toggle
 function renderCard(result, index) {
 
     const beer = result.beer;
-    const tesco = result.tesco;
+    const offers = (result.offers || []).map(normalizeOffer);
 
-    // Old cached results have no options array, so make a single one
-    const options = (tesco.options && tesco.options.length)
-        ? tesco.options
-        : [{
-            label: "Buy",
-            price: tesco.price,
-            image: tesco.image,
-            link: tesco.link
-        }];
+    cardData[index] = offers;
+    cardState[index] = { storeIndex: 0, optIndex: 0 };
 
-    cardOptions[index] = options;
+    if (!offers.length) return "";
 
-    const first = options[0];
-
-    // Toggle buttons (only shown when there's more than one option)
-    const toggle = options.length > 1
-        ? `<div class="opt-row">
-                ${options.map((opt, i) => `
-                    <button
-                        class="opt-btn ${i === 0 ? "active" : ""}"
-                        data-card="${index}"
-                        data-opt="${i}">
-                        ${opt.label}
-                    </button>
-                `).join("")}
-           </div>`
-        : "";
+    const store = offers[0];
+    const opt = store.options[0];
 
     return `
         <div class="beer-card">
 
-            <img id="img-${index}" src="${first.image || ""}" alt="${beer.name}">
+            <img id="img-${index}" src="${opt.image || ""}" alt="${beer.name}">
 
             <h2>${beer.name}</h2>
 
@@ -228,14 +270,17 @@ function renderCard(result, index) {
                 🌿 ${beer.hops.join(", ")}
             </p>
 
-            ${toggle}
+            ${renderStoreButtons(index)}
+
+            <div class="opt-row" id="opts-${index}">${renderOptButtons(index)}</div>
 
             <p class="beer-price">
-                💷 Tesco: <span id="price-${index}">${cleanPrice(first.price)}</span>
+                💷 <span id="store-${index}">${store.supermarket}</span>:
+                <span id="price-${index}">${cleanPrice(opt.price)}</span>
             </p>
 
-            <a id="buy-${index}" class="buy-btn" href="${first.link || "#"}" target="_blank">
-                Buy at Tesco
+            <a id="buy-${index}" class="buy-btn" href="${opt.link || "#"}" target="_blank">
+                Buy at <span id="buylabel-${index}">${store.supermarket}</span>
             </a>
 
         </div>
@@ -243,41 +288,82 @@ function renderCard(result, index) {
 }
 
 
-// When a pack-size button is clicked, swap the price / image / link
-function selectOption(cardIndex, optIndex) {
+// Update a card's image / price / store label / buy link to the
+// currently selected store + pack size.
+function refreshCard(index) {
 
-    const options = cardOptions[cardIndex];
-    if (!options) return;
+    const offers = cardData[index];
+    const state = cardState[index];
+    const store = offers[state.storeIndex];
+    const opt = store.options[state.optIndex] || store.options[0];
 
-    const opt = options[optIndex];
-    if (!opt) return;
-
-    const img = document.getElementById("img-" + cardIndex);
-    const price = document.getElementById("price-" + cardIndex);
-    const buy = document.getElementById("buy-" + cardIndex);
-
+    const img = document.getElementById("img-" + index);
     if (img) img.src = opt.image || "";
+
+    const price = document.getElementById("price-" + index);
     if (price) price.textContent = cleanPrice(opt.price);
+
+    const storeLabel = document.getElementById("store-" + index);
+    if (storeLabel) storeLabel.textContent = store.supermarket;
+
+    const buy = document.getElementById("buy-" + index);
     if (buy) buy.href = opt.link || "#";
 
-    // Highlight the chosen button
-    document
-        .querySelectorAll(`.opt-btn[data-card="${cardIndex}"]`)
-        .forEach((btn, i) => {
-            btn.classList.toggle("active", i === optIndex);
-        });
+    const buyLabel = document.getElementById("buylabel-" + index);
+    if (buyLabel) buyLabel.textContent = store.supermarket;
 }
 
 
-// One listener handles clicks for every pack-size button
+// Switch supermarket: reset to its first pack size and rebuild toggle
+function setStore(index, storeIndex) {
+
+    cardState[index].storeIndex = storeIndex;
+    cardState[index].optIndex = 0;
+
+    const optsEl = document.getElementById("opts-" + index);
+    if (optsEl) optsEl.innerHTML = renderOptButtons(index);
+
+    document
+        .querySelectorAll(`.store-btn[data-card="${index}"]`)
+        .forEach((btn, i) => btn.classList.toggle("active", i === storeIndex));
+
+    refreshCard(index);
+}
+
+
+// Switch pack size within the current supermarket
+function setOption(index, optIndex) {
+
+    cardState[index].optIndex = optIndex;
+
+    document
+        .querySelectorAll(`.opt-btn[data-card="${index}"]`)
+        .forEach((btn, i) => btn.classList.toggle("active", i === optIndex));
+
+    refreshCard(index);
+}
+
+
+// One listener handles clicks for store buttons and pack-size buttons
 document.getElementById("results")
     .addEventListener("click", event => {
-        const btn = event.target.closest(".opt-btn");
-        if (!btn) return;
-        selectOption(
-            Number(btn.dataset.card),
-            Number(btn.dataset.opt)
-        );
+
+        const storeBtn = event.target.closest(".store-btn");
+        if (storeBtn) {
+            setStore(
+                Number(storeBtn.dataset.card),
+                Number(storeBtn.dataset.store)
+            );
+            return;
+        }
+
+        const optBtn = event.target.closest(".opt-btn");
+        if (optBtn) {
+            setOption(
+                Number(optBtn.dataset.card),
+                Number(optBtn.dataset.opt)
+            );
+        }
     });
 
 

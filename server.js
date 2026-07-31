@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 
-const { searchTesco, warmUp } = require("./scrapers/tesco");
+const { searchAll, warmUp } = require("./scrapers");
 
 const app = express();
 
@@ -56,33 +56,6 @@ async function runWithLimit(items, limit, task) {
 
 }
 
-
-
-
-
-function loadTescoCache() {
-
-    try {
-
-        return JSON.parse(
-
-            fs.readFileSync(
-
-                "./cache/tesco.json",
-
-                "utf8"
-
-            )
-
-        );
-
-    } catch {
-
-        return {};
-
-    }
-
-}
 
 
 
@@ -191,89 +164,18 @@ app.get("/recommend", async (req,res)=>{
 
 
 
-        const cache = loadTescoCache();
-
-
-
-
-
+        // For each matching beer, search every supermarket at once.
         const results = await runWithLimit(
 
             matches,
 
-            5,
+            3,
 
             async (beer)=>{
 
+                const offers = await searchAll(beer.name);
 
-                const cached =
-                    cache[beer.name];
-
-
-
-                if(
-
-                    cached &&
-
-                    cached.result &&
-
-                    cached.result.available
-
-                ) {
-
-
-                    console.log(
-
-                        "USING CACHE:",
-                        beer.name
-
-                    );
-
-
-                    return {
-
-                        beer,
-
-                        tesco:
-                        cached.result
-
-                    };
-
-                }
-
-
-
-
-
-                console.log(
-
-                    "SEARCHING:",
-                    beer.name
-
-                );
-
-
-
-
-
-                const tesco =
-                    await searchTesco(
-                        beer.name
-                    );
-
-
-
-
-
-                return {
-
-                    beer,
-
-                    tesco
-
-                };
-
-
+                return { beer, offers };
 
             }
 
@@ -282,34 +184,18 @@ app.get("/recommend", async (req,res)=>{
 
 
 
-
-
-
+        // Keep beers that at least one supermarket actually stocks
         const validResults =
             results.filter(result =>
-
-                result.tesco &&
-                result.tesco.available
-
+                result.offers.length > 0
             );
 
 
 
 
-
-
         console.log(
-            "SENDING:"
-        );
-
-
-
-        console.log(
-
-            validResults.map(
-                r=>r.beer.name
-            )
-
+            "SENDING:",
+            validResults.map(r => r.beer.name)
         );
 
 

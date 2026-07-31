@@ -1,101 +1,60 @@
 // ---------------------------------------------------------------
 // Warm the cache.
 //
-// This scrapes every beer in data/beers.json once and saves the
-// results to cache/tesco.json. After running it, searches on the
-// website read straight from the cache and appear almost instantly,
-// instead of scraping live while the user waits.
+// Scrapes every beer in data/beers.json across every supermarket and
+// saves the results to each store's cache file (cache/<store>.json).
+// After running it, searches on the website read straight from the
+// cache and appear almost instantly instead of scraping live.
 //
-// Run it with:   node scripts/buildBeerDatabase.js
-// (Or occasionally / on a schedule to refresh prices.)
+// Run it with:   npm run warm    (or: node scripts/buildBeerDatabase.js)
 // ---------------------------------------------------------------
 
 const fs = require("fs");
 const path = require("path");
 
-const { searchTesco } = require("../scrapers/tesco");
+const { scrapers, searchAll } = require("../scrapers");
 
 
 const beersPath = path.join(__dirname, "../data/beers.json");
-const cachePath = path.join(__dirname, "../cache/tesco.json");
-
-
-// Scrape a few beers at a time (gentle on Tesco, still much faster
-// than one-at-a-time).
-const CONCURRENCY = 3;
-
-
-// Run `task` over `items`, at most `limit` at once.
-async function runWithLimit(items, limit, task) {
-
-    let index = 0;
-
-    async function worker() {
-        while (index < items.length) {
-            const current = index++;
-            await task(items[current], current);
-        }
-    }
-
-    const workers = [];
-    for (let i = 0; i < limit; i++) {
-        workers.push(worker());
-    }
-
-    await Promise.all(workers);
-}
-
-
-function loadExistingCache() {
-    try {
-        return JSON.parse(fs.readFileSync(cachePath, "utf8"));
-    } catch {
-        return {};
-    }
-}
 
 
 (async () => {
 
     const beers = JSON.parse(fs.readFileSync(beersPath, "utf8"));
 
-    console.log(`Warming cache for ${beers.length} beers...\n`);
-
-    // Start from the existing cache so we keep anything already there,
-    // then update each beer as we scrape it.
-    const cache = loadExistingCache();
+    console.log(
+        `Warming cache for ${beers.length} beers ` +
+        `across ${scrapers.length} supermarkets...\n`
+    );
 
     let done = 0;
-    let found = 0;
 
-    await runWithLimit(beers, CONCURRENCY, async (beer) => {
+    // One beer at a time so each store's cache file isn't written by
+    // two searches at once (the stores are still searched in parallel).
+    for (const beer of beers) {
 
-        const result = await searchTesco(beer.name);
-
-        cache[beer.name] = {
-            time: Date.now(),
-            result
-        };
+        const offers = await searchAll(beer.name);
 
         done++;
-        if (result.available) found++;
 
-        const status = result.available
-            ? result.price
-            : "not found";
+        const found = offers.length
+            ? offers.map(o => `${o.supermarket} ${o.price || ""}`.trim()).join(", ")
+            : "not found anywhere";
 
-        console.log(`[${done}/${beers.length}] ${beer.name} -> ${status}`);
-    });
+        console.log(`[${done}/${beers.length}] ${beer.name} -> ${found}`);
+    }
 
-    // Write the whole cache once, at the end.
-    fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2));
+    // Report the total cache size on disk (sum of every cache file)
+    const cacheDir = path.join(__dirname, "../cache");
+    let bytes = 0;
+    try {
+        for (const file of fs.readdirSync(cacheDir)) {
+            bytes += fs.statSync(path.join(cacheDir, file)).size;
+        }
+    } catch {}
 
-    const bytes = fs.statSync(cachePath).size;
+    console.log(`\nDone. Total cache size: ${(bytes / 1024).toFixed(1)} KB.`);
 
-    console.log(`\nDone. ${found}/${beers.length} beers found at Tesco.`);
-    console.log(`Cache saved to cache/tesco.json (${(bytes / 1024).toFixed(1)} KB).`);
-
-    // The browser stays open to keep things fast during a run, so
-    // exit explicitly when the script has finished.
+    // The browser stays open to keep runs fast, so exit explicitly.
     process.exit(0);
 })();
