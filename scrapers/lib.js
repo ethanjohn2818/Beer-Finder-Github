@@ -337,9 +337,22 @@ function createScraper(config) {
                     if (!href || seen.has(href)) continue;
                     seen.add(href);
 
-                    const tile =
+                    // Start from a sensible tile container...
+                    let tile =
                         a.closest("li, article, [class*='tile'], [class*='product']")
                         || a.parentElement;
+
+                    // ...but climb up to the smallest ancestor that actually
+                    // shows a price, so we capture the name AND the £ price
+                    // together (Tesco keeps them in separate sub-elements).
+                    let node = a.parentElement;
+                    for (let i = 0; i < 8 && node; i++) {
+                        if ((node.innerText || "").includes("£")) {
+                            tile = node;
+                            break;
+                        }
+                        node = node.parentElement;
+                    }
 
                     const text = (tile.innerText || "").trim();
 
@@ -379,9 +392,14 @@ function createScraper(config) {
                     console.log("   (none — page had no product links: not stocked, blocked, or slow to load)");
                 }
                 tiles.forEach(tile => {
-                    const firstLine = (tile.text || "").split("\n")[0].slice(0, 70);
-                    const hit = matchesBeer(searchTerm, brewery, tile.text) ? "MATCH " : "  --  ";
-                    console.log(`   ${hit}| ${firstLine}`);
+                    const firstLine = (tile.text || "").split("\n")[0].slice(0, 55);
+                    if (matchesBeer(searchTerm, brewery, tile.text)) {
+                        const label = detectPackLabel(tile.text);
+                        const price = extractPrice(tile.text) || "NO PRICE FOUND";
+                        console.log(`   MATCH | ${label} @ ${price} | ${firstLine}`);
+                    } else {
+                        console.log(`     --  | ${firstLine}`);
+                    }
                 });
                 await page.screenshot({ path: "debug-page.png", fullPage: true }).catch(() => {});
                 console.log("   (saved a screenshot of the page to debug-page.png)\n");
