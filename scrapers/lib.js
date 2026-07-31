@@ -196,7 +196,8 @@ function createScraper(config) {
 
         const cache = loadCache(config.cacheFile);
 
-        if (cacheValid(cache[searchTerm])) {
+        // In debug mode, always re-scrape so we can see what's on the page.
+        if (!process.env.DEBUG && cacheValid(cache[searchTerm])) {
             return cache[searchTerm].result;
         }
 
@@ -284,6 +285,20 @@ function createScraper(config) {
             const matching = tiles.filter(tile =>
                 matchesSearch(searchTerm, tile.text)
             );
+
+            // Debug: show every product on the page and whether it matched
+            if (process.env.DEBUG) {
+                console.log(`\n[debug] ${config.name} "${searchTerm}" — ${tiles.length} products on page:`);
+                if (tiles.length === 0) {
+                    console.log("   (none — page had no product links: not stocked, blocked, or slow to load)");
+                }
+                tiles.forEach(tile => {
+                    const firstLine = (tile.text || "").split("\n")[0].slice(0, 70);
+                    const hit = matchesSearch(searchTerm, tile.text) ? "MATCH " : "  --  ";
+                    console.log(`   ${hit}| ${firstLine}`);
+                });
+                console.log("");
+            }
 
             // One buy option per pack size
             const options = [];

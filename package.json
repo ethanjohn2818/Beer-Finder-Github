@@ -7,6 +7,7 @@
     "start": "node server.js",
     "warm": "node scripts/buildBeerDatabase.js",
     "prune": "node scripts/pruneBeers.js",
+    "debug": "node scripts/debugSearch.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
