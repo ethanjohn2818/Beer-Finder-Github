@@ -173,7 +173,7 @@ app.get("/recommend", async (req,res)=>{
 
             async (beer)=>{
 
-                const offers = await searchAll(beer.name);
+                const offers = await searchAll(beer.name, beer.brewery);
 
                 return { beer, offers };
 

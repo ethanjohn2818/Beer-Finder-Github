@@ -104,20 +104,66 @@ function cacheValid(entry) {
 
 // ---- Text helpers ---------------------------------------------
 
-// Does the product name contain every meaningful word of the search?
-function matchesSearch(searchTerm, name) {
+// Generic beer words that don't identify a specific beer on their own.
+const GENERIC_WORDS = new Set([
+    "ale", "ipa", "lager", "session", "stout", "porter", "bitter",
+    "pale", "hazy", "double", "extra", "beer", "beers", "can", "cans",
+    "brewery", "brewing", "brew", "blonde", "golden", "amber", "red",
+    "helles", "pils", "pilsner", "keller", "sour", "new", "england",
+    "west", "coast", "the", "and"
+]);
 
-    if (!name) return false;
 
-    const words = searchTerm
+// Split text into lowercase words of 3+ letters, punctuation stripped.
+function words(text) {
+    return String(text || "")
         .toLowerCase()
-        .replace("&", "")
-        .split(" ")
+        .replace(/[^a-z0-9 ]/g, " ")
+        .split(/\s+/)
         .filter(word => word.length > 2);
+}
 
-    const text = name.toLowerCase();
 
-    return words.every(word => text.includes(word));
+// Does a product tile match the beer we're looking for?
+//
+// We match on the beer's DISTINCTIVE words (e.g. "Neck Oil", "Lost",
+// "Punk") — the name minus the brewery and minus generic style words —
+// because supermarkets often drop the brewery from the product title
+// ("Lost Lager", not "BrewDog Lost Lager"). Requiring those distinctive
+// words avoids both false negatives (brewery missing) and false
+// positives (matching a different beer from the same brewery).
+function matchesBeer(name, brewery, productText) {
+
+    if (!productText) return false;
+
+    const text = productText.toLowerCase();
+
+    const nameWords = words(name);
+    const breweryWords = new Set(words(brewery));
+
+    // Distinctive product words: not the brewery, not a generic style word
+    const productWords = nameWords.filter(
+        word => !breweryWords.has(word) && !GENERIC_WORDS.has(word)
+    );
+
+    if (productWords.length > 0) {
+        // Every distinctive word must be present
+        return productWords.every(word => text.includes(word));
+    }
+
+    // Name is only brewery + generic words (e.g. "Cloudwater Pale Ale").
+    // Then we DO need the brewery, plus the style words, to be sure.
+    const styleWords = nameWords.filter(word => !breweryWords.has(word));
+    const breweryPresent = [...breweryWords].every(word => text.includes(word));
+
+    return breweryPresent && styleWords.every(word => text.includes(word));
+}
+
+
+// Backwards-compatible helper (brewery unknown): treat the whole name
+// as the beer identity.
+function matchesSearch(searchTerm, name) {
+    return matchesBeer(searchTerm, "", name);
 }
 
 
@@ -192,7 +238,7 @@ function absolute(baseUrl, url) {
 
 function createScraper(config) {
 
-    async function search(searchTerm) {
+    async function search(searchTerm, brewery = "") {
 
         const cache = loadCache(config.cacheFile);
 
@@ -283,7 +329,7 @@ function createScraper(config) {
 
             // Keep only tiles that match the beer we searched for
             const matching = tiles.filter(tile =>
-                matchesSearch(searchTerm, tile.text)
+                matchesBeer(searchTerm, brewery, tile.text)
             );
 
             // Debug: show every product on the page and whether it matched
@@ -294,7 +340,7 @@ function createScraper(config) {
                 }
                 tiles.forEach(tile => {
                     const firstLine = (tile.text || "").split("\n")[0].slice(0, 70);
-                    const hit = matchesSearch(searchTerm, tile.text) ? "MATCH " : "  --  ";
+                    const hit = matchesBeer(searchTerm, brewery, tile.text) ? "MATCH " : "  --  ";
                     console.log(`   ${hit}| ${firstLine}`);
                 });
                 console.log("");
@@ -369,5 +415,6 @@ module.exports = {
     // exported for reuse / testing
     extractPrice,
     detectPackLabel,
-    matchesSearch
+    matchesSearch,
+    matchesBeer
 };

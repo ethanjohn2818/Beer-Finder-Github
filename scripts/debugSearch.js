@@ -12,6 +12,8 @@
 
 process.env.DEBUG = "1";
 
+const fs = require("fs");
+const path = require("path");
 const { scrapers } = require("../scrapers");
 
 const term = process.argv.slice(2).join(" ").trim();
@@ -21,11 +23,21 @@ if (!term) {
     process.exit(1);
 }
 
+// Look up the brewery from the database so matching behaves like a real search
+let brewery = "";
+try {
+    const beers = JSON.parse(
+        fs.readFileSync(path.join(__dirname, "../data/beers.json"), "utf8")
+    );
+    const beer = beers.find(b => b.name.toLowerCase() === term.toLowerCase());
+    if (beer) brewery = beer.brewery;
+} catch {}
+
 (async () => {
 
     for (const store of scrapers) {
 
-        const result = await store.search(term);
+        const result = await store.search(term, brewery);
 
         console.log(
             `==> ${store.name}: ` +
