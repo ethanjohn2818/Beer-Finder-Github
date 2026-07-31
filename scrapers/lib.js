@@ -73,16 +73,27 @@ const NOT_FOUND_CACHE_TIME = 24 * 60 * 60 * 1000;  // 24 hours (a warm run lasts
 const ERROR_CACHE_TIME = 5 * 60 * 1000;            // 5 minutes (retry soon after a failure)
 
 
+// Keep each cache file in memory and share that one object across all
+// searches in this process. This makes concurrent searches safe: they
+// all mutate the same object, so no save can wipe out another's result.
+// (A fresh process reloads from disk, so warming still refreshes it.)
+const memCaches = {};
+
+
 function loadCache(file) {
-    try {
-        return JSON.parse(fs.readFileSync(file, "utf8"));
-    } catch {
-        return {};
+    if (!(file in memCaches)) {
+        try {
+            memCaches[file] = JSON.parse(fs.readFileSync(file, "utf8"));
+        } catch {
+            memCaches[file] = {};
+        }
     }
+    return memCaches[file];
 }
 
 
 function saveCache(file, cache) {
+    memCaches[file] = cache;
     fs.writeFileSync(file, JSON.stringify(cache, null, 2));
 }
 

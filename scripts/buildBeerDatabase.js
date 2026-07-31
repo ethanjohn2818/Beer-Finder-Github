@@ -18,20 +18,37 @@ const { scrapers, searchAll } = require("../scrapers");
 const beersPath = path.join(__dirname, "../data/beers.json");
 
 
+// How many beers to scrape at the same time (in separate browser tabs).
+const CONCURRENCY = 3;
+
+
+// Run `task` over `items`, at most `limit` running at once.
+async function runWithLimit(items, limit, task) {
+    let index = 0;
+    async function worker() {
+        while (index < items.length) {
+            const current = index++;
+            await task(items[current]);
+        }
+    }
+    await Promise.all(
+        Array.from({ length: limit }, () => worker())
+    );
+}
+
+
 (async () => {
 
     const beers = JSON.parse(fs.readFileSync(beersPath, "utf8"));
 
     console.log(
         `Warming cache for ${beers.length} beers ` +
-        `across ${scrapers.length} supermarkets...\n`
+        `(${CONCURRENCY} at a time)...\n`
     );
 
     let done = 0;
 
-    // One beer at a time so each store's cache file isn't written by
-    // two searches at once (the stores are still searched in parallel).
-    for (const beer of beers) {
+    await runWithLimit(beers, CONCURRENCY, async (beer) => {
 
         // force = true: always re-scrape, ignoring any cached result,
         // so warming genuinely refreshes every beer.
@@ -44,7 +61,7 @@ const beersPath = path.join(__dirname, "../data/beers.json");
             : "not found anywhere";
 
         console.log(`[${done}/${beers.length}] ${beer.name} -> ${found}`);
-    }
+    });
 
     // Report the total cache size on disk (sum of every cache file)
     const cacheDir = path.join(__dirname, "../cache");
