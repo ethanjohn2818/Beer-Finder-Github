@@ -9,18 +9,12 @@
 const { warmUp } = require("./lib");
 
 const tesco = require("./tesco");
-const morrisons = require("./morrisons");
-const sainsburys = require("./sainsburys");
-const waitrose = require("./waitrose");
-const mands = require("./mands");
 
 
+// Only Tesco is active for now. To add another supermarket later:
+// create scrapers/<name>.js with createScraper, then add it here.
 const scrapers = [
-    tesco,
-    morrisons,
-    sainsburys,
-    waitrose,
-    mands
+    tesco
 ];
 
 
