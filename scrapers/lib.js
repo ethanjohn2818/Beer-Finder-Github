@@ -61,9 +61,9 @@ async function warmUp() {
 
 // ---- Caching --------------------------------------------------
 
-const FOUND_CACHE_TIME = 24 * 60 * 60 * 1000;
-const NOT_FOUND_CACHE_TIME = 60 * 60 * 1000;
-const ERROR_CACHE_TIME = 5 * 60 * 1000;
+const FOUND_CACHE_TIME = 24 * 60 * 60 * 1000;      // 24 hours
+const NOT_FOUND_CACHE_TIME = 24 * 60 * 60 * 1000;  // 24 hours (a warm run lasts a day)
+const ERROR_CACHE_TIME = 5 * 60 * 1000;            // 5 minutes (retry soon after a failure)
 
 
 function loadCache(file) {
@@ -88,11 +88,13 @@ function cacheValid(entry) {
 
     let expiry;
 
-    if (entry.result.available) {
-        expiry = FOUND_CACHE_TIME;
-    } else if (entry.result.name === null) {
+    if (entry.result.error) {
+        // A real failure (timeout / blocked): retry again soon
         expiry = ERROR_CACHE_TIME;
+    } else if (entry.result.available) {
+        expiry = FOUND_CACHE_TIME;
     } else {
+        // Searched fine, Tesco just doesn't stock it: cache for a day
         expiry = NOT_FOUND_CACHE_TIME;
     }
 
@@ -210,7 +212,8 @@ function createScraper(config) {
             image: null,
             link: null,
             available: false,
-            options: []
+            options: [],
+            error: false
         };
 
         let failed = false;
@@ -321,6 +324,7 @@ function createScraper(config) {
 
         if (failed) {
             result.name = null;
+            result.error = true;
         }
 
         cache[searchTerm] = { time: Date.now(), result };
