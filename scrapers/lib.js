@@ -236,6 +236,14 @@ function extractPrice(text) {
 }
 
 
+// Numeric value of a "£X.XX" string (0 if missing/unparseable).
+function priceValue(price) {
+    if (!price) return 0;
+    const n = Number(String(price).replace(/[£,\s]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+}
+
+
 // Work out the pack size from a product name.
 // "Neck Oil 4 x 330ml" -> "4 × 330ml"
 function detectPackLabel(text) {
@@ -468,13 +476,20 @@ function createScraper(config) {
 
             for (const tile of matching) {
 
+                const price = extractPrice(tile.text);
+
+                // Skip anything without a real positive price. Tesco never
+                // sells for £0.00, so a missing/zero price means the "match"
+                // is junk (e.g. a cookie-consent page artifact).
+                if (priceValue(price) <= 0) continue;
+
                 const label = detectPackLabel(tile.text);
                 if (usedLabels.has(label)) continue;
                 usedLabels.add(label);
 
                 options.push({
                     label,
-                    price: extractPrice(tile.text),
+                    price,
                     image: absolute(config.baseUrl, tile.image),
                     link: absolute(config.baseUrl, tile.href),
                     name: tile.text.split("\n")[0] || tile.text
@@ -530,6 +545,7 @@ module.exports = {
     getContext,
     // exported for reuse / testing
     extractPrice,
+    priceValue,
     detectPackLabel,
     matchesSearch,
     matchesBeer

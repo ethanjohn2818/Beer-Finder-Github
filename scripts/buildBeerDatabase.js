@@ -41,6 +41,18 @@ async function runWithLimit(items, limit, task) {
 
     const beers = JSON.parse(fs.readFileSync(beersPath, "utf8"));
 
+    // Start from a clean slate so stale/junk results (from earlier runs
+    // that hit cookie walls etc.) can never survive a warm.
+    const cacheDir = path.join(__dirname, "../cache");
+    try {
+        for (const file of fs.readdirSync(cacheDir)) {
+            if (file.endsWith(".json")) {
+                fs.unlinkSync(path.join(cacheDir, file));
+            }
+        }
+        console.log("Cleared old cache.");
+    } catch {}
+
     console.log(
         `Warming cache for ${beers.length} beers ` +
         `(${CONCURRENCY} at a time)...\n`
@@ -64,7 +76,6 @@ async function runWithLimit(items, limit, task) {
     });
 
     // Report the total cache size on disk (sum of every cache file)
-    const cacheDir = path.join(__dirname, "../cache");
     let bytes = 0;
     try {
         for (const file of fs.readdirSync(cacheDir)) {
