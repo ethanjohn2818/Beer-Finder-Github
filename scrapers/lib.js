@@ -225,10 +225,15 @@ function createScraper(config) {
                 timeout: 20000
             });
 
+            // Give products a chance to appear. If none show up, that
+            // usually just means Tesco doesn't stock this beer (zero
+            // results) - NOT an error - so we don't fail here; we let
+            // the empty result fall through as a genuine "not found".
             await page
                 .locator(config.productSelector)
                 .first()
-                .waitFor({ timeout: 7000 });
+                .waitFor({ timeout: 7000 })
+                .catch(() => {});
 
             // Grab several product tiles off the search page
             const tiles = await page.evaluate(({ selector, imageHint }) => {
