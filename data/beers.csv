@@ -1,26 +1,110 @@
 name,brewery,style,abv,hops,malts,flavours
-Beavertown Neck Oil,Beavertown,Session IPA,4.3,"Mosaic;Columbus","Pale;Caramalt","Citrus;Tropical;Pine"
-Beavertown Gamma Ray,Beavertown,American Pale Ale,5.4,"Columbus;Bravo;Amarillo;Citra","Pale;Vienna","Tropical;Mango;Citrus"
-Beavertown Lazer Crush,Beavertown,Hazy IPA,4.5,"Citra;Mosaic;El Dorado","Pale;Oats;Wheat","Tropical;Juicy;Citrus"
-BrewDog Punk IPA,BrewDog,IPA,5.4,"Ahtanum;Chinook;Citra;Mosaic;Simcoe","Extra Pale","Grapefruit;Pine;Tropical"
-BrewDog Elvis Juice,BrewDog,Grapefruit IPA,6.5,"Amarillo;Citra;Mosaic;Simcoe","Extra Pale;Caramalt","Grapefruit;Orange;Pine"
-BrewDog Hazy Jane,BrewDog,New England IPA,5.0,"Citra;Mosaic","Pale;Oats;Wheat","Juicy;Tropical;Soft"
-Vocation Life & Death,Vocation,IPA,6.5,"Citra;Mosaic","Pale;Wheat","Mango;Citrus;Pine"
-Vocation Heart & Soul,Vocation,Session IPA,4.4,"Citra;Mosaic","Pale;Wheat","Citrus;Tropical;Light"
-Vocation Bread & Butter,Vocation,Amber Ale,3.9,"Cascade;Centennial","Pale;Crystal","Caramel;Biscuit;Citrus"
-Tiny Rebel Clwb Tropica,Tiny Rebel,Tropical IPA,5.5,"Citra;Mosaic","Pale","Pineapple;Mango;Passionfruit"
-Tiny Rebel Easy Livin',Tiny Rebel,Session IPA,4.3,"Citra;Mosaic","Pale","Citrus;Light;Juicy"
-Northern Monk Faith,Northern Monk,Hazy Pale Ale,5.4,"Citra;Mosaic","Pale;Oats","Juicy;Orange;Tropical"
-Northern Monk Heathen,Northern Monk,IPA,7.2,"Citra;Mosaic;Simcoe","Pale","Resin;Tropical;Pine"
-Thornbridge Jaipur,Thornbridge,IPA,5.9,"Centennial;Chinook;Ahtanum;Simcoe;Columbus","Maris Otter","Grapefruit;Pine;Floral"
-Thornbridge Green Mountain,Thornbridge,Session IPA,4.3,"Citra;Mosaic","Pale","Tropical;Citrus;Fresh"
-Siren Lumina,Siren,Session IPA,4.2,"Citra;Mosaic;Azacca","Pale;Oats","Lime;Mango;Juicy"
-Siren Soundwave,Siren,IPA,5.6,"Citra;Simcoe;Columbus","Pale","Citrus;Pine;Resin"
-Magic Rock Saucery,Magic Rock,Session IPA,3.9,"Citra;Mosaic","Pale","Lemon;Light;Tropical"
-Magic Rock High Wire,Magic Rock,Pale Ale,5.5,"Citra;Mosaic;Centennial","Pale","Pine;Citrus;Biscuit"
-Buxton Axe Edge,Buxton,IPA,6.8,"Citra;Mosaic;Simcoe","Pale","Juicy;Pine;Tropical"
-Five Points Pale,Five Points,Pale Ale,4.4,"Cascade;Centennial","Pale","Citrus;Floral;Balanced"
-The Kernel Citra Pale Ale,The Kernel,Pale Ale,5.2,"Citra","Pale","Citrus;Lime;Fresh"
-Verdant Lightbulb,Verdant,Extra Pale Ale,4.5,"Mosaic;Citra","Pale;Oats","Juicy;Soft;Tropical"
-Cloudwater Pale Ale,Cloudwater,Pale Ale,4.5,"Mosaic;Citra","Pale;Oats","Orange;Peach;Juicy"
-Track Sonoma,Track,Pale Ale,3.8,"Citra;Mosaic","Pale","Citrus;Light;Juicy"
+Beavertown Gamma Ray,Beavertown,American Pale Ale,5.4,Columbus;Bravo;Amarillo;Citra,Pale;Vienna,Tropical;Mango;Citrus
+Beavertown Neck Oil,Beavertown,Session IPA,4.3,Amarillo;Centennial;Chinook;Columbus,Pale;Caramalt,Citrus;Tropical;Pine
+Beavertown Lazer Crush,Beavertown,Hazy IPA,4.5,Citra;Mosaic;El Dorado,Pale;Oats;Wheat,Tropical;Juicy;Citrus
+Beavertown Bloody 'Ell,Beavertown,Blood Orange IPA,5.5,Amarillo;Centennial;Citra,Pale;Vienna,Blood Orange;Citrus;Pine
+Beavertown Lupuloid IPA,Beavertown,IPA,6.7,Citra;Chinook;Mosaic;Amarillo,Pale;Caramalt,Grapefruit;Pine;Resin
+Beavertown Nanobot,Beavertown,Session Pale Ale,2.8,Citra;Amarillo,Pale;Oats,Citrus;Light;Juicy
+BrewDog Punk IPA,BrewDog,IPA,5.4,Ahtanum;Chinook;Citra;Mosaic;Simcoe,Extra Pale,Grapefruit;Pine;Tropical
+BrewDog Hazy Jane,BrewDog,New England IPA,5,Citra;Mosaic;Amarillo;Simcoe,Pale;Oats;Wheat,Juicy;Tropical;Soft
+BrewDog Elvis Juice,BrewDog,Grapefruit IPA,6.5,Amarillo;Citra;Mosaic;Simcoe,Extra Pale;Caramalt,Grapefruit;Orange;Pine
+BrewDog Dead Pony Club,BrewDog,Session Pale Ale,3.8,Cascade;Centennial;Simcoe;Amarillo,Extra Pale,Citrus;Lime;Light
+BrewDog Jack Hammer,BrewDog,IPA,7.2,Columbus;Centennial;Simcoe;Amarillo,Extra Pale,Grapefruit;Resin;Bitter
+BrewDog 5AM Saint,BrewDog,Amber Ale,5,Amarillo;Cascade;Centennial;Simcoe,Munich;Crystal;Caramalt,Caramel;Citrus;Toffee
+BrewDog Lost Lager,BrewDog,Lager,4.7,Mittelfruh;Cascade,Pilsner,Crisp;Bready;Floral
+Buxton Axe Edge,Buxton,IPA,6.8,Citra;Mosaic;Simcoe,Pale,Juicy;Pine;Tropical
+Buxton Moor Top,Buxton,Session Pale Ale,3.6,Comet,Pale,Grapefruit;Berry;Light
+Buxton Trolltunga,Buxton,Gooseberry IPA,8,Citra;Nelson Sauvin,Pale,Gooseberry;White Wine;Tropical
+Cloudwater Pale Ale,Cloudwater,Pale Ale,4.5,Mosaic;Citra,Pale;Oats,Orange;Peach;Juicy
+Cloudwater DIPA,Cloudwater,Double IPA,8.5,Citra;Mosaic;Simcoe,Pale;Oats;Wheat,Tropical;Resin;Juicy
+Cloudwater Small Pale,Cloudwater,Session Pale Ale,3,Citra;Amarillo,Pale;Oats,Citrus;Light;Juicy
+Cloudwater Happy Path,Cloudwater,Session IPA,4,Citra;Mosaic;Simcoe,Pale;Oats,Tropical;Citrus;Juicy
+Five Points Pale,Five Points,Pale Ale,4.4,Amarillo;Centennial;Chinook;Mosaic,Pale,Citrus;Floral;Balanced
+Five Points XPA,Five Points,Extra Pale Ale,4,Citra;Amarillo;Mosaic,Pale;Oats,Tropical;Citrus;Juicy
+Five Points Jupiter,Five Points,Session Pale Ale,3.4,Citra;Mosaic,Pale,Citrus;Light;Fresh
+Five Points Best,Five Points,Bitter,4.1,East Kent Goldings;Fuggle,Maris Otter;Crystal,Toffee;Earthy;Malty
+Magic Rock High Wire,Magic Rock,Pale Ale,5.5,Citra;Mosaic;Centennial,Pale,Pine;Citrus;Biscuit
+Magic Rock Saucery,Magic Rock,Session IPA,3.9,Citra;Mosaic,Pale,Lemon;Light;Tropical
+Magic Rock Cannonball,Magic Rock,IPA,7.4,Citra;Simcoe;Centennial;Chinook;Cascade,Pale;Caramalt,Grapefruit;Resin;Tropical
+Magic Rock Dark Arts,Magic Rock,Stout,6,Columbus,Roast;Chocolate;Oats,Coffee;Chocolate;Roasted
+Northern Monk Faith,Northern Monk,Hazy Pale Ale,5.4,Citra;Mosaic,Pale;Oats,Juicy;Orange;Tropical
+Northern Monk Heathen,Northern Monk,IPA,7.2,Citra;Mosaic;Simcoe,Pale,Resin;Tropical;Pine
+Northern Monk Eternal,Northern Monk,Session IPA,4.1,Citra;Simcoe;Mosaic,Pale;Oats,Citrus;Light;Juicy
+Northern Monk Death of the Sun,Northern Monk,Hazy IPA,6.5,Citra;Mosaic;Simcoe,Pale;Oats,Tropical;Juicy;Resin
+Siren Lumina,Siren,Session IPA,4.2,Citra;Mosaic;Azacca,Pale;Oats,Lime;Mango;Juicy
+Siren Soundwave,Siren,IPA,5.6,Citra;Simcoe;Columbus,Pale,Citrus;Pine;Resin
+Siren Half Mast,Siren,Session Pale Ale,2.8,Citra;Amarillo,Pale;Oats,Citrus;Light;Zesty
+Siren Broken Dream,Siren,Breakfast Stout,6.5,Bramling Cross,Roast;Chocolate;Oats,Coffee;Chocolate;Roasted
+The Kernel Pale Ale Citra,The Kernel,Pale Ale,5.2,Citra,Pale,Citrus;Lime;Fresh
+The Kernel Table Beer,The Kernel,Table Beer,3,Amarillo;Mosaic,Pale;Wheat,Citrus;Light;Refreshing
+The Kernel India Pale Ale,The Kernel,IPA,6.8,Chinook;Simcoe;Centennial,Pale,Grapefruit;Pine;Resin
+Thornbridge Jaipur,Thornbridge,IPA,5.9,Centennial;Chinook;Ahtanum;Simcoe;Columbus,Maris Otter,Grapefruit;Pine;Floral
+Thornbridge Green Mountain,Thornbridge,Session IPA,4.3,Citra;Mosaic,Pale,Tropical;Citrus;Fresh
+Thornbridge Kipling,Thornbridge,Pale Ale,5.2,Nelson Sauvin,Pale,Gooseberry;Passionfruit;White Wine
+Thornbridge Lukas,Thornbridge,Helles Lager,4.2,Saaz;Hallertau,Pilsner,Bready;Floral;Crisp
+Thornbridge Wild Swan,Thornbridge,Blonde Ale,3.5,Cascade;Willamette,Pale;Wheat,Lemon;Bitter;Crisp
+Tiny Rebel Clwb Tropica,Tiny Rebel,Tropical IPA,5.5,Citra;Mosaic,Pale,Pineapple;Mango;Passionfruit
+Tiny Rebel Cwtch,Tiny Rebel,Red Ale,4.6,Cascade;Centennial;Chinook;Simcoe,Crystal;Pale,Caramel;Citrus;Toffee
+Tiny Rebel Easy Livin',Tiny Rebel,Session IPA,4.3,Citra;Mosaic,Pale,Citrus;Light;Juicy
+Tiny Rebel Stay Puft,Tiny Rebel,Marshmallow Porter,5.2,Fuggle,Chocolate;Roast,Marshmallow;Vanilla;Chocolate
+Track Sonoma,Track,Pale Ale,3.8,Citra;Mosaic,Pale,Citrus;Light;Juicy
+Track Bright,Track,Session IPA,4.6,Citra;Simcoe,Pale;Oats,Tropical;Citrus;Juicy
+Verdant Lightbulb,Verdant,Extra Pale Ale,4.5,Mosaic;Citra,Pale;Oats,Juicy;Soft;Tropical
+Verdant Headband,Verdant,Pale Ale,5.5,Citra;Simcoe;Columbus,Pale;Oats;Wheat,Peach;Juicy;Soft
+Verdant Even Sharks Need Water,Verdant,Session IPA,4.6,Citra;Simcoe,Pale;Oats,Tropical;Juicy;Citrus
+Verdant Pulp,Verdant,New England IPA,6.5,Citra;Mosaic;Simcoe,Pale;Oats;Wheat,Peach;Mango;Creamy
+Vocation Bread & Butter,Vocation,Session Pale Ale,3.9,Cascade;Centennial,Pale;Crystal,Caramel;Biscuit;Citrus
+Vocation Heart & Soul,Vocation,Session IPA,4.4,Citra;Mosaic,Pale;Wheat,Citrus;Tropical;Light
+Vocation Life & Death,Vocation,IPA,6.5,Citra;Mosaic,Pale;Wheat,Mango;Citrus;Pine
+Vocation Pride & Joy,Vocation,American Pale Ale,5.3,Citra;Amarillo;Cascade,Pale,Grapefruit;Citrus;Floral
+Deya Steady Rolling Man,Deya,Pale Ale,5.2,Citra;Mosaic;Simcoe,Pale;Oats;Wheat,Juicy;Tropical;Soft
+Deya Into the Haze,Deya,Double IPA,8,Citra;Mosaic,Pale;Oats;Wheat,Tropical;Juicy;Creamy
+Deya Saturated in Sunshine,Deya,Session IPA,4.2,Citra;Mosaic,Pale;Oats,Tropical;Citrus;Juicy
+Gipsy Hill Hepcat,Gipsy Hill,Session Pale Ale,4.6,Citra;Mosaic,Pale;Oats,Tropical;Citrus;Light
+Gipsy Hill Bandit,Gipsy Hill,IPA,5.8,Citra;Simcoe;Amarillo,Pale;Oats,Juicy;Tropical;Citrus
+Pressure Drop Pale Fire,Pressure Drop,American Pale Ale,4.8,Amarillo;Citra;Cascade,Pale;Wheat,Grapefruit;Citrus;Floral
+Pressure Drop Wu Gang Chops the Tree,Pressure Drop,Hefeweizen IPA,3.8,Amarillo;Citra,Wheat;Pale,Banana;Citrus;Spice
+Wiper and True Kaleidoscope,Wiper and True,Pale Ale,4.2,Chinook;Amarillo;Cascade;Mosaic,Pale;Oats,Citrus;Tropical;Floral
+Wiper and True Milk Shake,Wiper and True,Milk Stout,5.6,Fuggle,Chocolate;Roast;Oats,Chocolate;Coffee;Creamy
+Wylam Jakehead,Wylam,IPA,6.3,Citra;Amarillo;Centennial;Columbus;Chinook,Pale;Crystal,Grapefruit;Resin;Tropical
+North Brewing Transmission,North Brewing,IPA,6.9,Chinook;Citra;Cascade,Pale,Grapefruit;Pine;Resin
+North Brewing Sputnik,North Brewing,American Pale Ale,5.6,Amarillo;Centennial;Chinook,Pale,Citrus;Pine;Floral
+Brew York Little Eff,Brew York,Session IPA,4.3,Citra;Mosaic,Pale;Oats,Citrus;Juicy;Light
+Brew York Maris the Otter,Brew York,Pale Ale,4.3,Citra;Amarillo,Maris Otter,Biscuit;Citrus;Balanced
+Fyne Ales Jarl,Fyne Ales,Blonde Ale,3.8,Citra,Pale;Wheat,Grapefruit;Lemon;Floral
+Fyne Ales Superior IPA,Fyne Ales,IPA,5.8,Simcoe;Citra;Chinook,Pale,Grapefruit;Pine;Resin
+Oakham Citra,Oakham,Pale Ale,4.2,Citra,Pale,Grapefruit;Lychee;Citrus
+Oakham JHB,Oakham,Golden Ale,3.8,Mount Hood,Pale,Citrus;Floral;Crisp
+Rooster's Baby-Faced Assassin,Rooster's,IPA,6.1,Citra,Pale,Mango;Grapefruit;Tropical
+Rooster's Yankee,Rooster's,Pale Ale,4.3,Cascade,Pale,Grapefruit;Floral;Citrus
+Camden Hells Lager,Camden Town,Helles Lager,4.6,Perle;Hallertau,Pilsner,Bready;Crisp;Floral
+Camden Pale Ale,Camden Town,Pale Ale,4,Centennial;Chinook;Simcoe;Cascade,Pale,Citrus;Tropical;Light
+Camden Off Menu IPA,Camden Town,IPA,5.8,Simcoe;Citra;Mosaic,Pale,Tropical;Citrus;Pine
+Adnams Ghost Ship,Adnams,Pale Ale,4.5,Citra,Pale;Crystal,Citrus;Lemon;Malty
+Signature Brew Roadie,Signature Brew,Session IPA,4.3,Citra;Amarillo,Pale;Oats,Citrus;Tropical;Light
+Lost and Grounded Keller Pils,Lost and Grounded,Keller Pils,4.8,Hallertau;Saphir,Pilsner,Bready;Herbal;Crisp
+Bristol Beer Factory Independence,Bristol Beer Factory,American Pale Ale,4.6,Cascade;Chinook,Pale,Grapefruit;Pine;Citrus
+Moor Nor'Hop,Moor,Pale Ale,4.1,Nelson Sauvin;Motueka,Pale,Gooseberry;Lime;Tropical
+Wild Beer Pogo,Wild Beer Co,Tropical Pale Ale,4.1,Citra;Amarillo,Pale;Wheat,Passionfruit;Guava;Orange
+Wild Beer Millionaire,Wild Beer Co,Salted Caramel Stout,4.7,Fuggle,Chocolate;Roast,Caramel;Chocolate;Salt
+Marble Lagonda IPA,Marble,IPA,5,Cascade;Centennial;Columbus,Pale,Citrus;Pine;Floral
+Left Handed Giant Pale,Left Handed Giant,Pale Ale,5,Citra;Mosaic;Simcoe,Pale;Oats,Juicy;Tropical;Soft
+Polly's Simcoe & Citra,Polly's Brew Co,Pale Ale,4.7,Simcoe;Citra,Pale;Oats,Tropical;Citrus;Juicy
+Abbeydale Deception,Abbeydale,Blonde Ale,4.1,Nelson Sauvin,Pale,Gooseberry;Citrus;Crisp
+Arbor Motueka,Arbor Ales,Pale Ale,3.7,Motueka,Pale,Lime;Tropical;Floral
+Fourpure Session IPA,Fourpure,Session IPA,4.2,Amarillo;Citra;Centennial,Pale,Citrus;Tropical;Light
+Fourpure Easy Peeler,Fourpure,Citrus IPA,4.5,Citra;Mandarina Bavaria,Pale,Orange;Tangerine;Citrus
+Duration Turtles All the Way Down,Duration,Pale Ale,4.9,Citra;Mosaic,Pale;Oats,Tropical;Citrus;Juicy
+Overtone Sudo,Overtone,Pale Ale,5,Citra;Simcoe,Pale;Oats,Tropical;Citrus;Juicy
+Fierce Cafe Racer,Fierce Beer,IPA,7.3,Citra;Simcoe;Mosaic,Pale,Tropical;Resin;Juicy
+Neptune Bpositea,Neptune,Session IPA,4.3,Citra;Mosaic,Pale;Oats,Citrus;Tropical;Light
+Vault City Strawberry Sundae,Vault City,Sour,5.5,Cascade,Pale;Wheat,Strawberry;Tart;Sweet
+Lervig Lucky Jack,Lervig,American Pale Ale,4.7,Simcoe;Citra;Cascade,Pale,Citrus;Tropical;Floral
+Mikkeller Green Gold,Mikkeller,IPA,7,Amarillo;Centennial;Simcoe,Pale;Caramel,Citrus;Pine;Floral
+Sierra Nevada Pale Ale,Sierra Nevada,American Pale Ale,5.6,Cascade,Pale;Caramel,Grapefruit;Pine;Caramel
+Sierra Nevada Torpedo,Sierra Nevada,Extra IPA,7.2,Citra;Magnum;Crystal,Pale;Caramel,Citrus;Pine;Resin
+Lagunitas IPA,Lagunitas,IPA,6.2,Cascade;Centennial;Chinook;Simcoe;Willamette,Pale;Caramel,Citrus;Caramel;Pine
+Founders All Day IPA,Founders,Session IPA,4.7,Amarillo;Simcoe,Pale;Rye,Citrus;Pine;Light
+Goose Island IPA,Goose Island,IPA,5.9,Cascade;Centennial;Styrian Golding,Pale;Crystal,Citrus;Pine;Floral
+Brooklyn Lager,Brooklyn,Amber Lager,5.2,Cascade;Hallertau;Vanguard,Pilsner;Caramel,Caramel;Floral;Crisp
+Stone IPA,Stone,IPA,6.9,Centennial;Chinook;Magnum,Pale,Pine;Grapefruit;Resin
