@@ -2,7 +2,8 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 
-const { searchAll, warmUp } = require("./scrapers");
+const { loadCatalog } = require("./scrapers/catalog");
+const { matchesBeer, priceValue, packRank } = require("./scrapers/lib");
 
 const app = express();
 
@@ -17,46 +18,38 @@ app.use(
 
 
 
-async function runWithLimit(items, limit, task) {
 
-    const results = [];
+// Find a beer's buy options in the Tesco catalogue: every catalogue
+// product that matches this beer, one option per pack size.
+function catalogOptions(beer, catalog) {
 
-    let index = 0;
+    const matches = catalog.filter(product =>
+        matchesBeer(beer.name, beer.brewery, product.text || product.title)
+    );
 
+    const options = [];
+    const usedLabels = new Set();
 
-    async function worker() {
+    for (const product of matches) {
 
-        while(index < items.length) {
+        if (priceValue(product.price) <= 0) continue;
 
-            const current = index++;
+        const label = product.pack || "Buy";
+        if (usedLabels.has(label)) continue;
+        usedLabels.add(label);
 
-            results[current] =
-                await task(items[current]);
-
-        }
-
+        options.push({
+            label,
+            price: product.price,
+            image: product.image,
+            link: product.link
+        });
     }
 
+    options.sort((a, b) => packRank(a.label) - packRank(b.label));
 
-
-    const workers = [];
-
-
-    for(let i = 0; i < limit; i++) {
-
-        workers.push(worker());
-
-    }
-
-
-    await Promise.all(workers);
-
-
-    return results;
-
+    return options;
 }
-
-
 
 
 
@@ -89,7 +82,7 @@ app.get("/beers", (req,res)=>{
 
 
 
-app.get("/recommend", async (req,res)=>{
+app.get("/recommend", (req,res)=>{
 
 
     const hop = req.query.hop;
@@ -108,141 +101,89 @@ app.get("/recommend", async (req,res)=>{
 
 
 
-
-
     try {
 
 
-
         const beers = JSON.parse(
-
-            fs.readFileSync(
-
-                "./data/beers.json",
-
-                "utf8"
-
-            )
-
+            fs.readFileSync("./data/beers.json", "utf8")
         );
 
 
+        const catalog = loadCatalog();
 
-
-
-        const matches = beers.filter(beer =>
-
-            beer.hops.some(h =>
-
-                h.toLowerCase()
-                .includes(
-                    hop.toLowerCase()
-                )
-
-            )
-
-        );
-
-
-
-
-
-        console.log(
-            "BEERS FOUND:"
-        );
-
-
-        console.log(
-
-            matches.map(
-                beer => beer.name
-            )
-
-        );
-
-
-
-
-
-        // For each matching beer, search every supermarket at once.
-        const results = await runWithLimit(
-
-            matches,
-
-            3,
-
-            async (beer)=>{
-
-                const offers = await searchAll(beer.name, beer.brewery);
-
-                return { beer, offers };
-
-            }
-
-        );
-
-
-
-
-        // Keep beers that at least one supermarket actually stocks
-        const validResults =
-            results.filter(result =>
-                result.offers.length > 0
+        if (catalog.length === 0) {
+            console.log(
+                "Catalogue is empty — run `npm run catalog` to build it."
             );
+        }
 
 
+        // Beers in our list whose hops include the searched hop
+        const matches = beers.filter(beer =>
+            beer.hops.some(h =>
+                h.toLowerCase().includes(hop.toLowerCase())
+            )
+        );
+
+
+        // Keep the ones Tesco actually stocks (found in the catalogue)
+        const results = [];
+
+        for (const beer of matches) {
+
+            const options = catalogOptions(beer, catalog);
+            if (options.length === 0) continue;
+
+            const first = options[0];
+
+            results.push({
+                beer,
+                offers: [{
+                    supermarket: "Tesco",
+                    available: true,
+                    options,
+                    price: first.price,
+                    image: first.image,
+                    link: first.link
+                }]
+            });
+        }
 
 
         console.log(
             "SENDING:",
-            validResults.map(r => r.beer.name)
+            results.map(r => r.beer.name)
         );
 
 
-
-
-
-        res.json(validResults);
-
-
-
+        res.json(results);
 
 
     } catch(error) {
 
-
         console.error(error);
 
-
         res.status(500).json({
-
             error:"Something went wrong"
-
         });
 
-
     }
-
-
 
 });
 
 
 
 
-
 app.listen(PORT,()=>{
 
-
     console.log(
-
         `Beer Finder running at http://localhost:${PORT}`
-
     );
 
-
-    // Pre-launch the browser so the first search isn't slow.
-    warmUp();
-
+    if (loadCatalog().length === 0) {
+        console.log(
+            "Catalogue is empty — run `npm run catalog` first to fetch Tesco's beers."
+        );
+    }
 
 });

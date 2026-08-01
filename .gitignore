@@ -13,3 +13,6 @@ data/beers.full.json
 
 # Debug screenshot from `npm run debug`
 debug-page.png
+
+# Tesco catalogue built locally by `npm run catalog`
+cache/tesco-catalog.json

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "catalog": "node scripts/buildCatalog.js",
     "warm": "node scripts/buildBeerDatabase.js",
     "prune": "node scripts/pruneBeers.js",
     "debug": "node scripts/debugSearch.js",

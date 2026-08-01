@@ -539,14 +539,102 @@ function createScraper(config) {
 }
 
 
+// Scrape every product tile from a single Tesco results URL.
+// Returns raw tiles: { text, href, image }. Used by the catalogue
+// crawler to walk the "craft beer" search pages.
+async function scrapeSearchPage(url) {
+
+    const ctx = await getContext();
+    const page = await ctx.newPage();
+
+    let tiles = [];
+
+    try {
+
+        await page.goto(url, {
+            waitUntil: "domcontentloaded",
+            timeout: 20000
+        });
+
+        await dismissCookieBanner(page);
+
+        await page
+            .locator("a[href*='/products/']")
+            .first()
+            .waitFor({ timeout: 12000 })
+            .catch(() => {});
+
+        tiles = await page.evaluate(() => {
+
+            const anchors = Array.from(
+                document.querySelectorAll("a[href*='/products/']")
+            );
+
+            const seen = new Set();
+            const out = [];
+
+            for (const a of anchors) {
+
+                const href = a.getAttribute("href");
+                if (!href || seen.has(href)) continue;
+                seen.add(href);
+
+                let tile =
+                    a.closest("li, article, [class*='tile'], [class*='product']")
+                    || a.parentElement;
+
+                let node = a.parentElement;
+                for (let i = 0; i < 8 && node; i++) {
+                    if ((node.innerText || "").includes("£")) {
+                        tile = node;
+                        break;
+                    }
+                    node = node.parentElement;
+                }
+
+                const text = (tile.innerText || "").trim();
+
+                let image = null;
+                const img = tile.querySelector("img");
+                if (img) {
+                    const candidates = [
+                        img.getAttribute("src"),
+                        img.src,
+                        img.currentSrc,
+                        img.getAttribute("data-src")
+                    ].filter(Boolean);
+                    image =
+                        candidates.find(s => s.includes("digitalcontent"))
+                        || candidates[0] || null;
+                }
+
+                out.push({ text, href, image });
+            }
+
+            return out;
+        });
+
+    } catch (error) {
+        console.log("Page failed:", url, error.message);
+    }
+
+    await page.close().catch(() => {});
+
+    return tiles;
+}
+
+
 module.exports = {
     createScraper,
     warmUp,
     getContext,
+    scrapeSearchPage,
     // exported for reuse / testing
     extractPrice,
     priceValue,
     detectPackLabel,
+    packRank,
+    absolute,
     matchesSearch,
     matchesBeer
 };
