@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------
-// Tesco craft-beer catalogue.
+// Tesco beer catalogue.
 //
-// Instead of guessing which of our beers Tesco stocks, we crawl Tesco's
-// "craft beer" search results page by page and record every real beer
-// product it sells (name, price, image, link, pack size). The website
-// then matches our hop list against this catalogue, so only genuine
-// Tesco beer products can ever show up.
+// One "craft beer" search doesn't surface Tesco's whole beer range, so
+// we crawl a set of searches — "craft beer" plus "<brewery> beer" for
+// every brewery in our list — and record every real beer product (name,
+// price, image, link, pack size). The website then matches our hop list
+// against this catalogue, so only genuine Tesco beer products can appear.
 // ---------------------------------------------------------------
 
 const fs = require("fs");
@@ -29,38 +29,25 @@ const FULL_PAGE = 24;
 const CATALOG_FILE = path.join(__dirname, "../cache/tesco-catalog.json");
 
 
-function catalogUrl(page) {
-    return `${BASE}/shop/en-GB/search?query=craft+beer&count=24&page=${page}`;
+function searchUrl(query, page) {
+    // Spaces as "+" to match Tesco's own search URLs.
+    const q = encodeURIComponent(query).replace(/%20/g, "+");
+    return `${BASE}/shop/en-GB/search?query=${q}&inputType=free+text&count=24&page=${page}`;
 }
 
 
-// Walk the craft-beer results pages and collect every priced product.
-async function crawlCatalog(maxPages = 25) {
-
-    const products = [];
-    const seen = new Set();
+// Crawl the pages for one search query, adding new products to `products`.
+async function crawlQuery(query, maxPages, products, seen, screenshotFirst) {
 
     for (let page = 1; page <= maxPages; page++) {
 
-        // Screenshot the first page so an empty crawl can be diagnosed.
-        const shot = page === 1
+        const shot = (screenshotFirst && page === 1)
             ? path.join(__dirname, "../catalog-page-1.png")
             : undefined;
 
-        const tiles = await scrapeSearchPage(catalogUrl(page), shot);
+        const tiles = await scrapeSearchPage(searchUrl(query, page), shot);
 
-        console.log(`  page ${page}: found ${tiles.length} product tiles on the page`);
-
-        // No products on this page -> we've reached the end (or were blocked).
-        if (tiles.length === 0) {
-            if (page === 1) {
-                console.log(
-                    "  Nothing on page 1 — check catalog-page-1.png to see what " +
-                    "Tesco showed (cookie wall / access denied / different layout)."
-                );
-            }
-            break;
-        }
+        if (tiles.length === 0) break;
 
         let added = 0;
 
@@ -87,24 +74,38 @@ async function crawlCatalog(maxPages = 25) {
             added++;
         }
 
-        console.log(`  page ${page}: +${added} products (total ${products.length})`);
+        console.log(`    "${query}" page ${page}: +${added} (total ${products.length})`);
 
-        // A page much smaller than a full one (24 per page) means the real
-        // search results have run out. Everything after that is unrelated
-        // "suggestions" (cards, books, plants...), so stop here.
-        if (tiles.length < FULL_PAGE) {
-            console.log(
-                `  page ${page} was short (${tiles.length} < ${FULL_PAGE}) — ` +
-                `end of the craft beer results, stopping before the suggestions.`
-            );
-            break;
-        }
+        // A short page = end of the real results; the rest are suggestions.
+        if (tiles.length < FULL_PAGE) break;
 
-        // If a page adds nothing new (all duplicates), we're also done.
+        // Nothing new (all duplicates of earlier searches) -> done here.
         if (added === 0) break;
+    }
+}
+
+
+// Crawl every query in `queries`, deduping products by link across them.
+async function crawlQueries(queries, maxPagesPerQuery = 10) {
+
+    const products = [];
+    const seen = new Set();
+
+    let first = true;
+
+    for (const query of queries) {
+        console.log(`\n${query}:`);
+        await crawlQuery(query, maxPagesPerQuery, products, seen, first);
+        first = false;
     }
 
     return products;
+}
+
+
+// Back-compat: crawl just the broad "craft beer" search.
+async function crawlCatalog(maxPages = 25) {
+    return crawlQueries(["craft beer"], maxPages);
 }
 
 
@@ -123,6 +124,7 @@ function loadCatalog() {
 
 
 module.exports = {
+    crawlQueries,
     crawlCatalog,
     saveCatalog,
     loadCatalog,
