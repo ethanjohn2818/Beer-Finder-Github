@@ -54,18 +54,24 @@ function catalogOptions(beer, catalog) {
 
 
 
+// Only the beers Tesco actually stocks (found in the catalogue).
+// The Hops and Brewery pages are built from this, so they only list
+// beers you can really search for and buy.
 app.get("/beers", (req,res)=>{
 
     try {
 
         const beers = JSON.parse(
-            fs.readFileSync(
-                "./data/beers.json",
-                "utf8"
-            )
+            fs.readFileSync("./data/beers.json", "utf8")
         );
 
-        res.json(beers);
+        const catalog = loadCatalog();
+
+        const available = beers.filter(beer =>
+            catalogOptions(beer, catalog).length > 0
+        );
+
+        res.json(available);
 
     } catch(error) {
 

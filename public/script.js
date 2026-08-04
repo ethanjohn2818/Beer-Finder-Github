@@ -74,6 +74,12 @@ function buildHopsList(beers) {
     const container = document.getElementById("hops-list");
     container.innerHTML = "";
 
+    if (hops.length === 0) {
+        container.innerHTML =
+            "<p class='searching'>No beers available yet — build the Tesco catalogue with <code>npm run catalog</code>.</p>";
+        return;
+    }
+
     hops.forEach(hop => {
         container.innerHTML += `
             <div class="list-card">
@@ -105,6 +111,12 @@ function buildBreweryList(beers) {
 
     const container = document.getElementById("brewery-list");
     container.innerHTML = "";
+
+    if (breweries.length === 0) {
+        container.innerHTML =
+            "<p class='searching'>No beers available yet — build the Tesco catalogue with <code>npm run catalog</code>.</p>";
+        return;
+    }
 
     breweries.forEach(brewery => {
         container.innerHTML += `
