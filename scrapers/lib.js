@@ -541,8 +541,9 @@ function createScraper(config) {
 
 // Scrape every product tile from a single Tesco results URL.
 // Returns raw tiles: { text, href, image }. Used by the catalogue
-// crawler to walk the "craft beer" search pages.
-async function scrapeSearchPage(url) {
+// crawler to walk the "craft beer" search pages. If screenshotPath is
+// given, saves a picture of the page (for diagnosing an empty crawl).
+async function scrapeSearchPage(url, screenshotPath) {
 
     const ctx = await getContext();
     const page = await ctx.newPage();
@@ -563,6 +564,10 @@ async function scrapeSearchPage(url) {
             .first()
             .waitFor({ timeout: 12000 })
             .catch(() => {});
+
+        if (screenshotPath) {
+            await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
+        }
 
         tiles = await page.evaluate(() => {
 

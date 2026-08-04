@@ -16,3 +16,6 @@ debug-page.png
 
 # Tesco catalogue built locally by `npm run catalog`
 cache/tesco-catalog.json
+
+# Catalogue crawl diagnostic screenshot
+catalog-page-1.png

@@ -38,11 +38,23 @@ async function crawlCatalog(maxPages = 25) {
 
     for (let page = 1; page <= maxPages; page++) {
 
-        const tiles = await scrapeSearchPage(catalogUrl(page));
+        // Screenshot the first page so an empty crawl can be diagnosed.
+        const shot = page === 1
+            ? path.join(__dirname, "../catalog-page-1.png")
+            : undefined;
 
-        // No products on this page -> we've reached the end.
+        const tiles = await scrapeSearchPage(catalogUrl(page), shot);
+
+        console.log(`  page ${page}: found ${tiles.length} product tiles on the page`);
+
+        // No products on this page -> we've reached the end (or were blocked).
         if (tiles.length === 0) {
-            console.log(`  page ${page}: no products — stopping.`);
+            if (page === 1) {
+                console.log(
+                    "  Nothing on page 1 — check catalog-page-1.png to see what " +
+                    "Tesco showed (cookie wall / access denied / different layout)."
+                );
+            }
             break;
         }
 
