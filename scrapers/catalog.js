@@ -22,6 +22,10 @@ const {
 
 const BASE = "https://www.tesco.com";
 
+// Tesco returns count=24 per page. A page with clearly fewer than this is
+// the last page of real results; pages after it are unrelated suggestions.
+const FULL_PAGE = 24;
+
 const CATALOG_FILE = path.join(__dirname, "../cache/tesco-catalog.json");
 
 
@@ -85,7 +89,18 @@ async function crawlCatalog(maxPages = 25) {
 
         console.log(`  page ${page}: +${added} products (total ${products.length})`);
 
-        // If a page adds nothing new, we're past the real results.
+        // A page much smaller than a full one (24 per page) means the real
+        // search results have run out. Everything after that is unrelated
+        // "suggestions" (cards, books, plants...), so stop here.
+        if (tiles.length < FULL_PAGE) {
+            console.log(
+                `  page ${page} was short (${tiles.length} < ${FULL_PAGE}) — ` +
+                `end of the craft beer results, stopping before the suggestions.`
+            );
+            break;
+        }
+
+        // If a page adds nothing new (all duplicates), we're also done.
         if (added === 0) break;
     }
 
