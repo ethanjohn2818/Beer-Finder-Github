@@ -281,13 +281,13 @@ function renderCard(result, index) {
             <h2>${beer.name}</h2>
 
             <p class="beer-style">
-                ${beer.style || "Beer"}
+                ${beer.style || "Craft beer"}
                 ${beer.abv ? beer.abv + "%" : ""}
             </p>
 
-            <p class="beer-hops">
-                🌿 ${beer.hops.join(", ")}
-            </p>
+            ${(beer.hops && beer.hops.length)
+                ? `<p class="beer-hops">🌿 ${beer.hops.join(", ")}</p>`
+                : ""}
 
             ${renderStoreButtons(index)}
 

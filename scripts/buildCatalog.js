@@ -1,38 +1,27 @@
 // ---------------------------------------------------------------
 // Build the Tesco beer catalogue.
 //
-// Crawls Tesco for "craft beer" plus "<brewery> beer" for every brewery
-// in our list, and saves every real beer product (name, price, image,
-// link, pack size) to cache/tesco-catalog.json. Searching per brewery
-// captures far more of Tesco's range than a single "craft beer" search.
+// Crawls Tesco's "craft beer" search from page 1 to the end and saves
+// every real beer product (name, price, image, link, pack size) to
+// cache/tesco-catalog.json. The website matches our hop list against
+// this, so only genuine Tesco beers appear.
+//
+// We use the single "craft beer" search on purpose: it's Tesco's real,
+// curated craft selection. (Searching per brewery pulled in ~1000
+// results because Tesco pads searches for beers it doesn't stock with
+// unrelated "suggestions".)
 //
 // Run it with:   npm run catalog
 // ---------------------------------------------------------------
 
-const fs = require("fs");
-const path = require("path");
-
 const { crawlQueries, saveCatalog, CATALOG_FILE } = require("../scrapers/catalog");
-
-
-const beers = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../data/beers.json"), "utf8")
-);
-
-// Unique breweries from our list, plus a broad "craft beer" sweep.
-const breweries = [...new Set(beers.map(b => b.brewery).filter(Boolean))];
-
-const queries = ["craft beer", ...breweries.map(b => `${b} beer`)];
 
 
 (async () => {
 
-    console.log(
-        `Crawling Tesco: "craft beer" + ${breweries.length} breweries ` +
-        `(${queries.length} searches). A browser window will open...\n`
-    );
+    console.log("Crawling Tesco's craft beer pages (a browser window will open)...\n");
 
-    const products = await crawlQueries(queries, 10);
+    const products = await crawlQueries(["craft beer"], 30);
 
     saveCatalog(products);
 
