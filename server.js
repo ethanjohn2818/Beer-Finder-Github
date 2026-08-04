@@ -19,6 +19,23 @@ app.use(
 
 
 
+// Does a beer match a free-text search? Matches on hop, brewery, name,
+// style or flavour (case-insensitive substring).
+function beerMatchesQuery(beer, query) {
+
+    const q = query.toLowerCase();
+
+    if ((beer.name || "").toLowerCase().includes(q)) return true;
+    if ((beer.brewery || "").toLowerCase().includes(q)) return true;
+    if ((beer.style || "").toLowerCase().includes(q)) return true;
+
+    if ((beer.hops || []).some(h => h.toLowerCase().includes(q))) return true;
+    if ((beer.flavours || []).some(f => f.toLowerCase().includes(q))) return true;
+
+    return false;
+}
+
+
 // Find a beer's buy options in the Tesco catalogue: every catalogue
 // product that matches this beer, one option per pack size.
 function catalogOptions(beer, catalog) {
@@ -91,15 +108,17 @@ app.get("/beers", (req,res)=>{
 app.get("/recommend", (req,res)=>{
 
 
-    const hop = req.query.hop;
+    // Accept a general query (?q=) — matches hop, brewery or beer name.
+    // Falls back to the old ?hop= for backwards compatibility.
+    const query = (req.query.q || req.query.hop || "").trim();
 
 
 
-    if(!hop) {
+    if(!query) {
 
         return res.status(400).json({
 
-            error:"Please provide a hop"
+            error:"Please provide something to search for"
 
         });
 
@@ -124,11 +143,9 @@ app.get("/recommend", (req,res)=>{
         }
 
 
-        // Beers in our list whose hops include the searched hop
+        // Beers matching the query by hop, brewery, name, style or flavour
         const matches = beers.filter(beer =>
-            beer.hops.some(h =>
-                h.toLowerCase().includes(hop.toLowerCase())
-            )
+            beerMatchesQuery(beer, query)
         );
 
 

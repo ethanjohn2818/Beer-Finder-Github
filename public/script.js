@@ -138,18 +138,25 @@ function buildBreweryList(beers) {
 
 async function searchBeers() {
 
-    const hop = document
+    const query = document
         .getElementById("hopInput")
-        .value;
+        .value
+        .trim();
 
     const resultsDiv = document.getElementById("results");
 
-    resultsDiv.innerHTML = "<p class='searching'>Searching supermarkets... 🍺</p>";
+    if (!query) {
+        resultsDiv.innerHTML =
+            "<p class='searching'>Type a hop, brewery or beer name to search 🍺</p>";
+        return;
+    }
+
+    resultsDiv.innerHTML = "<p class='searching'>Searching... 🍺</p>";
 
     try {
 
         const response = await fetch(
-            `/recommend?hop=${encodeURIComponent(hop)}`
+            `/recommend?q=${encodeURIComponent(query)}`
         );
 
         const beers = await response.json();
@@ -158,7 +165,7 @@ async function searchBeers() {
 
         if (!Array.isArray(beers) || beers.length === 0) {
             resultsDiv.innerHTML =
-                "<p class='searching'>No beers found for that hop 😔</p>";
+                "<p class='searching'>No beers found for that search 😔</p>";
             return;
         }
 
