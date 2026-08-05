@@ -26,7 +26,8 @@ const BASE = "https://www.tesco.com";
 // the last page of real results; pages after it are unrelated suggestions.
 const FULL_PAGE = 24;
 
-const CATALOG_FILE = path.join(__dirname, "../cache/tesco-catalog.json");
+// Written into the published site so the static front-end can load it.
+const CATALOG_FILE = path.join(__dirname, "../public/data/tesco-catalog.json");
 
 
 function searchUrl(query, page) {

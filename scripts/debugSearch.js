@@ -27,7 +27,7 @@ if (!term) {
 let brewery = "";
 try {
     const beers = JSON.parse(
-        fs.readFileSync(path.join(__dirname, "../data/beers.json"), "utf8")
+        fs.readFileSync(path.join(__dirname, "../public/data/beers.json"), "utf8")
     );
     const beer = beers.find(b => b.name.toLowerCase() === term.toLowerCase());
     if (beer) brewery = beer.brewery;

@@ -10,12 +10,13 @@ npm-debug.log*
 
 # Local backup made by `npm run prune`
 data/beers.full.json
+public/data/beers.full.json
 
 # Debug screenshot from `npm run debug`
 debug-page.png
 
-# Tesco catalogue built locally by `npm run catalog`
-cache/tesco-catalog.json
-
 # Catalogue crawl diagnostic screenshot
 catalog-page-1.png
+
+# NOTE: public/data/tesco-catalog.json IS committed on purpose — it's the
+# data the live static site serves. Rebuild it with `npm run catalog`.

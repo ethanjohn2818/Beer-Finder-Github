@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
     "catalog": "node scripts/buildCatalog.js",
-    "warm": "node scripts/buildBeerDatabase.js",
-    "prune": "node scripts/pruneBeers.js",
+    "start": "node server.js",
     "debug": "node scripts/debugSearch.js",
     "report": "node scripts/matchReport.js",
     "test": "echo \"Error: no test specified\" && exit 1"

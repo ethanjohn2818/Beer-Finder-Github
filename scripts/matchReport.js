@@ -19,7 +19,7 @@ const { loadCatalog } = require("../scrapers/catalog");
 
 
 const beers = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../data/beers.json"), "utf8")
+    fs.readFileSync(path.join(__dirname, "../public/data/beers.json"), "utf8")
 );
 
 const catalog = loadCatalog();

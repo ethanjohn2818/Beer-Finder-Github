@@ -39,15 +39,19 @@ document.querySelectorAll("[data-view]").forEach(el => {
 // Load the beer database once, then build the Hops & Brewery lists
 // ---------------------------------------------------------------
 
-// All catalogue beers, kept so the "Find your beer" page can filter them
+// All catalogue beers, built in the browser from the two data files.
 let allBeers = [];
 
 async function loadBeerData() {
 
     try {
 
-        const response = await fetch("/beers");
-        allBeers = await response.json();
+        const [curated, catalog] = await Promise.all([
+            fetch("data/beers.json").then(r => r.json()),
+            fetch("data/tesco-catalog.json").then(r => r.json())
+        ]);
+
+        allBeers = buildCatalogBeers(catalog, curated);
 
         buildHopsList(allBeers);
         buildBreweryList(allBeers);
@@ -140,7 +144,7 @@ function buildBreweryList(beers) {
 // Search (existing feature)
 // ---------------------------------------------------------------
 
-async function searchBeers() {
+function searchBeers() {
 
     const query = document
         .getElementById("hopInput")
@@ -155,39 +159,39 @@ async function searchBeers() {
         return;
     }
 
-    resultsDiv.innerHTML = "<p class='searching'>Searching... 🍺</p>";
+    // Filter the in-browser beer list (no server needed)
+    const matches = allBeers.filter(beer => beerMatchesQuery(beer, query));
 
-    try {
-
-        const response = await fetch(
-            `/recommend?q=${encodeURIComponent(query)}`
-        );
-
-        const beers = await response.json();
-
-        resultsDiv.innerHTML = "";
-
-        if (!Array.isArray(beers) || beers.length === 0) {
-            resultsDiv.innerHTML =
-                "<p class='searching'>No beers found for that search 😔</p>";
-            return;
-        }
-
-        // Reset the per-card state, then render every beer
-        cardData = [];
-        cardState = [];
-
-        const html = beers
-            .map((result, index) => renderCard(result, index))
-            .join("");
-
-        resultsDiv.innerHTML = html;
-
-    } catch (error) {
-        console.error(error);
+    if (matches.length === 0) {
         resultsDiv.innerHTML =
-            "<p class='searching'>Something went wrong. Please try again.</p>";
+            "<p class='searching'>No beers found for that search 😔</p>";
+        return;
     }
+
+    renderBeerCards(matches, resultsDiv);
+}
+
+
+// Render a list of catalogue beers as cards into a container.
+function renderBeerCards(beers, container) {
+
+    cardData = [];
+    cardState = [];
+
+    const html = beers
+        .map((beer, index) => renderCard({
+            beer,
+            offers: [{
+                supermarket: "Tesco",
+                options: beer.options,
+                price: beer.price,
+                image: beer.image,
+                link: beer.link
+            }]
+        }, index))
+        .join("");
+
+    container.innerHTML = html;
 }
 
 
@@ -505,24 +509,7 @@ function findByFlavour() {
         return;
     }
 
-    // Wrap each beer as a result so we can reuse the beer-card renderer
-    cardData = [];
-    cardState = [];
-
-    const html = matches
-        .map((beer, index) => renderCard({
-            beer,
-            offers: [{
-                supermarket: "Tesco",
-                options: beer.options,
-                price: beer.price,
-                image: beer.image,
-                link: beer.link
-            }]
-        }, index))
-        .join("");
-
-    resultsDiv.innerHTML = html;
+    renderBeerCards(matches, resultsDiv);
 }
 
 
