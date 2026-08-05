@@ -39,15 +39,19 @@ document.querySelectorAll("[data-view]").forEach(el => {
 // Load the beer database once, then build the Hops & Brewery lists
 // ---------------------------------------------------------------
 
+// All catalogue beers, kept so the "Find your beer" page can filter them
+let allBeers = [];
+
 async function loadBeerData() {
 
     try {
 
         const response = await fetch("/beers");
-        const beers = await response.json();
+        allBeers = await response.json();
 
-        buildHopsList(beers);
-        buildBreweryList(beers);
+        buildHopsList(allBeers);
+        buildBreweryList(allBeers);
+        renderFlavourChips();
 
     } catch (error) {
         console.error("Could not load beers:", error);
@@ -363,27 +367,27 @@ function setOption(index, optIndex) {
 }
 
 
-// One listener handles clicks for store buttons and pack-size buttons
-document.getElementById("results")
-    .addEventListener("click", event => {
+// One listener handles clicks for store buttons and pack-size buttons,
+// anywhere on the page (search results and "Find your beer" results).
+document.addEventListener("click", event => {
 
-        const storeBtn = event.target.closest(".store-btn");
-        if (storeBtn) {
-            setStore(
-                Number(storeBtn.dataset.card),
-                Number(storeBtn.dataset.store)
-            );
-            return;
-        }
+    const storeBtn = event.target.closest(".store-btn");
+    if (storeBtn) {
+        setStore(
+            Number(storeBtn.dataset.card),
+            Number(storeBtn.dataset.store)
+        );
+        return;
+    }
 
-        const optBtn = event.target.closest(".opt-btn");
-        if (optBtn) {
-            setOption(
-                Number(optBtn.dataset.card),
-                Number(optBtn.dataset.opt)
-            );
-        }
-    });
+    const optBtn = event.target.closest(".opt-btn");
+    if (optBtn) {
+        setOption(
+            Number(optBtn.dataset.card),
+            Number(optBtn.dataset.opt)
+        );
+    }
+});
 
 
 // Let people press Enter in the search box
@@ -393,6 +397,133 @@ document.getElementById("hopInput")
             searchBeers();
         }
     });
+
+
+// ---------------------------------------------------------------
+// Find your beer (pick flavours -> matching beers)
+// ---------------------------------------------------------------
+
+// Each option knows how to decide if a beer fits it, using the beer's
+// flavours, style, hops and ABV.
+function flavours(beer) {
+    return (beer.flavours || []).map(f => f.toLowerCase());
+}
+function hasAny(beer, words) {
+    const f = flavours(beer);
+    return words.some(w => f.some(x => x.includes(w)));
+}
+function styleIs(beer, words) {
+    const s = (beer.style || "").toLowerCase();
+    return words.some(w => s.includes(w));
+}
+
+const FLAVOUR_CATEGORIES = [
+    { label: "Fruity", emoji: "🍑",
+      match: b => hasAny(b, ["tropical","mango","peach","berry","strawberry","guava","pineapple","passionfruit","orange","apricot","lychee","gooseberry"]) },
+    { label: "Citrus", emoji: "🍋",
+      match: b => hasAny(b, ["citrus","grapefruit","lemon","lime","orange","tangerine","zesty"]) },
+    { label: "Tropical & Juicy", emoji: "🥭",
+      match: b => hasAny(b, ["tropical","mango","pineapple","passionfruit","guava","juicy","soft","creamy"]) },
+    { label: "Hoppy", emoji: "🌿",
+      match: b => styleIs(b, ["ipa","pale ale"]) || (b.hops || []).length >= 3 },
+    { label: "Extra Hoppy", emoji: "🔥",
+      match: b => styleIs(b, ["double ipa","imperial","new england"]) || (b.abv >= 6 && styleIs(b, ["ipa"])) || (b.hops || []).length >= 5 },
+    { label: "Sour", emoji: "😝",
+      match: b => styleIs(b, ["sour","gose","berliner"]) || hasAny(b, ["tart","sour"]) },
+    { label: "Dark & Roasty", emoji: "☕",
+      match: b => styleIs(b, ["stout","porter"]) || hasAny(b, ["coffee","chocolate","roasted","roast"]) },
+    { label: "Malty & Sweet", emoji: "🍯",
+      match: b => hasAny(b, ["caramel","toffee","biscuit","bready","marshmallow","vanilla","sweet","honey"]) },
+    { label: "Piney & Resinous", emoji: "🌲",
+      match: b => hasAny(b, ["pine","resin","herbal","floral"]) },
+    { label: "Crisp Lager", emoji: "🍺",
+      match: b => styleIs(b, ["lager","pilsner","pils","helles"]) || hasAny(b, ["crisp"]) },
+    { label: "Light & Sessionable", emoji: "🪶",
+      match: b => (b.abv && b.abv <= 4.3) || styleIs(b, ["session"]) }
+];
+
+const selectedFlavours = new Set();
+
+
+function renderFlavourChips() {
+
+    const container = document.getElementById("flavour-chips");
+    if (!container) return;
+
+    container.innerHTML = FLAVOUR_CATEGORIES.map((cat, i) => `
+        <button class="flavour-chip" data-flavour="${i}">
+            <span>${cat.emoji}</span> ${cat.label}
+        </button>
+    `).join("");
+}
+
+
+// Toggle a flavour chip on/off
+document.getElementById("flavour-chips")
+    .addEventListener("click", event => {
+        const chip = event.target.closest(".flavour-chip");
+        if (!chip) return;
+        const i = Number(chip.dataset.flavour);
+        if (selectedFlavours.has(i)) {
+            selectedFlavours.delete(i);
+            chip.classList.remove("active");
+        } else {
+            selectedFlavours.add(i);
+            chip.classList.add("active");
+        }
+    });
+
+
+function clearFlavours() {
+    selectedFlavours.clear();
+    document.querySelectorAll(".flavour-chip")
+        .forEach(chip => chip.classList.remove("active"));
+    document.getElementById("find-results").innerHTML = "";
+}
+
+
+// Show beers matching ALL selected flavours
+function findByFlavour() {
+
+    const resultsDiv = document.getElementById("find-results");
+
+    if (selectedFlavours.size === 0) {
+        resultsDiv.innerHTML =
+            "<p class='searching'>Pick at least one flavour above 🍺</p>";
+        return;
+    }
+
+    const chosen = [...selectedFlavours].map(i => FLAVOUR_CATEGORIES[i]);
+
+    const matches = allBeers.filter(beer =>
+        chosen.every(cat => cat.match(beer))
+    );
+
+    if (matches.length === 0) {
+        resultsDiv.innerHTML =
+            "<p class='searching'>No beers match all those flavours — try fewer 😔</p>";
+        return;
+    }
+
+    // Wrap each beer as a result so we can reuse the beer-card renderer
+    cardData = [];
+    cardState = [];
+
+    const html = matches
+        .map((beer, index) => renderCard({
+            beer,
+            offers: [{
+                supermarket: "Tesco",
+                options: beer.options,
+                price: beer.price,
+                image: beer.image,
+                link: beer.link
+            }]
+        }, index))
+        .join("");
+
+    resultsDiv.innerHTML = html;
+}
 
 
 // ---------------------------------------------------------------

@@ -178,7 +178,8 @@ main {
 /* ---------------------------------------------------------------
    Search results grid (4 across)
 --------------------------------------------------------------- */
-#results {
+#results,
+#find-results {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
@@ -483,7 +484,8 @@ main {
    Responsive
 --------------------------------------------------------------- */
 @media (max-width: 900px) {
-    #results {
+    #results,
+    #find-results {
         grid-template-columns: repeat(2, 1fr);
     }
     .list-grid {
@@ -496,6 +498,7 @@ main {
 
 @media (max-width: 560px) {
     #results,
+    #find-results,
     .list-grid {
         grid-template-columns: 1fr;
     }
@@ -505,4 +508,82 @@ main {
     .nav-btn {
         padding: 8px 12px;
     }
+}
+
+
+/* ---------------------------------------------------------------
+   Find your beer — flavour chips
+--------------------------------------------------------------- */
+.flavour-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin: 10px 0 24px;
+}
+
+.flavour-chip {
+    padding: 12px 20px;
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.flavour-chip:hover {
+    transform: translateY(-2px);
+    border-color: var(--amber);
+    box-shadow: var(--shadow-md);
+}
+
+.flavour-chip.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: #fff;
+}
+
+.find-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 8px 0 32px;
+}
+
+.find-btn {
+    padding: 14px 32px;
+    border: none;
+    border-radius: 12px;
+    background: var(--amber);
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.find-btn:hover {
+    background: var(--amber-dark);
+    transform: translateY(-2px);
+}
+
+.clear-btn {
+    padding: 14px 22px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.clear-btn:hover {
+    border-color: var(--amber);
+    color: var(--ink);
 }

@@ -17,6 +17,7 @@
         </div>
 
         <nav class="nav-links">
+            <button class="nav-btn" data-view="find">Find Your Beer</button>
             <button class="nav-btn" data-view="hops">Hops</button>
             <button class="nav-btn" data-view="brewery">Brewery</button>
             <button class="nav-btn" data-view="contact">Contact</button>
@@ -47,6 +48,26 @@
 
             <div id="results"></div>
 
+        </section>
+
+
+        <!-- FIND YOUR BEER VIEW -->
+        <section id="find-view" class="view hidden">
+            <h1>Find your beer ✨</h1>
+            <p class="view-intro">Pick the flavours you fancy, then hit “Show my beers”.</p>
+
+            <div id="flavour-chips" class="flavour-chips"></div>
+
+            <div class="find-actions">
+                <button id="findBtn" class="find-btn" onclick="findByFlavour()">
+                    Show my beers
+                </button>
+                <button id="clearBtn" class="clear-btn" onclick="clearFlavours()">
+                    Clear
+                </button>
+            </div>
+
+            <div id="find-results"></div>
         </section>
 
 
