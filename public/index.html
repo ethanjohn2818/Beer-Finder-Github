@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Finder</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6022289335915022"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -46,6 +50,8 @@
                 </div>
             </div>
 
+            <div class="ad-slot" data-ad="search-top"></div>
+
             <div id="results"></div>
 
         </section>
@@ -66,6 +72,8 @@
                     Clear
                 </button>
             </div>
+
+            <div class="ad-slot" data-ad="find-top"></div>
 
             <div id="find-results"></div>
         </section>
@@ -127,6 +135,32 @@
             </div>
         </section>
 
+
+        <!-- PRIVACY VIEW -->
+        <section id="privacy-view" class="view hidden">
+            <h1>Privacy policy 🔒</h1>
+            <p class="view-intro">Last updated August 2026.</p>
+
+            <div class="privacy">
+                <p>Beer Finder is a simple site that helps you find craft beers and where to buy them. We keep this short and plain.</p>
+
+                <h2>What we collect</h2>
+                <p>We don't ask you to create an account and we don't collect your name or contact details unless you choose to email us. The beer search runs in your browser.</p>
+
+                <h2>Cookies &amp; advertising</h2>
+                <p>We show adverts through <strong>Google AdSense</strong>. Google and its partners may use cookies to show and measure ads, including personalised ads based on your prior visits to this and other websites. You can learn how Google uses information from sites that use its services at
+                    <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>,
+                    and opt out of personalised advertising at
+                    <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">google.com/settings/ads</a>.</p>
+
+                <h2>Prices &amp; availability</h2>
+                <p>Beer prices, images and links are gathered from supermarket websites and may be out of date. Always check the retailer's own page before buying. We are not affiliated with any supermarket.</p>
+
+                <h2>Contact</h2>
+                <p>Questions about this policy? Email <a href="mailto:hello@beerfinder.co.uk">hello@beerfinder.co.uk</a>.</p>
+            </div>
+        </section>
+
     </main>
 
 
@@ -135,13 +169,14 @@
         <p>
             <a href="mailto:hello@beerfinder.co.uk">hello@beerfinder.co.uk</a>
             &nbsp;·&nbsp;
-            <a href="tel:+441234567890">+44 1234 567890</a>
+            <a href="#" data-view="privacy">Privacy policy</a>
         </p>
     </footer>
 
 
     <script src="beerlogic.js"></script>
     <script src="script.js"></script>
+    <script src="ads.js"></script>
 
 </body>
 </html>

@@ -587,3 +587,55 @@ main {
     border-color: var(--amber);
     color: var(--ink);
 }
+
+
+/* ---------------------------------------------------------------
+   Adverts
+--------------------------------------------------------------- */
+.ad-slot {
+    margin: 24px auto;
+    max-width: 970px;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Hide the ad box entirely when there's no ad in it, so no empty gap. */
+.ad-slot:empty {
+    display: none;
+    margin: 0;
+}
+
+.ad-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+
+/* ---------------------------------------------------------------
+   Privacy page
+--------------------------------------------------------------- */
+.privacy {
+    max-width: 760px;
+    background: var(--card);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    line-height: 1.65;
+}
+
+.privacy h2 {
+    font-size: 1.15rem;
+    margin: 22px 0 6px;
+}
+
+.privacy p {
+    color: var(--ink);
+    margin: 0 0 10px;
+}
+
+.privacy a {
+    color: var(--amber-dark);
+}
