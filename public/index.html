@@ -1,30 +1,182 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Finder</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6022289335915022"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-    <h1>🍺 Beer Finder</h1>
+    <!-- Top navigation bar -->
+    <header class="nav">
 
-    <p>Find beers based on your favourite hops</p>
+        <div class="nav-brand" data-view="search">
+            🍺 Beer Finder
+        </div>
 
-    <input 
-        id="hopInput" 
-        placeholder="Try Mosaic, Citra..."
-    >
+        <nav class="nav-links">
+            <button class="nav-btn" data-view="find">Find Your Beer</button>
+            <button class="nav-btn" data-view="hops">Hops</button>
+            <button class="nav-btn" data-view="brewery">Brewery</button>
+            <button class="nav-btn" data-view="contact">Contact</button>
+        </nav>
 
-    <button onclick="searchBeers()">
-        Find Beers
-    </button>
-
-
-    <div id="results"></div>
+    </header>
 
 
+    <main>
+
+        <!-- SEARCH VIEW -->
+        <section id="search-view" class="view">
+
+            <div class="hero">
+                <h1>Find your next beer 🍺</h1>
+                <p>Search by hop, brewery or beer name and we'll find it at the supermarket.</p>
+
+                <div class="search-bar">
+                    <input
+                        id="hopInput"
+                        placeholder="Try Citra, BrewDog, Neck Oil..."
+                    >
+                    <button id="searchBtn" onclick="searchBeers()">
+                        Find Beers
+                    </button>
+                </div>
+            </div>
+
+            <div class="ad-slot" data-ad="search-top"></div>
+
+            <div id="results"></div>
+
+        </section>
+
+
+        <!-- FIND YOUR BEER VIEW -->
+        <section id="find-view" class="view hidden">
+            <h1>Find your beer ✨</h1>
+            <p class="view-intro">Pick the flavours you fancy, then hit “Show my beers”.</p>
+
+            <div id="flavour-chips" class="flavour-chips"></div>
+
+            <div class="find-actions">
+                <button id="findBtn" class="find-btn" onclick="findByFlavour()">
+                    Show my beers
+                </button>
+                <button id="clearBtn" class="clear-btn" onclick="clearFlavours()">
+                    Clear
+                </button>
+            </div>
+
+            <div class="ad-slot" data-ad="find-top"></div>
+
+            <div id="find-results"></div>
+        </section>
+
+
+        <!-- HOPS VIEW -->
+        <section id="hops-view" class="view hidden">
+            <h1>Hops we know 🌿</h1>
+            <p class="view-intro">Hops in the beers you can buy right now, and which beers use them.</p>
+            <div id="hops-list" class="list-grid"></div>
+        </section>
+
+
+        <!-- BREWERY VIEW -->
+        <section id="brewery-view" class="view hidden">
+            <h1>Breweries we know 🏭</h1>
+            <p class="view-intro">Breweries whose beers you can buy right now, and their beers.</p>
+            <div id="brewery-list" class="list-grid"></div>
+        </section>
+
+
+        <!-- CONTACT VIEW -->
+        <section id="contact-view" class="view hidden">
+            <h1>Contact us ✉️</h1>
+            <p class="view-intro">Got a beer we should add, or a question? Drop us a line.</p>
+
+            <div class="contact-wrap">
+
+                <div class="contact-info">
+                    <h2>Get in touch</h2>
+                    <p>📧 <a href="mailto:hello@beerfinder.co.uk">hello@beerfinder.co.uk</a></p>
+                    <p>📞 <a href="tel:+441234567890">+44 1234 567890</a></p>
+                    <p>📍 United Kingdom</p>
+
+                    <div class="socials">
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Facebook">👍</a>
+                    </div>
+                </div>
+
+                <form class="contact-form" onsubmit="sendMessage(event)">
+                    <label>
+                        Name
+                        <input type="text" id="c-name" required>
+                    </label>
+                    <label>
+                        Email
+                        <input type="email" id="c-email" required>
+                    </label>
+                    <label>
+                        Message
+                        <textarea id="c-message" rows="4" required></textarea>
+                    </label>
+                    <button type="submit">Send message</button>
+                    <p id="contact-status" class="contact-status"></p>
+                </form>
+
+            </div>
+        </section>
+
+
+        <!-- PRIVACY VIEW -->
+        <section id="privacy-view" class="view hidden">
+            <h1>Privacy policy 🔒</h1>
+            <p class="view-intro">Last updated August 2026.</p>
+
+            <div class="privacy">
+                <p>Beer Finder is a simple site that helps you find craft beers and where to buy them. We keep this short and plain.</p>
+
+                <h2>What we collect</h2>
+                <p>We don't ask you to create an account and we don't collect your name or contact details unless you choose to email us. The beer search runs in your browser.</p>
+
+                <h2>Cookies &amp; advertising</h2>
+                <p>We show adverts through <strong>Google AdSense</strong>. Google and its partners may use cookies to show and measure ads, including personalised ads based on your prior visits to this and other websites. You can learn how Google uses information from sites that use its services at
+                    <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>,
+                    and opt out of personalised advertising at
+                    <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">google.com/settings/ads</a>.</p>
+
+                <h2>Prices &amp; availability</h2>
+                <p>Beer prices, images and links are gathered from supermarket websites and may be out of date. Always check the retailer's own page before buying. We are not affiliated with any supermarket.</p>
+
+                <h2>Contact</h2>
+                <p>Questions about this policy? Email <a href="mailto:hello@beerfinder.co.uk">hello@beerfinder.co.uk</a>.</p>
+            </div>
+        </section>
+
+    </main>
+
+
+    <footer class="footer">
+        <p>🍺 Beer Finder — made for beer lovers.</p>
+        <p>
+            <a href="mailto:hello@beerfinder.co.uk">hello@beerfinder.co.uk</a>
+            &nbsp;·&nbsp;
+            <a href="#" data-view="privacy">Privacy policy</a>
+        </p>
+    </footer>
+
+
+    <script src="beerlogic.js"></script>
     <script src="script.js"></script>
+    <script src="ads.js"></script>
 
 </body>
 </html>
