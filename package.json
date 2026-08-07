@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "catalog": "node scripts/buildCatalog.js",
+    "morrisons": "node scrapers/morrisons.js",
     "start": "node server.js",
     "debug": "node scripts/debugSearch.js",
     "report": "node scripts/matchReport.js",
