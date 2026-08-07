@@ -52,6 +52,7 @@ const STORES = [
         productSelector: "a[href*='/products/']",
         imageHint: "",
         fullPage: 24,
+        scroll: true,   // Morrisons lazy-loads its grid on scroll
         searchUrl: (query, page) =>
             `https://groceries.morrisons.com/search?q=${enc(query)}&page=${page}`
     }
@@ -72,6 +73,7 @@ async function crawlStore(store, query, products) {
         const tiles = await scrapeSearchPage(store.searchUrl(query, page), {
             productSelector: store.productSelector,
             imageHint: store.imageHint,
+            scroll: store.scroll,
             screenshotPath: shot
         });
 

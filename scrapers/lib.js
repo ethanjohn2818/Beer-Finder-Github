@@ -570,6 +570,18 @@ async function scrapeSearchPage(url, opts = {}) {
             .waitFor({ timeout: 12000 })
             .catch(() => {});
 
+        // Some shops (SPAs like Morrisons) lazy-load the main product grid
+        // as you scroll. Scroll down a few times to load it all.
+        if (opts.scroll) {
+            await page.evaluate(async () => {
+                for (let i = 0; i < 8; i++) {
+                    window.scrollTo(0, document.body.scrollHeight);
+                    await new Promise(r => setTimeout(r, 700));
+                }
+                window.scrollTo(0, 0);
+            }).catch(() => {});
+        }
+
         if (screenshotPath) {
             await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
         }
