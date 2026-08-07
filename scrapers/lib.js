@@ -571,15 +571,19 @@ async function scrapeSearchPage(url, opts = {}) {
             .catch(() => {});
 
         // Some shops (SPAs like Morrisons) lazy-load the main product grid
-        // as you scroll. Scroll down a few times to load it all.
+        // after the initial paint. Wait for the network to settle, scroll
+        // to trigger lazy loading, then settle again before scraping.
         if (opts.scroll) {
+            await page.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {});
             await page.evaluate(async () => {
-                for (let i = 0; i < 8; i++) {
+                for (let i = 0; i < 10; i++) {
                     window.scrollTo(0, document.body.scrollHeight);
-                    await new Promise(r => setTimeout(r, 700));
+                    await new Promise(r => setTimeout(r, 800));
                 }
                 window.scrollTo(0, 0);
             }).catch(() => {});
+            await page.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {});
+            await page.waitForTimeout(1500);
         }
 
         if (screenshotPath) {

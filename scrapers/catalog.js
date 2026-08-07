@@ -107,7 +107,7 @@ async function crawlStore(store, query, products) {
             added++;
         }
 
-        console.log(`  ${store.name} page ${page}: +${added} (total ${products.length})`);
+        console.log(`  ${store.name} page ${page}: found ${tiles.length} product tiles, kept ${added} priced (total ${products.length})`);
 
         // A short page = end of the real results (rest are "suggestions").
         if (tiles.length < store.fullPage) break;
