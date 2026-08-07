@@ -46,10 +46,18 @@ async function loadBeerData() {
 
     try {
 
-        const [curated, catalog] = await Promise.all([
-            fetch("data/beers.json").then(r => r.json()),
-            fetch("data/tesco-catalog.json").then(r => r.json())
-        ]);
+        const curated = await fetch("data/beers.json").then(r => r.json());
+
+        // Combined multi-shop catalogue; fall back to the old Tesco-only
+        // file so the site keeps working until the new one is built.
+        let catalog = await fetch("data/catalog.json")
+            .then(r => r.ok ? r.json() : [])
+            .catch(() => []);
+        if (!catalog.length) {
+            catalog = await fetch("data/tesco-catalog.json")
+                .then(r => r.ok ? r.json() : [])
+                .catch(() => []);
+        }
 
         allBeers = buildCatalogBeers(catalog, curated);
 
@@ -179,16 +187,7 @@ function renderBeerCards(beers, container) {
     cardState = [];
 
     const html = beers
-        .map((beer, index) => renderCard({
-            beer,
-            offers: [{
-                supermarket: "Tesco",
-                options: beer.options,
-                price: beer.price,
-                image: beer.image,
-                link: beer.link
-            }]
-        }, index))
+        .map((beer, index) => renderCard({ beer, offers: beer.offers }, index))
         .join("");
 
     container.innerHTML = html;

@@ -15,8 +15,9 @@ public/data/beers.full.json
 # Debug screenshot from `npm run debug`
 debug-page.png
 
-# Catalogue crawl diagnostic screenshot
+# Catalogue crawl diagnostic screenshots (one per shop)
 catalog-page-1.png
+catalog-*-page1.png
 
-# NOTE: public/data/tesco-catalog.json IS committed on purpose — it's the
-# data the live static site serves. Rebuild it with `npm run catalog`.
+# NOTE: public/data/catalog.json IS committed on purpose — it's the data
+# the live static site serves. Rebuild it with `npm run catalog`.

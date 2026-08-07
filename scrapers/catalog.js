@@ -1,11 +1,13 @@
 // ---------------------------------------------------------------
-// Tesco beer catalogue.
+// Supermarket beer catalogue.
 //
-// One "craft beer" search doesn't surface Tesco's whole beer range, so
-// we crawl a set of searches — "craft beer" plus "<brewery> beer" for
-// every brewery in our list — and record every real beer product (name,
-// price, image, link, pack size). The website then matches our hop list
-// against this catalogue, so only genuine Tesco beer products can appear.
+// Crawls each shop's "craft beer" search, page by page, and records
+// every real beer product (shop, name, price, image, link, pack size)
+// into public/data/catalog.json. The website matches our hop list
+// against this, so only genuine supermarket beers appear.
+//
+// To add a shop: add an entry to STORES below with its search URL and
+// the CSS selector for its product links.
 // ---------------------------------------------------------------
 
 const fs = require("fs");
@@ -20,54 +22,82 @@ const {
 } = require("./lib");
 
 
-const BASE = "https://www.tesco.com";
-
-// Tesco returns count=24 per page. A page with clearly fewer than this is
-// the last page of real results; pages after it are unrelated suggestions.
-const FULL_PAGE = 24;
-
-// Written into the published site so the static front-end can load it.
-const CATALOG_FILE = path.join(__dirname, "../public/data/tesco-catalog.json");
+const CATALOG_FILE = path.join(__dirname, "../public/data/catalog.json");
 
 
-function searchUrl(query, page) {
-    // Spaces as "+" to match Tesco's own search URLs.
-    const q = encodeURIComponent(query).replace(/%20/g, "+");
-    return `${BASE}/shop/en-GB/search?query=${q}&inputType=free+text&count=24&page=${page}`;
+function enc(query) {
+    return encodeURIComponent(query).replace(/%20/g, "+");
 }
 
 
-// Crawl the pages for one search query, adding new products to `products`.
-async function crawlQuery(query, maxPages, products, seen, screenshotFirst) {
+// Each shop: how to build its paginated search URL, and how to find
+// product links on the results page.
+//
+// ⚠️ Tesco is verified. Morrisons is best-effort (written without live
+// access) — if its crawl comes back empty, check the screenshot it saves
+// (catalog-morrisons-page1.png) and we'll adjust the selector/URL.
+const STORES = [
+    {
+        name: "Tesco",
+        baseUrl: "https://www.tesco.com",
+        productSelector: "a[href*='/products/']",
+        imageHint: "digitalcontent",
+        fullPage: 24,
+        searchUrl: (query, page) =>
+            `https://www.tesco.com/shop/en-GB/search?query=${enc(query)}&inputType=free+text&count=24&page=${page}`
+    },
+    {
+        name: "Morrisons",
+        baseUrl: "https://groceries.morrisons.com",
+        productSelector: "a[href*='/products/']",
+        imageHint: "",
+        fullPage: 24,
+        searchUrl: (query, page) =>
+            `https://groceries.morrisons.com/search?q=${enc(query)}&page=${page}`
+    }
+];
 
-    for (let page = 1; page <= maxPages; page++) {
 
-        const shot = (screenshotFirst && page === 1)
-            ? path.join(__dirname, "../catalog-page-1.png")
+// Crawl one shop's pages for a query, adding new products to `products`.
+async function crawlStore(store, query, products) {
+
+    const seen = new Set();
+
+    for (let page = 1; page <= 25; page++) {
+
+        const shot = page === 1
+            ? path.join(__dirname, `../catalog-${store.name.toLowerCase().replace(/[^a-z]/g, "")}-page1.png`)
             : undefined;
 
-        const tiles = await scrapeSearchPage(searchUrl(query, page), shot);
+        const tiles = await scrapeSearchPage(store.searchUrl(query, page), {
+            productSelector: store.productSelector,
+            imageHint: store.imageHint,
+            screenshotPath: shot
+        });
 
-        if (tiles.length === 0) break;
+        if (tiles.length === 0) {
+            console.log(`  ${store.name} page ${page}: 0 products — stopping` +
+                (page === 1 ? ` (see catalog-${store.name.toLowerCase().replace(/[^a-z]/g, "")}-page1.png)` : ""));
+            break;
+        }
 
         let added = 0;
 
         for (const tile of tiles) {
 
             const price = extractPrice(tile.text);
-
-            // Tesco never sells for £0.00 — skip junk / priceless tiles.
             if (priceValue(price) <= 0) continue;
 
-            const link = absolute(BASE, tile.href);
+            const link = absolute(store.baseUrl, tile.href);
             if (!link || seen.has(link)) continue;
             seen.add(link);
 
             products.push({
+                supermarket: store.name,
                 title: (tile.text.split("\n")[0] || tile.text).trim(),
                 text: tile.text,
                 price,
-                image: absolute(BASE, tile.image),
+                image: absolute(store.baseUrl, tile.image),
                 link,
                 pack: detectPackLabel(tile.text)
             });
@@ -75,38 +105,26 @@ async function crawlQuery(query, maxPages, products, seen, screenshotFirst) {
             added++;
         }
 
-        console.log(`    "${query}" page ${page}: +${added} (total ${products.length})`);
+        console.log(`  ${store.name} page ${page}: +${added} (total ${products.length})`);
 
-        // A short page = end of the real results; the rest are suggestions.
-        if (tiles.length < FULL_PAGE) break;
-
-        // Nothing new (all duplicates of earlier searches) -> done here.
+        // A short page = end of the real results (rest are "suggestions").
+        if (tiles.length < store.fullPage) break;
         if (added === 0) break;
     }
 }
 
 
-// Crawl every query in `queries`, deduping products by link across them.
-async function crawlQueries(queries, maxPagesPerQuery = 10) {
+// Crawl every shop for the query and return the combined product list.
+async function crawlCatalog(query = "craft beer") {
 
     const products = [];
-    const seen = new Set();
 
-    let first = true;
-
-    for (const query of queries) {
-        console.log(`\n${query}:`);
-        await crawlQuery(query, maxPagesPerQuery, products, seen, first);
-        first = false;
+    for (const store of STORES) {
+        console.log(`\n=== ${store.name} ===`);
+        await crawlStore(store, query, products);
     }
 
     return products;
-}
-
-
-// Back-compat: crawl just the broad "craft beer" search.
-async function crawlCatalog(maxPages = 25) {
-    return crawlQueries(["craft beer"], maxPages);
 }
 
 
@@ -125,7 +143,7 @@ function loadCatalog() {
 
 
 module.exports = {
-    crawlQueries,
+    STORES,
     crawlCatalog,
     saveCatalog,
     loadCatalog,

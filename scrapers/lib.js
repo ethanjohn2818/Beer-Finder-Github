@@ -539,11 +539,16 @@ function createScraper(config) {
 }
 
 
-// Scrape every product tile from a single Tesco results URL.
-// Returns raw tiles: { text, href, image }. Used by the catalogue
-// crawler to walk the "craft beer" search pages. If screenshotPath is
-// given, saves a picture of the page (for diagnosing an empty crawl).
-async function scrapeSearchPage(url, screenshotPath) {
+// Scrape every product tile from a supermarket search results URL.
+// Returns raw tiles: { text, href, image }.
+//   opts.productSelector : CSS selector for product links (default Tesco's)
+//   opts.imageHint       : substring that marks a real product image
+//   opts.screenshotPath  : save a picture of the page (to diagnose crawls)
+async function scrapeSearchPage(url, opts = {}) {
+
+    const productSelector = opts.productSelector || "a[href*='/products/']";
+    const imageHint = opts.imageHint || "";
+    const screenshotPath = opts.screenshotPath;
 
     const ctx = await getContext();
     const page = await ctx.newPage();
@@ -560,7 +565,7 @@ async function scrapeSearchPage(url, screenshotPath) {
         await dismissCookieBanner(page);
 
         await page
-            .locator("a[href*='/products/']")
+            .locator(productSelector)
             .first()
             .waitFor({ timeout: 12000 })
             .catch(() => {});
@@ -569,10 +574,10 @@ async function scrapeSearchPage(url, screenshotPath) {
             await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
         }
 
-        tiles = await page.evaluate(() => {
+        tiles = await page.evaluate(({ selector, hint }) => {
 
             const anchors = Array.from(
-                document.querySelectorAll("a[href*='/products/']")
+                document.querySelectorAll(selector)
             );
 
             const seen = new Set();
@@ -608,16 +613,16 @@ async function scrapeSearchPage(url, screenshotPath) {
                         img.currentSrc,
                         img.getAttribute("data-src")
                     ].filter(Boolean);
-                    image =
-                        candidates.find(s => s.includes("digitalcontent"))
-                        || candidates[0] || null;
+                    image = (hint
+                        ? candidates.find(s => s.includes(hint))
+                        : null) || candidates[0] || null;
                 }
 
                 out.push({ text, href, image });
             }
 
             return out;
-        });
+        }, { selector: productSelector, hint: imageHint });
 
     } catch (error) {
         console.log("Page failed:", url, error.message);

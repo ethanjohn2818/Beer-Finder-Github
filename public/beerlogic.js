@@ -147,6 +147,8 @@ function deriveBrewery(name, breweries) {
 
 
 // Turn the raw catalogue + hop database into the list of beers to show.
+// Each beer groups its pack sizes per shop, so a beer stocked at more
+// than one supermarket carries one "offer" per shop.
 function buildCatalogBeers(catalog, curated) {
 
     const breweries = [...new Set(curated.map(c => c.brewery).filter(Boolean))];
@@ -163,15 +165,20 @@ function buildCatalogBeers(catalog, curated) {
             groups.set(key, {
                 name: cleanName(product.title),
                 text: product.text || product.title,
-                options: []
+                stores: new Map()   // supermarket -> [ options ]
             });
         }
 
         const group = groups.get(key);
-        const label = product.pack || "Buy";
-        if (group.options.some(o => o.label === label)) continue;
+        const store = product.supermarket || "Tesco";
 
-        group.options.push({
+        if (!group.stores.has(store)) group.stores.set(store, []);
+        const options = group.stores.get(store);
+
+        const label = product.pack || "Buy";
+        if (options.some(o => o.label === label)) continue;
+
+        options.push({
             label,
             price: product.price,
             image: product.image,
@@ -183,15 +190,29 @@ function buildCatalogBeers(catalog, curated) {
 
     for (const group of groups.values()) {
 
-        if (group.options.length === 0) continue;
+        // One offer per shop, with that shop's pack sizes
+        const offers = [];
+        for (const [store, options] of group.stores) {
+            if (options.length === 0) continue;
+            options.sort((a, b) => packRank(a.label) - packRank(b.label));
+            const first = options[0];
+            offers.push({
+                supermarket: store,
+                options,
+                price: first.price,
+                image: first.image,
+                link: first.link
+            });
+        }
 
-        group.options.sort((a, b) => packRank(a.label) - packRank(b.label));
+        if (offers.length === 0) continue;
+
+        // Cheapest shop first
+        offers.sort((a, b) => priceValue(a.price) - priceValue(b.price));
 
         const match = curated.find(c =>
             matchesBeer(c.name, c.brewery, group.text)
         );
-
-        const first = group.options[0];
 
         beers.push({
             name: match ? match.name : group.name,
@@ -200,10 +221,7 @@ function buildCatalogBeers(catalog, curated) {
             abv: match ? match.abv : null,
             hops: match ? (match.hops || []) : [],
             flavours: match ? (match.flavours || []) : [],
-            options: group.options,
-            price: first.price,
-            image: first.image,
-            link: first.link
+            offers
         });
     }
 
