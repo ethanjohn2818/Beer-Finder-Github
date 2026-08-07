@@ -52,7 +52,11 @@ const STORES = [
         productSelector: "a[href*='/products/']",
         imageHint: "",
         fullPage: 24,
-        scroll: true,   // Morrisons lazy-loads its grid on scroll
+        scroll: true,
+        // Off for now: Morrisons only serves sponsored ads to a fresh
+        // browser — its real range is gated behind choosing a delivery
+        // store/postcode. Flip to true once that's handled.
+        enabled: false,
         searchUrl: (query, page) =>
             `https://groceries.morrisons.com/search?q=${enc(query)}&page=${page}`
     }
@@ -122,6 +126,7 @@ async function crawlCatalog(query = "craft beer") {
     const products = [];
 
     for (const store of STORES) {
+        if (store.enabled === false) continue;   // skip shops turned off
         console.log(`\n=== ${store.name} ===`);
         await crawlStore(store, query, products);
     }
