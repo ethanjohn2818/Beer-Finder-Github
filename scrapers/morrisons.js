@@ -35,7 +35,8 @@ const {
     extractPrice,
     priceValue,
     detectPackLabel,
-    absolute
+    absolute,
+    productName
 } = require("./lib");
 
 const { mergeCatalog, CATALOG_FILE } = require("./catalog");
@@ -392,7 +393,7 @@ async function crawl(query = "craft beer") {
 
                 products.push({
                     supermarket: "Morrisons",
-                    title: (tile.text.split("\n")[0] || tile.text).trim(),
+                    title: productName(tile.text),
                     text: tile.text,
                     price,
                     image: absolute(BASE_URL, tile.image),

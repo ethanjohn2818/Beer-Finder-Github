@@ -160,20 +160,49 @@ function deriveBrewery(name, breweries) {
 }
 
 
+// Name tokens for comparing two listings: lowercase words of 2+ chars
+// (keeps short but meaningful bits like "af"), punctuation stripped.
+function nameTokens(name) {
+    return new Set(
+        String(name || "")
+            .toLowerCase()
+            .replace(/[^a-z0-9 ]/g, " ")
+            .split(/\s+/)
+            .filter(w => w.length >= 2)
+    );
+}
+
+function isSubset(small, big) {
+    for (const w of small) if (!big.has(w)) return false;
+    return true;
+}
+
+// A set of words is only worth merging on if it carries at least one
+// distinctive (non-generic) word — so we never merge two different beers
+// just because they share "ipa" or "lager".
+function hasDistinctiveWord(set) {
+    for (const w of set) if (!GENERIC_WORDS.has(w)) return true;
+    return false;
+}
+
+
 // Turn the raw catalogue + hop database into the list of beers to show.
 //
-// The important bit: we group products by WHICH CURATED BEER THEY MATCH,
-// not by their shop's wording of the title. That single decision gives us
-// all three things at once:
-//   • the same beer sold at Tesco AND Morrisons stacks into one card
-//     (one "offer" per shop, with a shop toggle);
-//   • the same beer sold in several pack sizes at one shop stacks into
-//     that shop's buy options (single / 4-pack / case);
-//   • the hops live on the beer, so if Tesco's copy matched our hop data
-//     and Morrisons' copy didn't, Morrisons still shows the same hops —
-//     they're the same beer, so they share one set.
-// A product that matches no curated beer falls back to grouping by its
-// cleaned-up title and simply shows without hop data.
+// Grouping happens in two passes so the same beer always ends up as ONE
+// card, even when shops word its name differently:
+//
+//   Pass 1 — bucket products by (brewery + exact name words). This stacks a
+//     beer's pack sizes and any shop that spells it identically.
+//
+//   Pass 2 — merge buckets of the SAME BREWERY when one's name words are a
+//     subset of another's (e.g. Morrisons "BrewDog Triple Hazy IPA" ⊂ Tesco
+//     "BrewDog Triple Hazy New England IPA"). The MERGED beer keeps the
+//     LONGEST name (the most detailed one), and takes hop data from whichever
+//     listing had it — so if only Tesco's copy is in our hop database, the
+//     Morrisons copy shows the same hops.
+//
+// Each beer then carries one "offer" per shop (shop toggle), and each offer
+// its pack sizes (buy-option toggle).
 function buildCatalogBeers(catalog, curated) {
 
     const breweries = [...new Set(curated.map(c => c.brewery).filter(Boolean))];
@@ -182,79 +211,111 @@ function buildCatalogBeers(catalog, curated) {
         return curated.find(c => matchesBeer(c.name, c.brewery, text)) || null;
     }
 
-    const groups = new Map();
+    // ---- Pass 1: bucket by brewery + exact name words -------------
+    const buckets = new Map();
 
     for (const product of catalog) {
 
         if (priceValue(product.price) <= 0) continue;
 
+        const clean = cleanName(product.title);
+        if (!clean) continue;
+
         const text = product.text || product.title;
         const match = findCurated(text);
+        const brewery = match ? match.brewery : deriveBrewery(clean, breweries);
 
-        // Group key: the matched beer's identity (so every shop and every
-        // pack size of that beer share a group), or the cleaned title.
-        const key = match
-            ? `curated::${match.name.toLowerCase()}::${(match.brewery || "").toLowerCase()}`
-            : `raw::${baseKey(product.title)}`;
+        // Name words that identify the beer = its words minus the brewery's.
+        const nameSet = nameTokens(clean);
+        for (const bw of nameTokens(brewery)) nameSet.delete(bw);
 
-        if (key === "raw::") continue;   // title was empty/unusable
+        const sig = `${(brewery || "").toLowerCase()}||${[...nameSet].sort().join(" ")}`;
 
-        if (!groups.has(key)) {
-            groups.set(key, {
-                name: match ? match.name : cleanName(product.title),
-                match,
+        if (!buckets.has(sig)) {
+            buckets.set(sig, {
+                brewery,
+                nameSet,
+                names: [],
+                match: null,
                 stores: new Map()   // supermarket -> [ options ]
             });
         }
 
-        const group = groups.get(key);
-        if (match && !group.match) group.match = match;
+        const bucket = buckets.get(sig);
+        bucket.names.push(clean);
+        if (match && !bucket.match) bucket.match = match;
 
         const store = product.supermarket || "Tesco";
-        if (!group.stores.has(store)) group.stores.set(store, []);
-        const options = group.stores.get(store);
+        if (!bucket.stores.has(store)) bucket.stores.set(store, []);
+        const options = bucket.stores.get(store);
 
-        // One buy option per distinct pack size, per shop.
         const label = product.pack || "Buy";
-        if (options.some(o => o.label === label)) continue;
-
-        options.push({
-            label,
-            price: product.price,
-            image: product.image,
-            link: product.link
-        });
+        if (!options.some(o => o.label === label)) {
+            options.push({ label, price: product.price, image: product.image, link: product.link });
+        }
     }
 
+    // ---- Pass 2: merge same-brewery buckets by name subset --------
+    const list = [...buckets.values()];
+    const parent = list.map((_, i) => i);
+    const find = i => { while (parent[i] !== i) { parent[i] = parent[parent[i]]; i = parent[i]; } return i; };
+    const union = (a, b) => { parent[find(a)] = find(b); };
+
+    for (let i = 0; i < list.length; i++) {
+        for (let j = i + 1; j < list.length; j++) {
+            const a = list[i], b = list[j];
+            if ((a.brewery || "").toLowerCase() !== (b.brewery || "").toLowerCase()) continue;
+            const small = a.nameSet.size <= b.nameSet.size ? a.nameSet : b.nameSet;
+            const big = a.nameSet.size <= b.nameSet.size ? b.nameSet : a.nameSet;
+            if (small.size > 0 && isSubset(small, big) && hasDistinctiveWord(small)) {
+                union(i, j);
+            }
+        }
+    }
+
+    // Combine unioned buckets into final groups.
+    const groups = new Map();
+    for (let i = 0; i < list.length; i++) {
+        const root = find(i);
+        if (!groups.has(root)) {
+            groups.set(root, { brewery: list[root].brewery, names: [], match: null, stores: new Map() });
+        }
+        const g = groups.get(root);
+        const b = list[i];
+        g.names.push(...b.names);
+        if (b.match && !g.match) g.match = b.match;
+        if (!g.brewery && b.brewery) g.brewery = b.brewery;
+        for (const [store, options] of b.stores) {
+            if (!g.stores.has(store)) g.stores.set(store, []);
+            const dst = g.stores.get(store);
+            for (const o of options) if (!dst.some(x => x.label === o.label)) dst.push(o);
+        }
+    }
+
+    // ---- Build the beer list --------------------------------------
     const beers = [];
 
-    for (const group of groups.values()) {
+    for (const g of groups.values()) {
 
-        // One offer per shop, carrying that shop's pack sizes.
         const offers = [];
-        for (const [store, options] of group.stores) {
+        for (const [store, options] of g.stores) {
             if (options.length === 0) continue;
             options.sort((a, b) => packRank(a.label) - packRank(b.label));
             const first = options[0];
-            offers.push({
-                supermarket: store,
-                options,
-                price: first.price,
-                image: first.image,
-                link: first.link
-            });
+            offers.push({ supermarket: store, options, price: first.price, image: first.image, link: first.link });
         }
-
         if (offers.length === 0) continue;
 
-        // Cheapest shop first (so the card defaults to the best price).
+        // Cheapest shop first (card defaults to the best price).
         offers.sort((a, b) => priceValue(a.price) - priceValue(b.price));
 
-        const match = group.match;
+        // Keep the LONGEST name — the most detailed one (your rule).
+        const name = g.names.slice().sort((a, b) => b.length - a.length)[0];
+        const match = g.match;
 
         beers.push({
-            name: match ? match.name : group.name,
-            brewery: match ? match.brewery : deriveBrewery(group.name, breweries),
+            name,
+            brewery: match ? match.brewery : (g.brewery || deriveBrewery(name, breweries)),
             style: match ? match.style : "",
             abv: match ? match.abv : null,
             hops: match ? (match.hops || []) : [],

@@ -18,7 +18,8 @@ const {
     extractPrice,
     priceValue,
     detectPackLabel,
-    absolute
+    absolute,
+    productName
 } = require("./lib");
 
 
@@ -100,7 +101,7 @@ async function crawlStore(store, query, products) {
 
             products.push({
                 supermarket: store.name,
-                title: (tile.text.split("\n")[0] || tile.text).trim(),
+                title: productName(tile.text),
                 text: tile.text,
                 price,
                 image: absolute(store.baseUrl, tile.image),

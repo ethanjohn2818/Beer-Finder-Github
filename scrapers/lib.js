@@ -325,6 +325,31 @@ async function dismissCookieBanner(page) {
 }
 
 
+// Pull the real product NAME out of a tile's text.
+//
+// The first line of a tile is often a badge ("New", "Sponsored", "Vegan")
+// or an ad disclaimer, not the beer's name — e.g. Morrisons tiles read
+// "New\nBeavertown Rumble DIPA 440ml\n(0)\nRating,...". Taking line 0 blindly
+// gave dozens of beers the name "New". So skip those noise lines and return
+// the first line that actually looks like a product name.
+const NAME_NOISE_EXACT = /^(new|sponsored|vegan|best ?seller|bestseller|more like this|reduced|new lower price|add|price|new in)$/i;
+const NAME_NOISE_START = /^(these are ads|rating,|offer name:|buy \d|any \d|save \d|ordinarily |£\d|now £|was £)/i;
+
+function productName(text) {
+    if (!text) return "";
+    const lines = String(text).split("\n").map(s => s.trim()).filter(Boolean);
+    for (const line of lines) {
+        if (line.length < 3) continue;
+        if (NAME_NOISE_EXACT.test(line)) continue;      // a badge on its own line
+        if (NAME_NOISE_START.test(line)) continue;      // ratings / offers / prices
+        if (/^\(\d+\)$/.test(line)) continue;            // "(0)" review count
+        if (/^\d+\s*(ml|cl|l|litre|litres|pint|pints)\b/i.test(line)) continue; // pure volume
+        return line;
+    }
+    return lines[0] || "";
+}
+
+
 // Make a link/image URL absolute against a base site.
 function absolute(baseUrl, url) {
     if (!url) return null;
@@ -679,6 +704,7 @@ module.exports = {
     detectPackLabel,
     packRank,
     absolute,
+    productName,
     matchesSearch,
     matchesBeer
 };
