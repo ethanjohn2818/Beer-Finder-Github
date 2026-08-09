@@ -54,21 +54,22 @@ const searchUrl = (query, page) =>
 // Start generous so we can PROVE it works, then lower these one at a time.
 // If a lower value stops finding the real beers, go back up one step.
 const TUNING = {
-    maxPages:        10,     // how many search pages to crawl at most
-    settleMs:        4000,   // pause after prices populate, before reading
-    scrollRounds:    12,     // how many times to scroll down (lazy loading)
-    scrollPauseMs:   900,    // pause between scrolls
-    gridTimeoutMs:   30000,  // how long to wait for the product grid to load
+    // Morrisons puts ALL its craft beers on one page, so we only need one.
+    maxPages:        1,
+    // The site is slow and the delivery popup keeps reappearing, so instead
+    // of a fixed wait we HARVEST the single page for a few minutes: keep
+    // scrolling, keep closing the popup, and let the beers trickle in.
+    harvestMs:       180000, // 3 minutes on the page
+    scrollPauseMs:   1200,   // pause after each scroll step
+    settleMs:        4000,   // final settle before the last read
+    gridTimeoutMs:   30000,  // how long to wait for the first product tile
     navTimeoutMs:    60000,  // how long to allow the page navigation itself
-    // The tiles can appear a beat before their price/name text loads in.
-    // Poll for the tiles to actually FILL with prices, up to this long,
-    // instead of reading them while they're still empty skeletons.
-    priceWaitMs:     30000,  // max time to wait for tiles to fill with £ prices
-    pricePollMs:     1000,   // how often to re-check while waiting
-    priceTarget:     12,     // how many tiles-with-a-price counts as "loaded"
-    // The real results page shows far more than the sponsored strip. If a
-    // page comes back with this few tiles, treat it as "only sponsored
-    // loaded" and wait/scroll for more rather than trusting it.
+    // If harvesting reaches at least this many priced beers AND the count
+    // stops growing for a while, we can stop early instead of waiting the
+    // full 3 minutes. Set high so a slow page still gets its full time.
+    enoughBeers:     40,
+    stableRounds:    8,      // consecutive no-growth rounds that count as "done"
+    // A page with only this few priced tiles is just the sponsored strip.
     sponsoredOnly:   9
 };
 
@@ -228,51 +229,67 @@ async function readPage(page, query, pageNo) {
         .waitFor({ timeout: TUNING.gridTimeoutMs })
         .catch(() => {});
 
-    // Let the app settle, then scroll to trigger the lazy-loaded grid.
+    // Let the app settle before we start harvesting.
     await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
 
-    // Keep scrolling until the number of product tiles stops growing — that
-    // means we've pulled in the whole real grid, not just the sponsored
-    // strip. This is the key to getting past "only 7 sponsored".
-    let lastCount = 0;
-    for (let round = 0; round < TUNING.scrollRounds; round++) {
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-        await page.waitForTimeout(TUNING.scrollPauseMs);
-        const count = await page.locator(PRODUCT_SELECTOR).count();
-        if (count === lastCount && count > TUNING.sponsoredOnly) break;
-        lastCount = count;
-    }
-    await page.evaluate(() => window.scrollTo(0, 0));
-
-    // The tiles can render a beat before their price/name text loads in
-    // (you saw this: tiles present, data hadn't followed yet). So don't
-    // read while they're empty skeletons — poll until enough tiles actually
-    // contain a £ price, and only then read. This is the real fix.
-    const deadline = Date.now() + TUNING.priceWaitMs;
-    let priced = 0;
-    while (Date.now() < deadline) {
-        priced = await page.evaluate((selector) => {
-            let n = 0;
-            for (const a of document.querySelectorAll(selector)) {
-                let node = a.parentElement;
-                for (let i = 0; i < 8 && node; i++) {
-                    if ((node.innerText || "").includes("£")) { n++; break; }
-                    node = node.parentElement;
-                }
+    // HARVEST: the site is slow and the delivery popup keeps coming back, so
+    // for up to ~3 minutes we keep scrolling the one page, keep closing the
+    // popup, and keep counting how many tiles have actually filled with a
+    // price. We stop early only if it's clearly finished (a good number of
+    // priced beers and the count has stopped growing).
+    const countPriced = (selector) => page.evaluate((sel) => {
+        let n = 0;
+        for (const a of document.querySelectorAll(sel)) {
+            let node = a.parentElement;
+            for (let i = 0; i < 8 && node; i++) {
+                if ((node.innerText || "").includes("£")) { n++; break; }
+                node = node.parentElement;
             }
-            return n;
-        }, PRODUCT_SELECTOR);
+        }
+        return n;
+    }, selector);
 
-        if (priced >= TUNING.priceTarget) break;
-        // The delivery popup can appear late and freeze the grid — keep
-        // clearing it while we wait for prices.
+    const harvestDeadline = Date.now() + TUNING.harvestMs;
+    let priced = 0;
+    let lastPriced = 0;
+    let stable = 0;
+    let step = 0;
+
+    while (Date.now() < harvestDeadline) {
+
+        // Keep the delivery popup out of the way (it reappears).
         await dismissDeliveryModal(page);
-        process.stdout.write(`\r  waiting for prices to load in... ${priced} priced so far`);
-        await page.waitForTimeout(TUNING.pricePollMs);
-    }
-    if (priced > 0) process.stdout.write("\n");
 
-    // A final settle so any last few tiles finish filling before we read.
+        // Scroll down a screenful to trigger more lazy-loaded beers, then
+        // occasionally jump to the very bottom to force the last ones in.
+        step++;
+        if (step % 4 === 0) {
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+        } else {
+            await page.evaluate(() => window.scrollBy(0, window.innerHeight));
+        }
+        await page.waitForTimeout(TUNING.scrollPauseMs);
+
+        priced = await countPriced(PRODUCT_SELECTOR);
+
+        const secsLeft = Math.max(0, Math.round((harvestDeadline - Date.now()) / 1000));
+        process.stdout.write(
+            `\r  harvesting page (slow site)... ${priced} priced beers so far, ${secsLeft}s left   `
+        );
+
+        // Early finish: enough beers and the count has held steady a while.
+        if (priced === lastPriced) {
+            stable++;
+            if (priced >= TUNING.enoughBeers && stable >= TUNING.stableRounds) break;
+        } else {
+            stable = 0;
+        }
+        lastPriced = priced;
+    }
+    process.stdout.write("\n");
+
+    // Scroll back to the top and let any last few tiles finish before we read.
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(TUNING.settleMs);
 
     if (pageNo === 1) {
