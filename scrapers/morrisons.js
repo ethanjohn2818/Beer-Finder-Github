@@ -165,6 +165,47 @@ async function dismissCookies(page) {
 }
 
 
+// Morrisons pops up a "can we deliver to you?" box (the ?showDDS=true
+// delivery/store selector) over the search — a small modal with an X.
+// Until it's closed the real product grid stays as empty skeletons, which
+// is what we were reading. Close it: press Escape, then click any X /
+// close / "no thanks" style control we can find. Best-effort and safe to
+// call repeatedly (it may appear a beat after the page loads).
+async function dismissDeliveryModal(page) {
+
+    // Escape closes most modals outright.
+    await page.keyboard.press("Escape").catch(() => {});
+
+    const selectors = [
+        "button[aria-label='Close']",
+        "button[aria-label*='close' i]",
+        "[data-test*='close' i]",
+        "[data-testid*='close' i]",
+        "[class*='modal'] button[aria-label*='close' i]",
+        "[role='dialog'] button[aria-label*='close' i]",
+        "button:has-text('No thanks')",
+        "button:has-text('Not now')",
+        "button:has-text('Maybe later')",
+        "button:has-text('Continue shopping')",
+        "button:has-text('Continue browsing')"
+    ];
+
+    for (const selector of selectors) {
+        try {
+            const button = page.locator(selector).first();
+            if (await button.isVisible({ timeout: 500 })) {
+                await button.click({ timeout: 1500 });
+                await page.waitForTimeout(400);
+                return true;
+            }
+        } catch {
+            // not present / not clickable — try the next
+        }
+    }
+    return false;
+}
+
+
 // ---- Read one search page -------------------------------------
 
 async function readPage(page, query, pageNo) {
@@ -177,6 +218,10 @@ async function readPage(page, query, pageNo) {
     });
 
     if (pageNo === 1) await dismissCookies(page);
+
+    // Close Morrisons' delivery/store popup — until it's gone the real grid
+    // stays as empty skeletons.
+    await dismissDeliveryModal(page);
 
     // Wait for the FIRST product link to appear at all.
     await page.locator(PRODUCT_SELECTOR).first()
@@ -219,6 +264,9 @@ async function readPage(page, query, pageNo) {
         }, PRODUCT_SELECTOR);
 
         if (priced >= TUNING.priceTarget) break;
+        // The delivery popup can appear late and freeze the grid — keep
+        // clearing it while we wait for prices.
+        await dismissDeliveryModal(page);
         process.stdout.write(`\r  waiting for prices to load in... ${priced} priced so far`);
         await page.waitForTimeout(TUNING.pricePollMs);
     }
