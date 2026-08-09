@@ -28,7 +28,7 @@
 // ---------------------------------------------------------------
 
 const { chromium } = require("playwright");
-const fs = require("fs");
+const { execSync } = require("child_process");
 const path = require("path");
 
 const {
@@ -38,10 +38,13 @@ const {
     absolute
 } = require("./lib");
 
+const { mergeCatalog, CATALOG_FILE } = require("./catalog");
+
 
 // ---- Where the results go -------------------------------------
 
-const OUT_FILE   = path.join(__dirname, "../public/data/morrisons-catalog.json");
+// Morrisons beers are merged straight into the live catalogue the site
+// loads (public/data/catalog.json), alongside Tesco's — see mergeCatalog.
 const SHOT_FILE  = path.join(__dirname, "../catalog-morrisons-page1.png");
 const BASE_URL   = "https://groceries.morrisons.com";
 
@@ -424,6 +427,59 @@ async function crawl(query = "craft beer") {
 }
 
 
+// ---- Put the beers live ---------------------------------------
+//
+// Merge the Morrisons beers into the catalogue the site loads (keeping
+// Tesco's), then commit + push so the live site updates — you shouldn't
+// have to touch git. Set NOPUSH=1 to skip the push (saves the file only).
+function publish(products) {
+
+    if (products.length <= TUNING.sponsoredOnly) {
+        console.log(
+            `\nOnly ${products.length} beers — that looks like the sponsored strip, not\n` +
+            `the real range, so NOT saving to the catalogue this time.`
+        );
+        return;
+    }
+
+    mergeCatalog(products, ["Morrisons"]);
+    console.log(`\nMerged ${products.length} Morrisons beers into the catalogue:`);
+    console.log(`  ${CATALOG_FILE}`);
+
+    if (process.env.NOPUSH === "1") {
+        console.log(`\nNOPUSH set — saved locally, not pushed. To put it live yourself:\n` +
+            `  git add public/data/catalog.json && git commit -m "Update Morrisons beers" && git push`);
+        return;
+    }
+
+    try {
+        execSync(`git add "${CATALOG_FILE}"`, { cwd: path.join(__dirname, "..") });
+        // Only commit if the catalogue actually changed.
+        let changed = true;
+        try {
+            execSync(`git diff --cached --quiet -- "${CATALOG_FILE}"`, { cwd: path.join(__dirname, "..") });
+            changed = false;
+        } catch { changed = true; }
+
+        if (!changed) {
+            console.log(`\nCatalogue unchanged since last time — nothing to push.`);
+            return;
+        }
+
+        execSync(`git commit -m "Update Morrisons beers in catalogue (${products.length})"`,
+            { cwd: path.join(__dirname, "..") });
+        execSync(`git push`, { cwd: path.join(__dirname, "..") });
+        console.log(`\n✅ Pushed to GitHub — the live site will update in a minute or two.`);
+    } catch (error) {
+        console.log(
+            `\nCouldn't auto-push (${error.message.split("\n")[0]}).\n` +
+            `Saved locally though — to put it live, run:\n` +
+            `  git add public/data/catalog.json && git commit -m "Update Morrisons beers" && git push`
+        );
+    }
+}
+
+
 // ---- Run it ---------------------------------------------------
 
 (async () => {
@@ -431,8 +487,6 @@ async function crawl(query = "craft beer") {
     console.log('Morrisons scraper — opening a browser and searching "craft beer"...');
 
     const { products, browser } = await crawl("craft beer");
-
-    fs.writeFileSync(OUT_FILE, JSON.stringify(products, null, 2));
 
     console.log(`\n==================== RESULT ====================`);
     console.log(`Found ${products.length} Morrisons beer products.\n`);
@@ -442,24 +496,10 @@ async function crawl(query = "craft beer") {
     });
     if (products.length > 40) console.log(`  ...and ${products.length - 40} more.`);
 
-    console.log(`\nSaved to: ${OUT_FILE}`);
-    console.log(`Screenshot of page 1: ${SHOT_FILE}`);
+    console.log(`\nScreenshot of page 1: ${SHOT_FILE}`);
 
-    if (products.length <= TUNING.sponsoredOnly) {
-        console.log(
-            `\nStill only got the sponsored strip so far. The browser is LEFT OPEN on\n` +
-            `purpose — watch the page: do the real beers fill in if you give it a\n` +
-            `minute? If they do, it's a timing issue and we raise the waits. If they\n` +
-            `never appear no matter how long you wait, it's not time — it's the page\n` +
-            `holding them back (e.g. it wants a delivery postcode chosen).`
-        );
-    } else {
-        console.log(
-            `\nLooks like it worked — the browser is left open so you can check the\n` +
-            `beers against the page. When you're happy, say the word and I'll wire\n` +
-            `this into the main catalogue so Morrisons shows alongside Tesco.`
-        );
-    }
+    // Save to the live catalogue and push it up.
+    publish(products);
 
     // Keep the window open so you can watch it. Close it yourself, or press
     // Ctrl+C in this terminal when you're done.

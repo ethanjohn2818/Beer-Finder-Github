@@ -19,8 +19,5 @@ debug-page.png
 catalog-page-1.png
 catalog-*-page1.png
 
-# Morrisons proving-run output (scratch until the scraper is wired in)
-public/data/morrisons-catalog.json
-
 # NOTE: public/data/catalog.json IS committed on purpose — it's the data
 # the live static site serves. Rebuild it with `npm run catalog`.

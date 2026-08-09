@@ -149,10 +149,23 @@ function loadCatalog() {
 }
 
 
+// Update just the given shops' beers in the catalogue, leaving every other
+// shop's beers untouched. This lets each shop be re-crawled on its own (the
+// Tesco crawl and the separate Morrisons crawl) without wiping each other.
+function mergeCatalog(newProducts, storeNames) {
+    const drop = new Set(storeNames);
+    const kept = loadCatalog().filter(p => !drop.has(p.supermarket));
+    const merged = kept.concat(newProducts);
+    saveCatalog(merged);
+    return merged;
+}
+
+
 module.exports = {
     STORES,
     crawlCatalog,
     saveCatalog,
     loadCatalog,
+    mergeCatalog,
     CATALOG_FILE
 };

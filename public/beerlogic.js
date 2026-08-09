@@ -147,34 +147,60 @@ function deriveBrewery(name, breweries) {
 
 
 // Turn the raw catalogue + hop database into the list of beers to show.
-// Each beer groups its pack sizes per shop, so a beer stocked at more
-// than one supermarket carries one "offer" per shop.
+//
+// The important bit: we group products by WHICH CURATED BEER THEY MATCH,
+// not by their shop's wording of the title. That single decision gives us
+// all three things at once:
+//   • the same beer sold at Tesco AND Morrisons stacks into one card
+//     (one "offer" per shop, with a shop toggle);
+//   • the same beer sold in several pack sizes at one shop stacks into
+//     that shop's buy options (single / 4-pack / case);
+//   • the hops live on the beer, so if Tesco's copy matched our hop data
+//     and Morrisons' copy didn't, Morrisons still shows the same hops —
+//     they're the same beer, so they share one set.
+// A product that matches no curated beer falls back to grouping by its
+// cleaned-up title and simply shows without hop data.
 function buildCatalogBeers(catalog, curated) {
 
     const breweries = [...new Set(curated.map(c => c.brewery).filter(Boolean))];
+
+    function findCurated(text) {
+        return curated.find(c => matchesBeer(c.name, c.brewery, text)) || null;
+    }
+
     const groups = new Map();
 
     for (const product of catalog) {
 
         if (priceValue(product.price) <= 0) continue;
 
-        const key = baseKey(product.title);
-        if (!key) continue;
+        const text = product.text || product.title;
+        const match = findCurated(text);
+
+        // Group key: the matched beer's identity (so every shop and every
+        // pack size of that beer share a group), or the cleaned title.
+        const key = match
+            ? `curated::${match.name.toLowerCase()}::${(match.brewery || "").toLowerCase()}`
+            : `raw::${baseKey(product.title)}`;
+
+        if (key === "raw::") continue;   // title was empty/unusable
 
         if (!groups.has(key)) {
             groups.set(key, {
-                name: cleanName(product.title),
-                text: product.text || product.title,
+                name: match ? match.name : cleanName(product.title),
+                match,
                 stores: new Map()   // supermarket -> [ options ]
             });
         }
 
         const group = groups.get(key);
-        const store = product.supermarket || "Tesco";
+        if (match && !group.match) group.match = match;
 
+        const store = product.supermarket || "Tesco";
         if (!group.stores.has(store)) group.stores.set(store, []);
         const options = group.stores.get(store);
 
+        // One buy option per distinct pack size, per shop.
         const label = product.pack || "Buy";
         if (options.some(o => o.label === label)) continue;
 
@@ -190,7 +216,7 @@ function buildCatalogBeers(catalog, curated) {
 
     for (const group of groups.values()) {
 
-        // One offer per shop, with that shop's pack sizes
+        // One offer per shop, carrying that shop's pack sizes.
         const offers = [];
         for (const [store, options] of group.stores) {
             if (options.length === 0) continue;
@@ -207,12 +233,10 @@ function buildCatalogBeers(catalog, curated) {
 
         if (offers.length === 0) continue;
 
-        // Cheapest shop first
+        // Cheapest shop first (so the card defaults to the best price).
         offers.sort((a, b) => priceValue(a.price) - priceValue(b.price));
 
-        const match = curated.find(c =>
-            matchesBeer(c.name, c.brewery, group.text)
-        );
+        const match = group.match;
 
         beers.push({
             name: match ? match.name : group.name,
