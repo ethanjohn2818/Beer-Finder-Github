@@ -59,9 +59,9 @@ const TUNING = {
     // The site is slow and the delivery popup keeps reappearing, so instead
     // of a fixed wait we HARVEST the single page for a few minutes: keep
     // scrolling, keep closing the popup, and let the beers trickle in.
-    harvestMs:       180000, // 3 minutes on the page
-    scrollPauseMs:   1200,   // pause after each scroll step
-    settleMs:        4000,   // final settle before the last read
+    harvestMs:       180000, // up to 3 minutes on the page
+    scrollStepPx:    450,    // small steps so the grid doesn't drop beers
+    scrollPauseMs:   900,    // pause after each small step (let tiles load)
     gridTimeoutMs:   30000,  // how long to wait for the first product tile
     navTimeoutMs:    60000,  // how long to allow the page navigation itself
     // If harvesting reaches at least this many priced beers AND the count
@@ -232,66 +232,93 @@ async function readPage(page, query, pageNo) {
     // Let the app settle before we start harvesting.
     await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
 
-    // HARVEST: the site is slow, the delivery popup keeps coming back, AND
-    // the page sometimes refreshes itself back to the 9-tile sponsored strip
-    // (you saw exactly this: it reached 50 beers, then a refresh knocked it
-    // back to 9 right before the read). So we do NOT do one read at the end.
-    // Instead we read the tiles every round DURING the harvest and keep the
-    // BEST snapshot — the fullest one we ever saw. A refresh can drop the
-    // live count, but it can never erase a snapshot we already captured.
+    // HARVEST: Morrisons' grid virtualises — it only keeps the tiles near
+    // the viewport in the page and drops the ones you've scrolled past. So a
+    // single read (even the "best" one) only ever holds a slice of the
+    // beers, which is why scrolling fast to the bottom missed most of them.
+    //
+    // The fix: scroll DOWN IN SMALL STEPS and COLLECT beers as they pass
+    // through, accumulating them by their link into `collected`. It doesn't
+    // matter that the page holds only ~20 at a time — we gather each one as
+    // it goes by. This also survives the page's self-refresh: anything we've
+    // already collected stays collected.
+    const collected = new Map();   // href -> tile (prefer the priced version)
+
+    const merge = (tiles) => {
+        for (const t of tiles) {
+            if (!t.href) continue;
+            const existing = collected.get(t.href);
+            const hasPrice = (t.text || "").includes("£");
+            // Keep the first one we see, but upgrade a priceless skeleton to
+            // its priced version once the price loads in.
+            if (!existing || (hasPrice && !(existing.text || "").includes("£"))) {
+                collected.set(t.href, t);
+            }
+        }
+    };
+
+    const pricedCount = () =>
+        [...collected.values()].filter(t => (t.text || "").includes("£")).length;
+
     const harvestDeadline = Date.now() + TUNING.harvestMs;
-    let bestTiles = [];
-    let bestPriced = 0;
     let stable = 0;
-    let step = 0;
+    let lastPriced = 0;
+    let bottoms = 0;   // how many times we've reached the bottom
 
     while (Date.now() < harvestDeadline) {
 
         // Keep the delivery popup out of the way (it reappears).
         await dismissDeliveryModal(page);
 
-        // Scroll down a screenful to trigger more lazy-loaded beers, then
-        // occasionally jump to the very bottom to force the last ones in.
-        step++;
-        if (step % 4 === 0) {
-            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-        } else {
-            await page.evaluate(() => window.scrollBy(0, window.innerHeight));
-        }
+        // Collect what's on screen right now, then nudge down a small step.
+        merge(await extractTiles(page));
+
+        const atBottom = await page.evaluate((stepPx) => {
+            const nearBottom =
+                window.innerHeight + window.scrollY >= document.body.scrollHeight - 50;
+            if (nearBottom) {
+                window.scrollTo(0, 0);   // wrap back to top for another pass
+                return true;
+            }
+            window.scrollBy(0, stepPx);
+            return false;
+        }, TUNING.scrollStepPx);
+
         await page.waitForTimeout(TUNING.scrollPauseMs);
 
-        // Read whatever is on the page right now.
-        const tiles = await extractTiles(page);
-        const priced = tiles.filter(t => (t.text || "").includes("£")).length;
+        // Collect again after the step (catches tiles that just loaded).
+        merge(await extractTiles(page));
 
-        // Keep the fullest snapshot we've seen so a later refresh can't lose it.
-        if (priced > bestPriced) {
-            bestPriced = priced;
-            bestTiles = tiles;
-            if (pageNo === 1) {
-                await page.screenshot({ path: SHOT_FILE, fullPage: true }).catch(() => {});
-            }
-        }
+        const priced = pricedCount();
+
+        if (atBottom) bottoms++;
 
         const secsLeft = Math.max(0, Math.round((harvestDeadline - Date.now()) / 1000));
         process.stdout.write(
-            `\r  harvesting page (slow site)... ${priced} on screen now, ` +
-            `best ${bestPriced} captured, ${secsLeft}s left   `
+            `\r  harvesting (slow scroll)... ${priced} beers collected, ` +
+            `pass ${bottoms + 1}, ${secsLeft}s left      `
         );
 
-        // Early finish: we've captured a good number and the live page has
-        // stopped adding new ones for a while.
-        if (priced <= bestPriced) {
+        // Early finish: we've made at least 2 full passes and no new beers
+        // turned up on the last pass — we've got them all.
+        if (priced === lastPriced) {
             stable++;
-            if (bestPriced >= TUNING.enoughBeers && stable >= TUNING.stableRounds) break;
+            if (bottoms >= 2 && stable >= TUNING.stableRounds &&
+                priced >= TUNING.enoughBeers) break;
         } else {
             stable = 0;
         }
+        lastPriced = priced;
     }
     process.stdout.write("\n");
 
-    console.log(`  Best snapshot: ${bestPriced} priced tiles captured.`);
-    return bestTiles;
+    if (pageNo === 1) {
+        await page.screenshot({ path: SHOT_FILE, fullPage: true }).catch(() => {});
+    }
+
+    const result = [...collected.values()];
+    console.log(`  Collected ${pricedCount()} priced beers over ${bottoms} full pass(es).`);
+    return result;
 }
 
 
