@@ -6,6 +6,7 @@
   "scripts": {
     "catalog": "node scripts/buildCatalog.js",
     "morrisons": "node scrapers/morrisons.js",
+    "build": "node scripts/buildAll.js",
     "start": "node server.js",
     "debug": "node scripts/debugSearch.js",
     "report": "node scripts/matchReport.js",

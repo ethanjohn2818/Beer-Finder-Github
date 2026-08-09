@@ -428,36 +428,47 @@ async function crawl(query = "craft beer") {
 
 
 // ---- Put the beers live ---------------------------------------
-//
-// Merge the Morrisons beers into the catalogue the site loads (keeping
-// Tesco's), then commit + push so the live site updates — you shouldn't
-// have to touch git. Set NOPUSH=1 to skip the push (saves the file only).
-function publish(products) {
+
+// Merge just the Morrisons beers into the catalogue the site loads (keeping
+// Tesco's). Refuses to save a run that only got the sponsored strip, so a
+// bad run can't wipe good data. Returns true if it saved.
+function mergeMorrisons(products) {
 
     if (products.length <= TUNING.sponsoredOnly) {
         console.log(
             `\nOnly ${products.length} beers — that looks like the sponsored strip, not\n` +
             `the real range, so NOT saving to the catalogue this time.`
         );
-        return;
+        return false;
     }
 
     mergeCatalog(products, ["Morrisons"]);
     console.log(`\nMerged ${products.length} Morrisons beers into the catalogue:`);
     console.log(`  ${CATALOG_FILE}`);
+    return true;
+}
+
+
+// Commit + push catalog.json so the live site updates — you shouldn't have
+// to touch git. Set NOPUSH=1 to skip the push (saves the file only). Shared
+// by the standalone run and the combined Tesco+Morrisons runner.
+function pushCatalog(message) {
+
+    const cwd = path.join(__dirname, "..");
 
     if (process.env.NOPUSH === "1") {
         console.log(`\nNOPUSH set — saved locally, not pushed. To put it live yourself:\n` +
-            `  git add public/data/catalog.json && git commit -m "Update Morrisons beers" && git push`);
+            `  git add public/data/catalog.json && git commit -m "${message}" && git push`);
         return;
     }
 
     try {
-        execSync(`git add "${CATALOG_FILE}"`, { cwd: path.join(__dirname, "..") });
+        execSync(`git add "${CATALOG_FILE}"`, { cwd });
+
         // Only commit if the catalogue actually changed.
         let changed = true;
         try {
-            execSync(`git diff --cached --quiet -- "${CATALOG_FILE}"`, { cwd: path.join(__dirname, "..") });
+            execSync(`git diff --cached --quiet -- "${CATALOG_FILE}"`, { cwd });
             changed = false;
         } catch { changed = true; }
 
@@ -466,51 +477,75 @@ function publish(products) {
             return;
         }
 
-        execSync(`git commit -m "Update Morrisons beers in catalogue (${products.length})"`,
-            { cwd: path.join(__dirname, "..") });
-        execSync(`git push`, { cwd: path.join(__dirname, "..") });
+        execSync(`git commit -m "${message}"`, { cwd });
+        execSync(`git push`, { cwd });
         console.log(`\n✅ Pushed to GitHub — the live site will update in a minute or two.`);
     } catch (error) {
         console.log(
             `\nCouldn't auto-push (${error.message.split("\n")[0]}).\n` +
             `Saved locally though — to put it live, run:\n` +
-            `  git add public/data/catalog.json && git commit -m "Update Morrisons beers" && git push`
+            `  git add public/data/catalog.json && git commit -m "${message}" && git push`
         );
     }
 }
 
 
-// ---- Run it ---------------------------------------------------
+// Standalone publish: merge + push (used when running this script on its own).
+function publish(products) {
+    if (mergeMorrisons(products)) {
+        pushCatalog(`Update Morrisons beers in catalogue (${products.length})`);
+    }
+}
 
-(async () => {
 
-    console.log('Morrisons scraper — opening a browser and searching "craft beer"...');
-
-    const { products, browser } = await crawl("craft beer");
-
+function printFound(products) {
     console.log(`\n==================== RESULT ====================`);
     console.log(`Found ${products.length} Morrisons beer products.\n`);
-
     products.slice(0, 40).forEach((p, i) => {
         console.log(`  ${String(i + 1).padStart(2)}. ${p.price.padEnd(7)} ${p.title}`);
     });
     if (products.length > 40) console.log(`  ...and ${products.length - 40} more.`);
-
     console.log(`\nScreenshot of page 1: ${SHOT_FILE}`);
+}
 
-    // Save to the live catalogue and push it up.
-    publish(products);
 
-    // Keep the window open so you can watch it. Close it yourself, or press
-    // Ctrl+C in this terminal when you're done.
-    console.log(`\n>>> Browser left open. Press Ctrl+C here to close it when you're done. <<<`);
+// Reusable by the combined runner. `crawl` is exported as crawlMorrisons.
+module.exports = {
+    crawlMorrisons: crawl,
+    mergeMorrisons,
+    pushCatalog,
+    printFound,
+    SPONSORED_ONLY: TUNING.sponsoredOnly
+};
 
-    process.on("SIGINT", async () => {
-        console.log("\nClosing browser...");
-        await browser.close().catch(() => {});
-        process.exit(0);
-    });
 
-    // Hold the process open indefinitely (until Ctrl+C above).
-    await new Promise(() => {});
-})();
+// ---- Run it standalone ('npm run morrisons') ------------------
+//
+// Only when this file is run directly — when it's require()d by the combined
+// runner, none of this executes (the runner drives the crawl itself).
+if (require.main === module) {
+    (async () => {
+
+        console.log('Morrisons scraper — opening a browser and searching "craft beer"...');
+
+        const { products, browser } = await crawl("craft beer");
+
+        printFound(products);
+
+        // Save to the live catalogue and push it up.
+        publish(products);
+
+        // Keep the window open so you can watch it. Close it yourself, or
+        // press Ctrl+C in this terminal when you're done.
+        console.log(`\n>>> Browser left open. Press Ctrl+C here to close it when you're done. <<<`);
+
+        process.on("SIGINT", async () => {
+            console.log("\nClosing browser...");
+            await browser.close().catch(() => {});
+            process.exit(0);
+        });
+
+        // Hold the process open indefinitely (until Ctrl+C above).
+        await new Promise(() => {});
+    })();
+}
