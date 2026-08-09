@@ -327,6 +327,9 @@ async function crawl(query = "craft beer") {
     const products = [];
     const seen = new Set();
 
+    // We deliberately DON'T close the browser in here — the caller keeps it
+    // open so you can watch the page and confirm whether the real beers
+    // load in given more time. Return the browser so the caller owns it.
     try {
         for (let pageNo = 1; pageNo <= TUNING.maxPages; pageNo++) {
 
@@ -368,11 +371,13 @@ async function crawl(query = "craft beer") {
             // Stop when a page adds nothing new (end of real results).
             if (kept === 0) break;
         }
-    } finally {
-        await browser.close().catch(() => {});
+    } catch (error) {
+        console.log("Crawl error:", error.message);
     }
 
-    return products;
+    // Leave everything open on purpose. Whoever called us decides when to
+    // close (see the runner — it waits for you to press Ctrl+C).
+    return { products, browser };
 }
 
 
@@ -382,7 +387,7 @@ async function crawl(query = "craft beer") {
 
     console.log('Morrisons scraper — opening a browser and searching "craft beer"...');
 
-    const products = await crawl("craft beer");
+    const { products, browser } = await crawl("craft beer");
 
     fs.writeFileSync(OUT_FILE, JSON.stringify(products, null, 2));
 
@@ -399,17 +404,30 @@ async function crawl(query = "craft beer") {
 
     if (products.length <= TUNING.sponsoredOnly) {
         console.log(
-            `\nStill only got the sponsored strip. Next things to try (tell me which):\n` +
-            `  • make sure real Chrome is installed (this script prefers it);\n` +
-            `  • raise TUNING.settleMs / gridTimeoutMs in scrapers/morrisons.js;\n` +
-            `  • run it non-headless so you can watch what the page actually does.`
+            `\nStill only got the sponsored strip so far. The browser is LEFT OPEN on\n` +
+            `purpose — watch the page: do the real beers fill in if you give it a\n` +
+            `minute? If they do, it's a timing issue and we raise the waits. If they\n` +
+            `never appear no matter how long you wait, it's not time — it's the page\n` +
+            `holding them back (e.g. it wants a delivery postcode chosen).`
         );
     } else {
         console.log(
-            `\nLooks like it worked. When you're happy, say the word and I'll wire this\n` +
-            `into the main catalogue so Morrisons beers show on the site alongside Tesco.`
+            `\nLooks like it worked — the browser is left open so you can check the\n` +
+            `beers against the page. When you're happy, say the word and I'll wire\n` +
+            `this into the main catalogue so Morrisons shows alongside Tesco.`
         );
     }
 
-    process.exit(0);
+    // Keep the window open so you can watch it. Close it yourself, or press
+    // Ctrl+C in this terminal when you're done.
+    console.log(`\n>>> Browser left open. Press Ctrl+C here to close it when you're done. <<<`);
+
+    process.on("SIGINT", async () => {
+        console.log("\nClosing browser...");
+        await browser.close().catch(() => {});
+        process.exit(0);
+    });
+
+    // Hold the process open indefinitely (until Ctrl+C above).
+    await new Promise(() => {});
 })();
