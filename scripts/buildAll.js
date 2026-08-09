@@ -10,6 +10,11 @@
 // into public/data/catalog.json, and pushes once at the end.
 // ---------------------------------------------------------------
 
+// Tesco blocks headless browsers with an "Access Denied" page, so the
+// combined build ALWAYS runs visible. Ignore any leftover HEADLESS=true
+// left in the shell from an earlier experiment — otherwise Tesco fails.
+delete process.env.HEADLESS;
+
 const {
     crawlCatalog,
     mergeCatalog,
