@@ -164,10 +164,22 @@ const BEER_STYLE_WORDS = [
 //   - Otherwise (supermarket dropped the brewery) require BOTH a beer
 //     style AND a liquid volume. A toy might list "50ml" of glitter but
 //     has no beer style; a book/card has neither.
+// Brewery "suffix" words the shops often drop ("Camden Town" -> "Camden",
+// "Brooklyn Brewery" -> "Brooklyn"). Ignore them when checking a brewery is
+// present, so a shortened shop name still matches.
+const BREWERY_SUFFIX = new Set([
+    "brewery", "brewing", "brew", "beer", "beers", "company", "co",
+    "ltd", "town", "ales", "the", "and"
+]);
+
+function breweryTokens(brewery) {
+    return words(brewery).filter(word => !BREWERY_SUFFIX.has(word));
+}
+
 function looksLikeDrink(text, brewery) {
 
-    const breweryWords = words(brewery);
-    if (breweryWords.length && breweryWords.every(word => hasWord(text, word))) {
+    const core = breweryTokens(brewery);
+    if (core.length && core.every(word => hasWord(text, word))) {
         return true;
     }
 
@@ -212,7 +224,8 @@ function matchesBeer(name, brewery, productText) {
         // Name is only brewery + generic words (e.g. "Cloudwater Pale
         // Ale"). Then we DO need the brewery, plus the style words.
         const styleWords = nameWords.filter(word => !breweryWords.has(word));
-        const breweryPresent = [...breweryWords].every(word => hasWord(text, word));
+        const core = breweryTokens(brewery);
+        const breweryPresent = core.length > 0 && core.every(word => hasWord(text, word));
         wordsMatch = breweryPresent && styleWords.every(word => hasWord(text, word));
     }
 

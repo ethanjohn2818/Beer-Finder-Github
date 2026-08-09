@@ -96,9 +96,21 @@ function packRank(label) {
 
 // ---- Matching a beer to a Tesco product -----------------------
 
+// Brewery "suffix" words the shops often drop ("Camden Town" -> "Camden",
+// "Brooklyn Brewery" -> "Brooklyn"). Ignore them when checking a brewery is
+// present, so a shortened shop name still matches.
+const BREWERY_SUFFIX = new Set([
+    "brewery", "brewing", "brew", "beer", "beers", "company", "co",
+    "ltd", "town", "ales", "the", "and"
+]);
+
+function breweryTokens(brewery) {
+    return words(brewery).filter(w => !BREWERY_SUFFIX.has(w));
+}
+
 function looksLikeDrink(text, brewery) {
-    const breweryWords = words(brewery);
-    if (breweryWords.length && breweryWords.every(w => hasWord(text, w))) {
+    const core = breweryTokens(brewery);
+    if (core.length && core.every(w => hasWord(text, w))) {
         return true;
     }
     const hasStyle = BEER_STYLE_WORDS.some(style => hasWord(text, style));
@@ -120,7 +132,8 @@ function matchesBeer(name, brewery, productText) {
         wordsMatch = productWords.every(w => hasWord(text, w));
     } else {
         const styleWords = nameWords.filter(w => !breweryWords.has(w));
-        const breweryPresent = [...breweryWords].every(w => hasWord(text, w));
+        const core = breweryTokens(brewery);
+        const breweryPresent = core.length > 0 && core.every(w => hasWord(text, w));
         wordsMatch = breweryPresent && styleWords.every(w => hasWord(text, w));
     }
 
