@@ -232,26 +232,16 @@ async function readPage(page, query, pageNo) {
     // Let the app settle before we start harvesting.
     await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
 
-    // HARVEST: the site is slow and the delivery popup keeps coming back, so
-    // for up to ~3 minutes we keep scrolling the one page, keep closing the
-    // popup, and keep counting how many tiles have actually filled with a
-    // price. We stop early only if it's clearly finished (a good number of
-    // priced beers and the count has stopped growing).
-    const countPriced = (selector) => page.evaluate((sel) => {
-        let n = 0;
-        for (const a of document.querySelectorAll(sel)) {
-            let node = a.parentElement;
-            for (let i = 0; i < 8 && node; i++) {
-                if ((node.innerText || "").includes("£")) { n++; break; }
-                node = node.parentElement;
-            }
-        }
-        return n;
-    }, selector);
-
+    // HARVEST: the site is slow, the delivery popup keeps coming back, AND
+    // the page sometimes refreshes itself back to the 9-tile sponsored strip
+    // (you saw exactly this: it reached 50 beers, then a refresh knocked it
+    // back to 9 right before the read). So we do NOT do one read at the end.
+    // Instead we read the tiles every round DURING the harvest and keep the
+    // BEST snapshot — the fullest one we ever saw. A refresh can drop the
+    // live count, but it can never erase a snapshot we already captured.
     const harvestDeadline = Date.now() + TUNING.harvestMs;
-    let priced = 0;
-    let lastPriced = 0;
+    let bestTiles = [];
+    let bestPriced = 0;
     let stable = 0;
     let step = 0;
 
@@ -270,34 +260,45 @@ async function readPage(page, query, pageNo) {
         }
         await page.waitForTimeout(TUNING.scrollPauseMs);
 
-        priced = await countPriced(PRODUCT_SELECTOR);
+        // Read whatever is on the page right now.
+        const tiles = await extractTiles(page);
+        const priced = tiles.filter(t => (t.text || "").includes("£")).length;
+
+        // Keep the fullest snapshot we've seen so a later refresh can't lose it.
+        if (priced > bestPriced) {
+            bestPriced = priced;
+            bestTiles = tiles;
+            if (pageNo === 1) {
+                await page.screenshot({ path: SHOT_FILE, fullPage: true }).catch(() => {});
+            }
+        }
 
         const secsLeft = Math.max(0, Math.round((harvestDeadline - Date.now()) / 1000));
         process.stdout.write(
-            `\r  harvesting page (slow site)... ${priced} priced beers so far, ${secsLeft}s left   `
+            `\r  harvesting page (slow site)... ${priced} on screen now, ` +
+            `best ${bestPriced} captured, ${secsLeft}s left   `
         );
 
-        // Early finish: enough beers and the count has held steady a while.
-        if (priced === lastPriced) {
+        // Early finish: we've captured a good number and the live page has
+        // stopped adding new ones for a while.
+        if (priced <= bestPriced) {
             stable++;
-            if (priced >= TUNING.enoughBeers && stable >= TUNING.stableRounds) break;
+            if (bestPriced >= TUNING.enoughBeers && stable >= TUNING.stableRounds) break;
         } else {
             stable = 0;
         }
-        lastPriced = priced;
     }
     process.stdout.write("\n");
 
-    // Scroll back to the top and let any last few tiles finish before we read.
-    await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(TUNING.settleMs);
+    console.log(`  Best snapshot: ${bestPriced} priced tiles captured.`);
+    return bestTiles;
+}
 
-    if (pageNo === 1) {
-        await page.screenshot({ path: SHOT_FILE, fullPage: true }).catch(() => {});
-    }
 
-    // Pull each product tile: its text (name + price), link and image.
-    const tiles = await page.evaluate((selector) => {
+// Read every product tile on the page right now: text (name + price),
+// link and image. Returns [] on any error (e.g. mid-refresh).
+async function extractTiles(page) {
+    return page.evaluate((selector) => {
 
         const anchors = Array.from(document.querySelectorAll(selector));
         const seen = new Set();
@@ -327,9 +328,7 @@ async function readPage(page, query, pageNo) {
             out.push({ text, href, image });
         }
         return out;
-    }, PRODUCT_SELECTOR);
-
-    return tiles;
+    }, PRODUCT_SELECTOR).catch(() => []);
 }
 
 
