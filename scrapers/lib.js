@@ -227,11 +227,29 @@ function matchesSearch(searchTerm, name) {
 }
 
 
-// Pull just the money value out of a messy price string.
-// "£5.50 Clubcard Price" -> "£5.50"
+// Pull just the SELLING price out of a messy product tile.
+//
+// Two traps to avoid:
+//   • unit rates like "£7.61/litre" or "(£4.17/litre)" — never the price;
+//   • Morrisons lists the real price after the word "Price", e.g.
+//     "...(£7.61/litre) | Price | £3.35 | Add" — so the first £ on the tile
+//     is the per-litre rate, not what you pay.
+// So: prefer an explicit "Price £X" label; otherwise strip any per-unit
+// rate and take the first remaining £. "£5.50 Clubcard Price" -> "£5.50".
 function extractPrice(text) {
     if (!text) return null;
-    const match = text.match(/£\s?\d+(?:\.\d{1,2})?/);
+    const s = String(text);
+
+    // 1. Morrisons-style explicit price label ("Price" then the amount).
+    const labelled = s.match(/\bPrice\b\s*£\s?(\d+(?:\.\d{1,2})?)/i);
+    if (labelled) return "£" + labelled[1];
+
+    // 2. Remove per-unit rates so we can't pick one, then take the first £.
+    const cleaned = s.replace(
+        /£\s?\d+(?:\.\d{1,2})?\s*(?:\/|per\b)\s*(?:litre|liter|l\b|100\s?ml|100g|cl|ml|kg|g\b|each)/gi,
+        " "
+    );
+    const match = cleaned.match(/£\s?\d+(?:\.\d{1,2})?/);
     return match ? match[0].replace(/\s/g, "") : null;
 }
 

@@ -40,9 +40,23 @@ function hasWord(text, word) {
 
 // ---- Prices ---------------------------------------------------
 
+// Pull the SELLING price out of a messy product tile. Avoids two traps:
+// unit rates like "£7.61/litre" (never the price), and Morrisons listing
+// the real price after the word "Price" (so the first £ on the tile is the
+// per-litre rate). Prefer an explicit "Price £X" label, else strip per-unit
+// rates and take the first remaining £.
 function extractPrice(text) {
     if (!text) return null;
-    const match = String(text).match(/£\s?\d+(?:\.\d{1,2})?/);
+    const s = String(text);
+
+    const labelled = s.match(/\bPrice\b\s*£\s?(\d+(?:\.\d{1,2})?)/i);
+    if (labelled) return "£" + labelled[1];
+
+    const cleaned = s.replace(
+        /£\s?\d+(?:\.\d{1,2})?\s*(?:\/|per\b)\s*(?:litre|liter|l\b|100\s?ml|100g|cl|ml|kg|g\b|each)/gi,
+        " "
+    );
+    const match = cleaned.match(/£\s?\d+(?:\.\d{1,2})?/);
     return match ? match[0].replace(/\s/g, "") : null;
 }
 
