@@ -2914,5 +2914,101 @@
       "Citrus",
       "Pine"
     ]
+  },
+  {
+    "name": "BrewDog Pinball",
+    "brewery": "BrewDog",
+    "style": "Double IPA",
+    "abv": 8,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Talus"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Coconut",
+      "Orange"
+    ]
+  },
+  {
+    "name": "Ossett Smog Rat",
+    "brewery": "Ossett",
+    "style": "Double NEIPA",
+    "abv": 8.4,
+    "hops": [
+      "Amarillo",
+      "Nelson Sauvin"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Stone Fruit",
+      "Citrus",
+      "White Grape"
+    ]
+  },
+  {
+    "name": "Brooklyn Stonewall Inn",
+    "brewery": "Brooklyn",
+    "style": "Session IPA",
+    "abv": 4.3,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Full Circle Repeater",
+    "brewery": "Full Circle Brew Co",
+    "style": "Session IPA",
+    "abv": 4.2,
+    "hops": [
+      "Centennial",
+      "Amarillo",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Williams Bros Tin Man",
+    "brewery": "Williams Bros",
+    "style": "Tropical IPA",
+    "abv": 5.5,
+    "hops": [
+      "Magnum",
+      "Citra",
+      "Simcoe",
+      "Mosaic",
+      "Galaxy",
+      "Azacca"
+    ],
+    "malts": [
+      "Vienna"
+    ],
+    "flavours": [
+      "Tropical",
+      "Mango",
+      "Citrus"
+    ]
   }
 ]
