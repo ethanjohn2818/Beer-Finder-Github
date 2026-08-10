@@ -925,3 +925,164 @@ main {
     .finder-select select { min-width: 0; width: 100%; }
     .finder-select { width: 100%; }
 }
+
+
+/* ---------------------------------------------------------------
+   Clickable cards + "tap for more" hint
+--------------------------------------------------------------- */
+.beer-card.clickable { cursor: pointer; }
+
+.card-more {
+    font-size: 0.78rem;
+    color: var(--amber-dark);
+    font-weight: 600;
+    margin: 4px 0 6px;
+    opacity: 0.85;
+}
+
+.beer-card.clickable:hover .card-more { opacity: 1; }
+
+
+/* ---------------------------------------------------------------
+   Flavour tags (shared: detail page + hops page)
+--------------------------------------------------------------- */
+.tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.tag {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: var(--amber-dark);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.muted { color: var(--muted); font-weight: 400; }
+
+
+/* ---------------------------------------------------------------
+   Beer detail page
+--------------------------------------------------------------- */
+.back-btn {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+    transition: border-color 0.12s ease, transform 0.12s ease;
+}
+.back-btn:hover { border-color: var(--amber); transform: translateX(-2px); }
+
+.detail {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.detail-media {
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: var(--shadow-md);
+    padding: 24px;
+    position: sticky;
+    top: 90px;
+    text-align: center;
+}
+.detail-media img { width: 100%; height: auto; border-radius: 12px; }
+.detail-noimg { font-size: 6rem; padding: 40px 0; }
+
+.detail-body h1 { font-size: 1.8rem; margin: 0 0 4px; }
+.detail-brewery { color: var(--amber-dark); font-weight: 700; margin: 0 0 2px; }
+.detail-style { color: var(--muted); margin: 0 0 16px; }
+.detail-desc { font-size: 1.05rem; line-height: 1.6; margin: 0 0 8px; }
+
+.detail-section {
+    margin-top: 26px;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    padding: 20px 22px;
+}
+.detail-section h2 { font-size: 1.15rem; margin: 0 0 12px; }
+
+.hop-profiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.hop-profile {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    background: #fff;
+}
+.hop-profile h3 { margin: 0 0 4px; color: var(--amber-dark); font-size: 1.02rem; }
+.hop-profile p { margin: 0 0 6px; font-size: 0.9rem; color: var(--ink); }
+
+.detail-shop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid var(--border);
+}
+.detail-shop:first-child { border-top: none; }
+.detail-shop-name { font-weight: 700; min-width: 90px; }
+.detail-shop-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.opt-buy {
+    background: var(--amber);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 0.12s ease;
+}
+.opt-buy:hover { background: var(--amber-dark); }
+
+
+/* ---------------------------------------------------------------
+   Hops accordion — flavour profile extras
+--------------------------------------------------------------- */
+.acc-flavour {
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 10px;
+}
+.acc-body { padding: 0 22px 16px; }
+.acc-body ul { margin: 6px 0 0; padding-left: 18px; }
+.acc-body li { margin: 4px 0; font-size: 0.9rem; }
+.hop-notes { margin: 0 0 4px; font-size: 0.92rem; }
+.hop-beers-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin: 12px 0 2px;
+    color: var(--muted);
+}
+
+
+/* ---------------------------------------------------------------
+   Detail page responsive
+--------------------------------------------------------------- */
+@media (max-width: 780px) {
+    .detail { grid-template-columns: 1fr; }
+    .detail-media { position: static; max-width: 320px; margin: 0 auto; }
+    .hop-profiles { grid-template-columns: 1fr; }
+}

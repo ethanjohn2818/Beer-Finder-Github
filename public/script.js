@@ -45,11 +45,16 @@ document.querySelectorAll("[data-view]").forEach(el => {
 // ---------------------------------------------------------------
 
 let allBeers = [];
+let hopData = {};   // hop name -> { flavours:[], notes:"" }
 
 async function loadBeerData() {
 
     try {
         const curated = await fetch("data/beers.json").then(r => r.json());
+
+        hopData = await fetch("data/hops.json")
+            .then(r => r.ok ? r.json() : {})
+            .catch(() => ({}));
 
         let catalog = await fetch("data/catalog.json")
             .then(r => r.ok ? r.json() : [])
@@ -61,6 +66,7 @@ async function loadBeerData() {
         }
 
         allBeers = buildCatalogBeers(catalog, curated);
+        allBeers.forEach((b, i) => { b._id = i; });   // stable id for detail lookup
 
         initStoreFilters();
         renderTypeFilter();
@@ -269,7 +275,7 @@ function renderCard(result, index) {
     const opt = store.options[0];
 
     return `
-        <div class="beer-card">
+        <div class="beer-card clickable" data-beer="${beer._id}">
             <img id="img-${index}" src="${opt.image || ""}" alt="${beer.name}">
             <h2>${beer.name}</h2>
             <p class="beer-style">
@@ -278,6 +284,7 @@ function renderCard(result, index) {
             </p>
             ${(beer.hops && beer.hops.length)
                 ? `<p class="beer-hops">🌿 ${beer.hops.join(", ")}</p>` : ""}
+            <p class="card-more">ⓘ Tap for taste &amp; hops</p>
             ${renderStoreButtons(index)}
             <div class="opt-row" id="opts-${index}">${renderOptButtons(index)}</div>
             <p class="beer-price">
@@ -335,6 +342,16 @@ document.addEventListener("click", event => {
     const optBtn = event.target.closest(".opt-btn");
     if (optBtn) {
         setOption(Number(optBtn.dataset.card), Number(optBtn.dataset.opt));
+        return;
+    }
+
+    // Clicking the buy link should just buy — don't open the detail page.
+    if (event.target.closest(".buy-btn")) return;
+
+    // A click anywhere else on a card opens its detail page.
+    const card = event.target.closest(".beer-card");
+    if (card && card.dataset.beer != null) {
+        openBeerDetail(Number(card.dataset.beer));
     }
 });
 
@@ -343,6 +360,120 @@ document.getElementById("hopInput")
     .addEventListener("keydown", event => {
         if (event.key === "Enter") searchBeers();
     });
+
+
+// ---------------------------------------------------------------
+// Hop flavour profiles + beer detail page
+// ---------------------------------------------------------------
+
+// Which view is on screen now (so the detail Back button returns there).
+function currentView() {
+    const v = [...document.querySelectorAll(".view")].find(el => !el.classList.contains("hidden"));
+    return v ? v.id.replace("-view", "") : "search";
+}
+let detailReturnView = "search";
+
+function hopProfile(name) {
+    return hopData[name] || null;
+}
+
+// Join words nicely: ["a","b","c"] -> "a, b and c".
+function listWords(arr) {
+    const a = arr.filter(Boolean);
+    if (a.length <= 1) return a.join("");
+    return a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
+}
+
+// A beer's taste tags = its own flavours plus every flavour its hops bring,
+// de-duplicated. This is how we explain the taste, even with no description.
+function beerTasteTags(beer) {
+    const seen = new Set();
+    const tags = [];
+    const add = f => { const k = f.toLowerCase(); if (!seen.has(k)) { seen.add(k); tags.push(f); } };
+    (beer.flavours || []).forEach(add);
+    (beer.hops || []).forEach(h => {
+        const p = hopProfile(h);
+        if (p) (p.flavours || []).forEach(add);
+    });
+    return tags;
+}
+
+function describeBeer(beer) {
+    if (beer.description) return beer.description;
+    const parts = [];
+    parts.push(`${beer.style || "A craft beer"}${beer.brewery ? " from " + beer.brewery : ""}.`);
+    const taste = beerTasteTags(beer);
+    if (taste.length) parts.push(`Expect ${listWords(taste.slice(0, 4)).toLowerCase()} flavours.`);
+    if ((beer.hops || []).length) parts.push(`Brewed with ${listWords(beer.hops)}.`);
+    return parts.join(" ");
+}
+
+function tagRow(tags) {
+    if (!tags || !tags.length) return "";
+    return `<div class="tag-row">${tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>`;
+}
+
+// Build and show the detail page for a beer id (index into allBeers).
+function openBeerDetail(id) {
+
+    const beer = allBeers[id];
+    if (!beer) return;
+    detailReturnView = currentView();
+
+    const img = (beer.offers[0] && beer.offers[0].image) || "";
+
+    const hopsHtml = (beer.hops || []).length
+        ? beer.hops.map(h => {
+            const p = hopProfile(h);
+            return `<div class="hop-profile">
+                <h3>${h}</h3>
+                ${p ? `<p>${p.notes}</p>${tagRow(p.flavours)}`
+                    : `<p class="muted">Flavour profile coming soon.</p>`}
+            </div>`;
+        }).join("")
+        : `<p class="muted">We don't have the hop details for this beer yet.</p>`;
+
+    const buyHtml = beer.offers.map(offer => `
+        <div class="detail-shop">
+            <span class="detail-shop-name">${offer.supermarket}</span>
+            <div class="detail-shop-opts">
+                ${(offer.options || []).map(o =>
+                    `<a class="opt-buy" href="${o.link || "#"}" target="_blank" rel="noopener">${o.label} — ${cleanPrice(o.price)}</a>`
+                ).join("")}
+            </div>
+        </div>`).join("");
+
+    document.getElementById("detail-view").innerHTML = `
+        <button class="back-btn" onclick="showView('${detailReturnView}')">← Back</button>
+        <div class="detail">
+            <div class="detail-media">
+                ${img ? `<img src="${img}" alt="${beer.name}">` : `<div class="detail-noimg">🍺</div>`}
+            </div>
+            <div class="detail-body">
+                <h1>${beer.name}</h1>
+                ${beer.brewery ? `<p class="detail-brewery">${beer.brewery}</p>` : ""}
+                <p class="detail-style">${beer.style || "Craft beer"}${beer.abv ? " • " + beer.abv + "% ABV" : ""}</p>
+                <p class="detail-desc">${describeBeer(beer)}</p>
+
+                <div class="detail-section">
+                    <h2>What it tastes like</h2>
+                    ${tagRow(beerTasteTags(beer)) || "<p class='muted'>Taste notes coming soon.</p>"}
+                </div>
+
+                <div class="detail-section">
+                    <h2>Hops <span class="muted">— and what each brings</span></h2>
+                    <div class="hop-profiles">${hopsHtml}</div>
+                </div>
+
+                <div class="detail-section">
+                    <h2>Where to buy</h2>
+                    ${buyHtml}
+                </div>
+            </div>
+        </div>`;
+
+    showView("detail");
+}
 
 
 // ---------------------------------------------------------------
@@ -372,7 +503,32 @@ function buildHopsList(beers) {
     beers.forEach(beer => (beer.hops || []).forEach(hop => {
         (hopMap[hop] = hopMap[hop] || []).push(beer.name);
     }));
-    renderAccordion(document.getElementById("hops-list"), hopMap);
+
+    const container = document.getElementById("hops-list");
+    const hops = Object.keys(hopMap).sort((a, b) => a.localeCompare(b));
+
+    if (!hops.length) {
+        container.innerHTML =
+            "<p class='searching'>No beers available yet — build the catalogue with <code>npm run build</code>.</p>";
+        return;
+    }
+
+    container.innerHTML = hops.map(hop => {
+        const p = hopProfile(hop);
+        const inline = p ? `<span class="acc-flavour">${(p.flavours || []).slice(0, 3).join(" · ")}</span>` : "";
+        return `<details class="acc">
+            <summary>
+                <span class="acc-title">${hop}</span>
+                ${inline}
+                <span class="acc-count">${hopMap[hop].length}</span>
+            </summary>
+            <div class="acc-body">
+                ${p ? `<p class="hop-notes">${p.notes}</p>${tagRow(p.flavours)}` : ""}
+                <p class="hop-beers-label">Beers with this hop</p>
+                <ul>${hopMap[hop].sort().map(n => `<li>${n}</li>`).join("")}</ul>
+            </div>
+        </details>`;
+    }).join("");
 }
 
 function buildBreweryList(beers) {
