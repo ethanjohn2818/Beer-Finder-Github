@@ -3257,5 +3257,122 @@
       "Mango",
       "Lychee"
     ]
+  },
+  {
+    "name": "BrewDog Emerald Daze",
+    "brewery": "BrewDog",
+    "style": "Hazy IPA",
+    "abv": 8,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Krush"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Coconut",
+      "Berry",
+      "Pineapple",
+      "Resinous"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Hop Hut Summer Slam",
+    "brewery": "Tiny Rebel",
+    "style": "IPA",
+    "abv": 5.5,
+    "hops": [
+      "Simcoe",
+      "Idaho 7"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Stone Fruit",
+      "Citrus",
+      "Orange",
+      "Mango"
+    ]
+  },
+  {
+    "name": "Cairngorm Trade Winds",
+    "brewery": "Cairngorm",
+    "style": "Golden Ale",
+    "abv": 4.3,
+    "hops": [
+      "Perle"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Elderflower",
+      "Citrus",
+      "Fruity"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Neon Drift",
+    "brewery": "Tiny Rebel",
+    "style": "Hazy IPA",
+    "abv": 4.8,
+    "hops": [
+      "Cascade",
+      "Ekuanot",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Grassy"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Equalizer",
+    "brewery": "Tiny Rebel",
+    "style": "Hazy IPA",
+    "abv": 5.8,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Lemon",
+      "Citrus",
+      "Grassy"
+    ]
+  },
+  {
+    "name": "Salcombe Shingle Bay",
+    "brewery": "Salcombe",
+    "style": "Golden Ale",
+    "abv": 4.2,
+    "hops": [
+      "Pacific Gem"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Blackberry",
+      "Citrus",
+      "Spiced Fruit"
+    ]
   }
 ]
