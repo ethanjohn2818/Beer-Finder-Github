@@ -465,5 +465,29 @@
       "Citrus"
     ],
     "notes": "Slovenian hop — floral and herbal with a light citrus note."
+  },
+  "Rakau": {
+    "flavours": [
+      "Apricot",
+      "Stone Fruit",
+      "Tropical"
+    ],
+    "notes": "New Zealand hop — apricot, stone fruit and clean tropical character."
+  },
+  "Pacifica": {
+    "flavours": [
+      "Orange",
+      "Floral",
+      "Apricot"
+    ],
+    "notes": "New Zealand hop — orange citrus, floral and apricot."
+  },
+  "Pioneer": {
+    "flavours": [
+      "Lemon",
+      "Grapefruit",
+      "Herbal"
+    ],
+    "notes": "English hedgerow hop — lemon, grapefruit and herbal notes."
   }
 }

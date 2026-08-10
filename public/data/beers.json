@@ -3520,5 +3520,141 @@
       "Floral",
       "Sweet"
     ]
+  },
+  {
+    "name": "Brew York Time Travelling Taxi",
+    "brewery": "Brew York",
+    "style": "DDH Pale Ale",
+    "abv": 5.4,
+    "hops": [
+      "Columbus",
+      "Citra",
+      "Loral"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Orange",
+      "Tropical",
+      "Mango",
+      "Apricot"
+    ]
+  },
+  {
+    "name": "Saltaire Blonde",
+    "brewery": "Saltaire",
+    "style": "Blonde Ale",
+    "abv": 4,
+    "hops": [
+      "Saaz"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat",
+      "Caramalt"
+    ],
+    "flavours": [
+      "Spicy",
+      "Fruity",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Shipyard American Pale Ale",
+    "brewery": "Shipyard",
+    "style": "American Pale Ale",
+    "abv": 4.5,
+    "hops": [
+      "Chinook",
+      "Cascade",
+      "Columbus",
+      "Centennial"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Pine",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "St Ives Mean As",
+    "brewery": "St Ives",
+    "style": "Hazy NZ IPA",
+    "abv": 6,
+    "hops": [
+      "Motueka",
+      "Rakau",
+      "Pacifica"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Lime",
+      "Orange",
+      "Apricot",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Butcombe Rare Breed",
+    "brewery": "Butcombe",
+    "style": "Pale Ale",
+    "abv": 4,
+    "hops": [
+      "Fuggles",
+      "Cascade",
+      "Amarillo"
+    ],
+    "malts": [
+      "Maris Otter"
+    ],
+    "flavours": [
+      "Citrus",
+      "Smooth",
+      "Fruity"
+    ]
+  },
+  {
+    "name": "Six Degrees North Hopclassic",
+    "brewery": "Six Degrees North",
+    "style": "Belgian IPA",
+    "abv": 6.6,
+    "hops": [
+      "Magnum",
+      "Pioneer"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Apricot",
+      "Citrus",
+      "Floral"
+    ]
+  },
+  {
+    "name": "St Peters Golden Ale",
+    "brewery": "St Peters",
+    "style": "Golden Ale",
+    "abv": 4.7,
+    "hops": [
+      "Challenger",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Caramel",
+      "Toffee",
+      "Toffee Apple"
+    ]
   }
 ]
