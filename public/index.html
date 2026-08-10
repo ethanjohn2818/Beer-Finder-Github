@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Finder</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20260810b">
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6022289335915022"
@@ -233,9 +233,11 @@
     </footer>
 
 
-    <script src="beerlogic.js"></script>
-    <script src="script.js"></script>
-    <script src="ads.js"></script>
+    <!-- ?v= is a cache-buster: bump it whenever these files change so
+         returning visitors never get a stale JS/CSS mix. -->
+    <script src="beerlogic.js?v=20260810b"></script>
+    <script src="script.js?v=20260810b"></script>
+    <script src="ads.js?v=20260810b"></script>
 
 </body>
 </html>

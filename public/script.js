@@ -68,8 +68,17 @@ async function loadBeerData() {
         renderFinderDropdowns();
         renderGifts();
 
+        // Populate the homepage with every beer straight away, so the site
+        // never looks empty before you've searched.
+        showAllBeers();
+
     } catch (error) {
         console.error("Could not load beers:", error);
+        const resultsDiv = document.getElementById("results");
+        if (resultsDiv) {
+            resultsDiv.innerHTML =
+                "<p class='searching'>Couldn't load the beer list. Please refresh the page.</p>";
+        }
     }
 }
 
