@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------
 // Local preview server.
 //
-// The live site is fully static (see public/) and is hosted on Netlify.
+// The live site is fully static (see public/) and is hosted on Cloudflare Pages.
 // This little server is only for previewing it on your own machine:
 //
 //     npm start   ->   http://localhost:3000
