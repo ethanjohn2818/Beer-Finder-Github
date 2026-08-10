@@ -3456,5 +3456,69 @@
       "Melon",
       "Nectarine"
     ]
+  },
+  {
+    "name": "Brew York Coney Island",
+    "brewery": "Brew York",
+    "style": "Hazy Session IPA",
+    "abv": 3.7,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Citrus",
+      "Mango",
+      "Stone Fruit"
+    ]
+  },
+  {
+    "name": "Kirkstall Flamango",
+    "brewery": "Kirkstall",
+    "style": "Hazy Pale Ale",
+    "abv": 3.4,
+    "hops": [
+      "Citra",
+      "Talus"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Mango",
+      "Tropical",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Harviestoun Bitter & Twisted",
+    "brewery": "Harviestoun",
+    "style": "Golden Ale",
+    "abv": 4.2,
+    "hops": [
+      "Challenger",
+      "Hersbrucker",
+      "Celeia",
+      "Bobek",
+      "Styrian Goldings"
+    ],
+    "malts": [
+      "Lager",
+      "Wheat",
+      "Crystal"
+    ],
+    "flavours": [
+      "Lemon",
+      "Floral",
+      "Sweet"
+    ]
   }
 ]

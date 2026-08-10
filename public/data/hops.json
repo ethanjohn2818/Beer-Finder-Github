@@ -449,5 +449,21 @@
       "Fruity"
     ],
     "notes": "Versatile English hop — spicy, cedary and lightly fruity."
+  },
+  "Hersbrucker": {
+    "flavours": [
+      "Floral",
+      "Herbal",
+      "Spice"
+    ],
+    "notes": "Noble German hop — soft floral, herbal and spicy."
+  },
+  "Bobek": {
+    "flavours": [
+      "Floral",
+      "Herbal",
+      "Citrus"
+    ],
+    "notes": "Slovenian hop — floral and herbal with a light citrus note."
   }
 }
