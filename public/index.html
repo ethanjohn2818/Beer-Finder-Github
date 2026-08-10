@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Finder</title>
-    <link rel="stylesheet" href="style.css?v=20260810b">
+    <link rel="stylesheet" href="style.css?v=20260810c">
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6022289335915022"
@@ -84,6 +84,14 @@
                     </select>
                 </label>
 
+                <label class="toolbar-sort">
+                    <span>Type</span>
+                    <select id="typeFilter" onchange="applyFiltersAndRender()">
+                        <option value="">All types</option>
+                        <!-- beer-type options injected by JS -->
+                    </select>
+                </label>
+
                 <div class="toolbar-stores" id="storeFilters">
                     <span class="toolbar-label">Stores</span>
                     <!-- store checkboxes injected by JS -->
@@ -101,18 +109,9 @@
         <!-- FIND YOUR BEER VIEW -->
         <section id="find-view" class="view hidden">
             <h1>Find your beer ✨</h1>
-            <p class="view-intro">Pick a flavour and/or a beer type, then hit “Show my beers”.</p>
+            <p class="view-intro">Tap the flavours you fancy, then hit “Show my beers”.</p>
 
-            <div class="finder-controls">
-                <label class="finder-select">
-                    <span>Flavour</span>
-                    <select id="flavourSelect"></select>
-                </label>
-                <label class="finder-select">
-                    <span>Beer type</span>
-                    <select id="typeSelect"></select>
-                </label>
-            </div>
+            <div id="flavour-chips" class="flavour-chips"></div>
 
             <div class="find-actions">
                 <button id="findBtn" class="find-btn" onclick="findByFlavour()">
@@ -235,9 +234,9 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260810b"></script>
-    <script src="script.js?v=20260810b"></script>
-    <script src="ads.js?v=20260810b"></script>
+    <script src="beerlogic.js?v=20260810c"></script>
+    <script src="script.js?v=20260810c"></script>
+    <script src="ads.js?v=20260810c"></script>
 
 </body>
 </html>

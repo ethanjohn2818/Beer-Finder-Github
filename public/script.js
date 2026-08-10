@@ -63,9 +63,10 @@ async function loadBeerData() {
         allBeers = buildCatalogBeers(catalog, curated);
 
         initStoreFilters();
+        renderTypeFilter();
         buildHopsList(allBeers);
         buildBreweryList(allBeers);
-        renderFinderDropdowns();
+        renderFlavourChips();
         renderGifts();
 
         // Populate the homepage with every beer straight away, so the site
@@ -175,6 +176,12 @@ function applyFiltersAndRender() {
             return offers.length ? { ...beer, offers } : null;
         })
         .filter(Boolean);
+
+    // Beer-type filter (IPA / Stout / Sour / ...)
+    const typeVal = (document.getElementById("typeFilter") || {}).value;
+    if (typeVal !== "" && typeVal != null) {
+        beers = beers.filter(b => BEER_TYPES[Number(typeVal)].match(b));
+    }
 
     // Sort
     const sort = (document.getElementById("sortBy") || {}).value || "relevance";
@@ -379,7 +386,7 @@ function buildBreweryList(beers) {
 
 
 // ---------------------------------------------------------------
-// Find your beer — a Flavour dropdown and a Beer-type dropdown
+// Beer TYPE filter (used by the search toolbar dropdown)
 // ---------------------------------------------------------------
 
 function flavours(beer) {
@@ -394,49 +401,79 @@ function styleIs(beer, words) {
     return words.some(w => s.includes(w));
 }
 
-// Flavour options (each knows how to test a beer).
-const FLAVOUR_CATEGORIES = [
-    { label: "Fruity", match: b => hasAny(b, ["tropical","mango","peach","berry","strawberry","guava","pineapple","passionfruit","orange","apricot","lychee","gooseberry"]) },
-    { label: "Citrus", match: b => hasAny(b, ["citrus","grapefruit","lemon","lime","orange","tangerine","zesty"]) },
-    { label: "Tropical & juicy", match: b => hasAny(b, ["tropical","mango","pineapple","passionfruit","guava","juicy","soft","creamy"]) },
-    { label: "Hoppy", match: b => styleIs(b, ["ipa","pale ale"]) || (b.hops || []).length >= 3 },
-    { label: "Extra hoppy", match: b => styleIs(b, ["double ipa","imperial","new england"]) || (b.abv >= 6 && styleIs(b, ["ipa"])) || (b.hops || []).length >= 5 },
-    { label: "Sour", match: b => styleIs(b, ["sour","gose","berliner"]) || hasAny(b, ["tart","sour"]) },
-    { label: "Dark & roasty", match: b => styleIs(b, ["stout","porter"]) || hasAny(b, ["coffee","chocolate","roasted","roast"]) },
-    { label: "Malty & sweet", match: b => hasAny(b, ["caramel","toffee","biscuit","bready","marshmallow","vanilla","sweet","honey"]) },
-    { label: "Piney & resinous", match: b => hasAny(b, ["pine","resin","herbal","floral"]) },
-    { label: "Crisp & refreshing", match: b => styleIs(b, ["lager","pilsner","pils","helles"]) || hasAny(b, ["crisp"]) },
-    { label: "Light & sessionable", match: b => (b.abv && b.abv <= 4.3) || styleIs(b, ["session"]) }
-];
+// A beer's type is worked out from its style AND its name — many beers
+// (sours, stouts) aren't in our hop DB so have no style, but their name
+// still says "Sour Beer", "Milk Stout", etc. Matching the name too is what
+// makes Sour and Stout actually return results.
+function typeText(beer) {
+    return `${beer.style || ""} ${beer.name || ""}`.toLowerCase();
+}
 
-// Beer-type options (matched against the beer's style).
 const BEER_TYPES = [
-    { label: "IPA", match: b => styleIs(b, ["ipa"]) },
-    { label: "Pale Ale", match: b => styleIs(b, ["pale"]) },
-    { label: "Lager", match: b => styleIs(b, ["lager","pilsner","pils","helles"]) },
-    { label: "Stout & Porter", match: b => styleIs(b, ["stout","porter"]) },
-    { label: "Sour", match: b => styleIs(b, ["sour","gose"]) },
-    { label: "Bitter & Ale", match: b => styleIs(b, ["bitter","red ale","amber","golden ale","brown"]) },
-    { label: "Double / Imperial", match: b => styleIs(b, ["double","imperial","dipa"]) },
-    { label: "Alcohol-free", match: b => isAlcoholFree(b) }
+    { label: "IPA",             match: b => /\bipa\b|neipa|dipa/.test(typeText(b)) },
+    { label: "Pale Ale",        match: b => /pale/.test(typeText(b)) },
+    { label: "Lager & Pilsner", match: b => /lager|pilsner|\bpils\b|helles/.test(typeText(b)) },
+    { label: "Stout & Porter",  match: b => /stout|porter/.test(typeText(b)) },
+    { label: "Sour",            match: b => /\bsour\b|gose|berliner|kriek/.test(typeText(b)) },
+    { label: "Bitter & Amber",  match: b => /bitter|amber|golden ale|brown ale|\bmild\b|red ale/.test(typeText(b)) },
+    { label: "Wheat & Weisse",  match: b => /wheat|weisse|hefe|witbier/.test(typeText(b)) },
+    { label: "Alcohol-free",    match: b => isAlcoholFree(b) }
 ];
 
-function renderFinderDropdowns() {
-    const fSel = document.getElementById("flavourSelect");
-    const tSel = document.getElementById("typeSelect");
-    if (fSel) fSel.innerHTML =
-        `<option value="">Any flavour</option>` +
-        FLAVOUR_CATEGORIES.map((c, i) => `<option value="${i}">${c.label}</option>`).join("");
-    if (tSel) tSel.innerHTML =
-        `<option value="">Any type</option>` +
+function renderTypeFilter() {
+    const sel = document.getElementById("typeFilter");
+    if (!sel) return;
+    sel.innerHTML = `<option value="">All types</option>` +
         BEER_TYPES.map((c, i) => `<option value="${i}">${c.label}</option>`).join("");
 }
 
+
+// ---------------------------------------------------------------
+// Find your beer — interactive flavour chips (tap to toggle)
+// ---------------------------------------------------------------
+
+const FLAVOUR_CATEGORIES = [
+    { label: "Fruity", emoji: "🍑", match: b => hasAny(b, ["tropical","mango","peach","berry","strawberry","guava","pineapple","passionfruit","orange","apricot","lychee","gooseberry"]) },
+    { label: "Citrus", emoji: "🍋", match: b => hasAny(b, ["citrus","grapefruit","lemon","lime","orange","tangerine","zesty"]) },
+    { label: "Tropical & juicy", emoji: "🥭", match: b => hasAny(b, ["tropical","mango","pineapple","passionfruit","guava","juicy","soft","creamy"]) },
+    { label: "Hoppy", emoji: "🌿", match: b => styleIs(b, ["ipa","pale ale"]) || (b.hops || []).length >= 3 },
+    { label: "Extra hoppy", emoji: "🔥", match: b => styleIs(b, ["double ipa","imperial","new england"]) || (b.abv >= 6 && styleIs(b, ["ipa"])) || (b.hops || []).length >= 5 },
+    { label: "Sour", emoji: "😝", match: b => /\bsour\b|gose|berliner/.test(typeText(b)) || hasAny(b, ["tart","sour"]) },
+    { label: "Dark & roasty", emoji: "☕", match: b => /stout|porter/.test(typeText(b)) || hasAny(b, ["coffee","chocolate","roasted","roast"]) },
+    { label: "Malty & sweet", emoji: "🍯", match: b => hasAny(b, ["caramel","toffee","biscuit","bready","marshmallow","vanilla","sweet","honey"]) },
+    { label: "Piney & resinous", emoji: "🌲", match: b => hasAny(b, ["pine","resin","herbal","floral"]) },
+    { label: "Crisp & refreshing", emoji: "🍺", match: b => styleIs(b, ["lager","pilsner","pils","helles"]) || hasAny(b, ["crisp"]) },
+    { label: "Light & sessionable", emoji: "🪶", match: b => (b.abv && b.abv <= 4.3) || styleIs(b, ["session"]) }
+];
+
+const selectedFlavours = new Set();
+
+function renderFlavourChips() {
+    const container = document.getElementById("flavour-chips");
+    if (!container) return;
+    container.innerHTML = FLAVOUR_CATEGORIES.map((cat, i) => `
+        <button class="flavour-chip" data-flavour="${i}">
+            <span>${cat.emoji}</span> ${cat.label}
+        </button>`).join("");
+}
+
+// Toggle chips (delegated so it survives re-renders)
+document.addEventListener("click", event => {
+    const chip = event.target.closest(".flavour-chip");
+    if (!chip) return;
+    const i = Number(chip.dataset.flavour);
+    if (selectedFlavours.has(i)) {
+        selectedFlavours.delete(i);
+        chip.classList.remove("active");
+    } else {
+        selectedFlavours.add(i);
+        chip.classList.add("active");
+    }
+});
+
 function clearFlavours() {
-    const fSel = document.getElementById("flavourSelect");
-    const tSel = document.getElementById("typeSelect");
-    if (fSel) fSel.value = "";
-    if (tSel) tSel.value = "";
+    selectedFlavours.clear();
+    document.querySelectorAll(".flavour-chip").forEach(chip => chip.classList.remove("active"));
     document.getElementById("find-results").innerHTML = "";
     document.getElementById("find-count").textContent = "";
 }
@@ -446,23 +483,17 @@ function findByFlavour() {
     const resultsDiv = document.getElementById("find-results");
     const countEl = document.getElementById("find-count");
 
-    const fVal = document.getElementById("flavourSelect").value;
-    const tVal = document.getElementById("typeSelect").value;
-
-    if (fVal === "" && tVal === "") {
-        resultsDiv.innerHTML = "<p class='searching'>Pick a flavour or a beer type above 🍺</p>";
+    if (selectedFlavours.size === 0) {
+        resultsDiv.innerHTML = "<p class='searching'>Pick at least one flavour above 🍺</p>";
         countEl.textContent = "";
         return;
     }
 
-    const tests = [];
-    if (fVal !== "") tests.push(FLAVOUR_CATEGORIES[Number(fVal)].match);
-    if (tVal !== "") tests.push(BEER_TYPES[Number(tVal)].match);
-
-    const matches = allBeers.filter(beer => tests.every(t => t(beer)));
+    const chosen = [...selectedFlavours].map(i => FLAVOUR_CATEGORIES[i]);
+    const matches = allBeers.filter(beer => chosen.every(cat => cat.match(beer)));
 
     if (matches.length === 0) {
-        resultsDiv.innerHTML = "<p class='searching'>No beers match those choices — try fewer 😔</p>";
+        resultsDiv.innerHTML = "<p class='searching'>No beers match all those flavours — try fewer 😔</p>";
         countEl.textContent = "";
         return;
     }
