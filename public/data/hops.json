@@ -489,5 +489,13 @@
       "Herbal"
     ],
     "notes": "English hedgerow hop — lemon, grapefruit and herbal notes."
+  },
+  "Progress": {
+    "flavours": [
+      "Floral",
+      "Honey",
+      "Earthy"
+    ],
+    "notes": "English hop — soft floral, honeyed and earthy, a Fuggle-like aroma."
   }
 }

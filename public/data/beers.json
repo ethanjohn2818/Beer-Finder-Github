@@ -3656,5 +3656,106 @@
       "Toffee",
       "Toffee Apple"
     ]
+  },
+  {
+    "name": "Black Sheep Ale",
+    "brewery": "Black Sheep",
+    "style": "Bitter",
+    "abv": 4.4,
+    "hops": [
+      "Challenger",
+      "Progress",
+      "Goldings"
+    ],
+    "malts": [
+      "Maris Otter",
+      "Crystal"
+    ],
+    "flavours": [
+      "Peppery",
+      "Earthy",
+      "Bittersweet"
+    ]
+  },
+  {
+    "name": "Stewart Hollyrood",
+    "brewery": "Stewart",
+    "style": "Pale Ale",
+    "abv": 5,
+    "hops": [
+      "Citra",
+      "El Dorado",
+      "Cashmere"
+    ],
+    "malts": [
+      "Golden Promise"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Tropical",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Jiddler's Tipple Juicy Chug",
+    "brewery": "Jiddler's Tipple",
+    "style": "Hazy IPA",
+    "abv": 3.8,
+    "hops": [
+      "Mosaic",
+      "Idaho 7"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Apricot",
+      "Juicy",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Williams Bros Talking Head",
+    "brewery": "Williams Bros",
+    "style": "American Pale Ale",
+    "abv": 4.4,
+    "hops": [
+      "Magnum",
+      "Ekuanot",
+      "Citra",
+      "Mosaic",
+      "Cascade"
+    ],
+    "malts": [
+      "Extra Pale"
+    ],
+    "flavours": [
+      "Pine",
+      "Tropical",
+      "Ripe Fruit"
+    ]
+  },
+  {
+    "name": "Black Isle Spider Monkey",
+    "brewery": "Black Isle",
+    "style": "IPA",
+    "abv": 5.2,
+    "hops": [
+      "Cascade",
+      "Simcoe",
+      "Citra",
+      "Nelson Sauvin"
+    ],
+    "malts": [
+      "Lager",
+      "Wheat"
+    ],
+    "flavours": [
+      "Pineapple",
+      "Pawpaw",
+      "Tropical"
+    ]
   }
 ]
