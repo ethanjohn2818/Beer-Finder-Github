@@ -45,7 +45,8 @@ document.querySelectorAll("[data-view]").forEach(el => {
 // ---------------------------------------------------------------
 
 let allBeers = [];
-let hopData = {};   // hop name -> { flavours:[], notes:"" }
+let hopData = {};       // hop name -> { flavours:[], notes:"" }
+let breweryData = {};   // lowercased brewery name -> "Town, Country"
 
 async function loadBeerData() {
 
@@ -55,6 +56,13 @@ async function loadBeerData() {
         hopData = await fetch("data/hops.json")
             .then(r => r.ok ? r.json() : {})
             .catch(() => ({}));
+
+        // Brewery locations, keyed case-insensitively.
+        const rawBreweries = await fetch("data/breweries.json")
+            .then(r => r.ok ? r.json() : {})
+            .catch(() => ({}));
+        breweryData = {};
+        Object.keys(rawBreweries).forEach(k => { breweryData[k.toLowerCase()] = rawBreweries[k]; });
 
         let catalog = await fetch("data/catalog.json")
             .then(r => r.ok ? r.json() : [])
@@ -451,7 +459,9 @@ function openBeerDetail(id) {
             </div>
             <div class="detail-body">
                 <h1>${beer.name}</h1>
-                ${beer.brewery ? `<p class="detail-brewery">${beer.brewery}</p>` : ""}
+                ${beer.brewery
+                    ? `<p class="detail-brewery">${beer.brewery}${breweryLocation(beer.brewery) ? ` <span class="detail-loc">📍 ${breweryLocation(beer.brewery)}</span>` : ""}</p>`
+                    : ""}
                 <p class="detail-style">${beer.style || "Craft beer"}${beer.abv ? " • " + beer.abv + "% ABV" : ""}</p>
                 <p class="detail-desc">${describeBeer(beer)}</p>
 
@@ -531,13 +541,43 @@ function buildHopsList(beers) {
     }).join("");
 }
 
+// Where a brewery is based (case-insensitive lookup), or "" if unknown.
+function breweryLocation(name) {
+    return breweryData[String(name || "").toLowerCase()] || "";
+}
+
 function buildBreweryList(beers) {
     const breweryMap = {};
     beers.forEach(beer => {
         const brewery = beer.brewery || "Unknown";
         (breweryMap[brewery] = breweryMap[brewery] || []).push(beer.name);
     });
-    renderAccordion(document.getElementById("brewery-list"), breweryMap);
+
+    const container = document.getElementById("brewery-list");
+    const breweries = Object.keys(breweryMap).sort((a, b) => a.localeCompare(b));
+
+    if (!breweries.length) {
+        container.innerHTML =
+            "<p class='searching'>No beers available yet — build the catalogue with <code>npm run build</code>.</p>";
+        return;
+    }
+
+    container.innerHTML = breweries.map(brewery => {
+        const loc = breweryLocation(brewery);
+        const inline = loc ? `<span class="acc-flavour">📍 ${loc}</span>` : "";
+        return `<details class="acc">
+            <summary>
+                <span class="acc-title">${brewery}</span>
+                ${inline}
+                <span class="acc-count">${breweryMap[brewery].length}</span>
+            </summary>
+            <div class="acc-body">
+                ${loc ? `<p class="hop-notes">📍 Based in ${loc}</p>` : ""}
+                <p class="hop-beers-label">Beers we found</p>
+                <ul>${breweryMap[brewery].sort().map(n => `<li>${n}</li>`).join("")}</ul>
+            </div>
+        </details>`;
+    }).join("");
 }
 
 

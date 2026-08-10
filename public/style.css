@@ -1086,3 +1086,5 @@ main {
     .detail-media { position: static; max-width: 320px; margin: 0 auto; }
     .hop-profiles { grid-template-columns: 1fr; }
 }
+
+.detail-loc { color: var(--muted); font-weight: 500; font-size: 0.9rem; margin-left: 6px; }
