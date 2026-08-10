@@ -2304,5 +2304,237 @@
       "Citrus",
       "Peppery"
     ]
+  },
+  {
+    "name": "Ossett White Rat",
+    "brewery": "Ossett",
+    "style": "Pale Ale",
+    "abv": 4,
+    "hops": [
+      "Cascade",
+      "Columbus",
+      "Amarillo"
+    ],
+    "malts": [
+      "Lager",
+      "Wheat"
+    ],
+    "flavours": [
+      "Citrus",
+      "Grapefruit",
+      "Resinous"
+    ]
+  },
+  {
+    "name": "Kirkstall Virtuous",
+    "brewery": "Kirkstall",
+    "style": "Session IPA",
+    "abv": 4.5,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Pine",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Buxton Fresh Pulp",
+    "brewery": "Buxton",
+    "style": "New England IPA",
+    "abv": 6,
+    "hops": [
+      "Centennial",
+      "Chinook",
+      "Citra",
+      "Harlequin",
+      "El Dorado"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Passionfruit",
+      "Tropical",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Polly's Past Future",
+    "brewery": "Polly's Brew Co",
+    "style": "Pale Ale",
+    "abv": 5.4,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Idaho 7",
+      "Talus"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Stone Fruit",
+      "Grapefruit",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Saltaire South Island",
+    "brewery": "Saltaire",
+    "style": "Pale Ale",
+    "abv": 3.5,
+    "hops": [
+      "Nelson Sauvin"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Gooseberry",
+      "Passionfruit",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Saltaire Cascade Pale",
+    "brewery": "Saltaire",
+    "style": "Pale Ale",
+    "abv": 4.8,
+    "hops": [
+      "Cascade"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Grapefruit",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Saltaire Citra",
+    "brewery": "Saltaire",
+    "style": "Pale Ale",
+    "abv": 4.8,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Lime"
+    ]
+  },
+  {
+    "name": "Duvel",
+    "brewery": "Duvel",
+    "style": "Belgian Strong Golden Ale",
+    "abv": 8.5,
+    "hops": [
+      "Saaz",
+      "Styrian Goldings"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Pear",
+      "Spicy",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Adnams Southwold Bitter",
+    "brewery": "Adnams",
+    "style": "Bitter",
+    "abv": 3.7,
+    "hops": [
+      "Fuggles",
+      "First Gold"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Earthy",
+      "Floral",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "BrewDog Wingman",
+    "brewery": "BrewDog",
+    "style": "Session IPA",
+    "abv": 4.3,
+    "hops": [
+      "Amarillo",
+      "Centennial",
+      "Chinook",
+      "Citra",
+      "Simcoe"
+    ],
+    "malts": [
+      "Extra Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Pine",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "BrewDog Elvis AF",
+    "brewery": "BrewDog",
+    "style": "Grapefruit IPA",
+    "abv": 0.5,
+    "hops": [
+      "Simcoe",
+      "Amarillo",
+      "Mosaic",
+      "Citra"
+    ],
+    "malts": [
+      "Extra Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Citrus",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Beavertown Lunar Haze",
+    "brewery": "Beavertown",
+    "style": "Hazy IPA",
+    "abv": 4.5,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "El Dorado"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Tropical",
+      "Juicy",
+      "Citrus"
+    ]
   }
 ]
