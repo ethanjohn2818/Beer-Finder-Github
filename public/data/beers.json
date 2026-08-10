@@ -2536,5 +2536,145 @@
       "Juicy",
       "Citrus"
     ]
+  },
+  {
+    "name": "Vocation Hop Skip & Juice",
+    "brewery": "Vocation",
+    "style": "Hazy Pale Ale",
+    "abv": 5.7,
+    "hops": [
+      "Simcoe",
+      "Citra"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Wheat",
+      "Oats"
+    ],
+    "flavours": [
+      "Pineapple",
+      "Mango",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Roosters Hazy Faced Assassin",
+    "brewery": "Roosters",
+    "style": "Hazy Pale Ale",
+    "abv": 5.5,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Mango",
+      "Apricot",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "Brew York Juice Forsyth",
+    "brewery": "Brew York",
+    "style": "Tropical IPA",
+    "abv": 5,
+    "hops": [
+      "Columbus",
+      "Citra",
+      "Mosaic",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Pineapple",
+      "Mango",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Purity Mad Goose",
+    "brewery": "Purity",
+    "style": "Pale Ale",
+    "abv": 4.2,
+    "hops": [
+      "Pilgrim",
+      "Centennial",
+      "Chinook",
+      "Cascade"
+    ],
+    "malts": [
+      "Maris Otter",
+      "Caragold",
+      "Wheat"
+    ],
+    "flavours": [
+      "Citrus",
+      "Zesty",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "Sharp's Atlantic",
+    "brewery": "Sharp's",
+    "style": "Pale Ale",
+    "abv": 4.5,
+    "hops": [
+      "Cascade",
+      "Aurora",
+      "Citra",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Caramalt"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "Wye Valley HPA",
+    "brewery": "Wye Valley",
+    "style": "Pale Ale",
+    "abv": 4,
+    "hops": [
+      "Target",
+      "Celeia"
+    ],
+    "malts": [
+      "Maris Otter",
+      "Wheat"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Camden Easy IPA",
+    "brewery": "Camden",
+    "style": "Hazy IPA",
+    "abv": 5,
+    "hops": [
+      "Cashmere",
+      "Citra",
+      "El Dorado"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Citrus",
+      "Peach",
+      "Watermelon"
+    ]
   }
 ]
