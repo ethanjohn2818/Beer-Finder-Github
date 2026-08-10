@@ -2794,5 +2794,125 @@
       "Grassy",
       "Fruity"
     ]
+  },
+  {
+    "name": "BrewDog Counter Strike",
+    "brewery": "BrewDog",
+    "style": "West Coast IPA",
+    "abv": 6.8,
+    "hops": [
+      "Krush",
+      "Mosaic",
+      "Citra",
+      "Talus"
+    ],
+    "malts": [
+      "Extra Pale"
+    ],
+    "flavours": [
+      "Orange",
+      "Mango",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Kirkstall Superdelic",
+    "brewery": "Kirkstall",
+    "style": "Hazy IPA",
+    "abv": 5,
+    "hops": [
+      "Superdelic"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Mango",
+      "Berry",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Clwb Cabana",
+    "brewery": "Tiny Rebel",
+    "style": "Caribbean IPA",
+    "abv": 7,
+    "hops": [
+      "Cascade"
+    ],
+    "malts": [
+      "Pale",
+      "Vienna"
+    ],
+    "flavours": [
+      "Mango",
+      "Passionfruit",
+      "Pineapple",
+      "Guava"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Paper Planes",
+    "brewery": "Tiny Rebel",
+    "style": "Double IPA",
+    "abv": 8,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Mango",
+      "Passionfruit",
+      "Pineapple",
+      "Peach"
+    ]
+  },
+  {
+    "name": "Outland East of Eden",
+    "brewery": "Outland",
+    "style": "New England IPA",
+    "abv": 6,
+    "hops": [
+      "Mosaic",
+      "Citra",
+      "El Dorado"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Mango",
+      "Pineapple",
+      "Stone Fruit"
+    ]
+  },
+  {
+    "name": "Vocation Toucan Tropic",
+    "brewery": "Vocation",
+    "style": "DDH IPA",
+    "abv": 6.7,
+    "hops": [
+      "HBC 586",
+      "Simcoe",
+      "Galaxy"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Mango",
+      "Citrus",
+      "Pine"
+    ]
   }
 ]
