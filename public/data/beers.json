@@ -3917,5 +3917,66 @@
       "Fresh",
       "Floral"
     ]
+  },
+  {
+    "name": "Cairngorm IPA",
+    "brewery": "Cairngorm",
+    "style": "IPA",
+    "abv": 5,
+    "hops": [
+      "Citra",
+      "Willamette"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Pine",
+      "Tropical",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Harviestoun Haggis Hunter",
+    "brewery": "Harviestoun",
+    "style": "Amber Ale",
+    "abv": 4.3,
+    "hops": [
+      "East Kent Goldings",
+      "Fuggles",
+      "Celeia",
+      "Bobek",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral",
+      "Spicy",
+      "Grassy"
+    ]
+  },
+  {
+    "name": "Northern Monk Great Northern Bitter",
+    "brewery": "Northern Monk",
+    "style": "Best Bitter",
+    "abv": 4.5,
+    "hops": [
+      "Cascade",
+      "Ernest"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Caramel",
+      "Biscuit",
+      "Dark Fruit",
+      "Orange"
+    ]
   }
 ]

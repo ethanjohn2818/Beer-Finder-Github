@@ -505,5 +505,13 @@
       "Citrus"
     ],
     "notes": "New Zealand hop — intense grapefruit and passionfruit with citrus zest."
+  },
+  "Ernest": {
+    "flavours": [
+      "Floral",
+      "Lavender",
+      "Honey"
+    ],
+    "notes": "English hop — delicate floral, lavender and honey character."
   }
 }
