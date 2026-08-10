@@ -3855,5 +3855,67 @@
       "Mango",
       "Lychee"
     ]
+  },
+  {
+    "name": "Salt Hooch Lemon",
+    "brewery": "Salt",
+    "style": "Pale Ale",
+    "abv": 4,
+    "hops": [
+      "Loral",
+      "Citra"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Wheat",
+      "Cara"
+    ],
+    "flavours": [
+      "Lemon",
+      "Zesty",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Double Barrelled We Need Jungle",
+    "brewery": "Double Barrelled",
+    "style": "Hazy IPA",
+    "abv": 5.8,
+    "hops": [
+      "Mosaic",
+      "Enigma",
+      "Galaxy",
+      "Riwaka",
+      "Nelson Sauvin"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Berry",
+      "Peach",
+      "Passionfruit",
+      "White Grape"
+    ]
+  },
+  {
+    "name": "Cairngorm Gold",
+    "brewery": "Cairngorm",
+    "style": "Golden Ale",
+    "abv": 4.5,
+    "hops": [
+      "Saaz",
+      "Bobek"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Zesty",
+      "Fresh",
+      "Floral"
+    ]
   }
 ]

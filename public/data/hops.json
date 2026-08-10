@@ -497,5 +497,13 @@
       "Earthy"
     ],
     "notes": "English hop — soft floral, honeyed and earthy, a Fuggle-like aroma."
+  },
+  "Riwaka": {
+    "flavours": [
+      "Grapefruit",
+      "Passionfruit",
+      "Citrus"
+    ],
+    "notes": "New Zealand hop — intense grapefruit and passionfruit with citrus zest."
   }
 }
