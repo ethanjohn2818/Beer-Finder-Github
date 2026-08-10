@@ -3097,5 +3097,165 @@
       "Strawberry",
       "Dank"
     ]
+  },
+  {
+    "name": "BrewDog Triple Hazy",
+    "brewery": "BrewDog",
+    "style": "Imperial Hazy IPA",
+    "abv": 9.5,
+    "hops": [
+      "Citra",
+      "Simcoe",
+      "Amarillo",
+      "Mosaic"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Peach",
+      "Mango",
+      "Apricot",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Tiny Rebel Tigerblood",
+    "brewery": "Tiny Rebel",
+    "style": "IPA",
+    "abv": 7,
+    "hops": [
+      "Ekuanot",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Strawberry",
+      "Watermelon",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Salt Double Dripp",
+    "brewery": "Salt",
+    "style": "Double IPA",
+    "abv": 8,
+    "hops": [
+      "Mosaic",
+      "Citra",
+      "Enigma"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Passionfruit",
+      "Papaya",
+      "Mango"
+    ]
+  },
+  {
+    "name": "Outland Dead Reckoning",
+    "brewery": "Outland",
+    "style": "West Coast IPA",
+    "abv": 5,
+    "hops": [
+      "Amarillo",
+      "Cascade",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Citrus",
+      "Pine",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "Wiper & True Seeing Visions",
+    "brewery": "Wiper & True",
+    "style": "Pale Ale",
+    "abv": 4.6,
+    "hops": [
+      "Galaxy"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Passionfruit",
+      "Citrus",
+      "Orange"
+    ]
+  },
+  {
+    "name": "Duration Fishermen",
+    "brewery": "Duration",
+    "style": "Pale Ale",
+    "abv": 5.2,
+    "hops": [
+      "Cashmere",
+      "Loral"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Floral",
+      "Lemon",
+      "Melon"
+    ]
+  },
+  {
+    "name": "Fierce Beer Distant North",
+    "brewery": "Fierce Beer",
+    "style": "Hazy IPA",
+    "abv": 6.5,
+    "hops": [
+      "Citra",
+      "Krush",
+      "Idaho 7"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Grassy"
+    ]
+  },
+  {
+    "name": "Kirkstall Providence",
+    "brewery": "Kirkstall",
+    "style": "New England Pale Ale",
+    "abv": 5.2,
+    "hops": [
+      "Citra",
+      "Amarillo",
+      "Ekuanot"
+    ],
+    "malts": [
+      "Maris Otter",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Peach",
+      "Apricot",
+      "Mango",
+      "Lychee"
+    ]
   }
 ]
