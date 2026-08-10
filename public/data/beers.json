@@ -3010,5 +3010,92 @@
       "Mango",
       "Citrus"
     ]
+  },
+  {
+    "name": "Kirkstall Judicious",
+    "brewery": "Kirkstall",
+    "style": "Hazy Pale Ale",
+    "abv": 4.8,
+    "hops": [
+      "Talus",
+      "Galaxy",
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Pineapple",
+      "Mango",
+      "Passionfruit"
+    ]
+  },
+  {
+    "name": "Polly's Are We Famous",
+    "brewery": "Polly's Brew Co",
+    "style": "DDH Pale Ale",
+    "abv": 5.6,
+    "hops": [
+      "Azacca",
+      "Mosaic",
+      "Citra",
+      "El Dorado",
+      "Ekuanot"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Juicy",
+      "Tropical",
+      "Stone Fruit"
+    ]
+  },
+  {
+    "name": "Buxton King Slayer",
+    "brewery": "Buxton",
+    "style": "Double IPA",
+    "abv": 8,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Ekuanot",
+      "Sabro"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Coconut"
+    ]
+  },
+  {
+    "name": "Salt X Drop Project",
+    "brewery": "Salt",
+    "style": "New England IPA",
+    "abv": 7,
+    "hops": [
+      "Mosaic",
+      "Simcoe",
+      "Strata"
+    ],
+    "malts": [
+      "Extra Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Passionfruit",
+      "Strawberry",
+      "Dank"
+    ]
   }
 ]
