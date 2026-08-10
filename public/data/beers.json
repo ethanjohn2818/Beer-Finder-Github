@@ -2676,5 +2676,123 @@
       "Peach",
       "Watermelon"
     ]
+  },
+  {
+    "name": "Tiny Rebel Cloud Control",
+    "brewery": "Tiny Rebel",
+    "style": "New England IPA",
+    "abv": 6.5,
+    "hops": [
+      "Mosaic",
+      "Azacca",
+      "El Dorado"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat",
+      "Oats"
+    ],
+    "flavours": [
+      "Mango",
+      "Pineapple",
+      "Peach",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Kirkstall Spokane",
+    "brewery": "Kirkstall",
+    "style": "West Coast IPA",
+    "abv": 6,
+    "hops": [
+      "Columbus",
+      "Chinook",
+      "Sultana"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Pine",
+      "Mandarin"
+    ]
+  },
+  {
+    "name": "Old Speckled Hen",
+    "brewery": "Greene King",
+    "style": "English Pale Ale",
+    "abv": 5,
+    "hops": [
+      "Pilgrim",
+      "First Gold",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Toffee",
+      "Malty",
+      "Orange"
+    ]
+  },
+  {
+    "name": "Hobgoblin",
+    "brewery": "Wychwood",
+    "style": "Ruby Ale",
+    "abv": 5.2,
+    "hops": [
+      "Fuggles",
+      "Styrian Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal",
+      "Chocolate"
+    ],
+    "flavours": [
+      "Toffee",
+      "Fruity",
+      "Caramel"
+    ]
+  },
+  {
+    "name": "Deuchars IPA",
+    "brewery": "Caledonian",
+    "style": "IPA",
+    "abv": 3.8,
+    "hops": [
+      "Fuggles",
+      "Willamette",
+      "Styrian Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Meantime Prime Pale",
+    "brewery": "Meantime",
+    "style": "Pale Ale",
+    "abv": 4.3,
+    "hops": [
+      "Cascade",
+      "Centennial",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Grassy",
+      "Fruity"
+    ]
   }
 ]
