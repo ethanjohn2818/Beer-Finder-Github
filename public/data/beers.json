@@ -3374,5 +3374,87 @@
       "Citrus",
       "Spiced Fruit"
     ]
+  },
+  {
+    "name": "BrewDog Shore Leave",
+    "brewery": "BrewDog",
+    "style": "Amber Ale",
+    "abv": 4.3,
+    "hops": [
+      "Ahtanum",
+      "Chinook",
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Caramalt",
+      "Crystal"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Pine",
+      "Caramel"
+    ]
+  },
+  {
+    "name": "Salcombe Gold",
+    "brewery": "Salcombe",
+    "style": "Golden Ale",
+    "abv": 4.5,
+    "hops": [
+      "Amarillo",
+      "Chinook",
+      "Citra"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Melon",
+      "Apricot",
+      "Peach"
+    ]
+  },
+  {
+    "name": "Cairngorm Wildcat",
+    "brewery": "Cairngorm",
+    "style": "Scottish Ale",
+    "abv": 5.1,
+    "hops": [
+      "Challenger",
+      "Fuggles"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Fruity",
+      "Earthy"
+    ]
+  },
+  {
+    "name": "Northern Monk Faith In Futures",
+    "brewery": "Northern Monk",
+    "style": "Hazy DDH IPA",
+    "abv": 6.2,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Mango",
+      "Melon",
+      "Nectarine"
+    ]
   }
 ]
