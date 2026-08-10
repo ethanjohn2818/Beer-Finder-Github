@@ -3757,5 +3757,103 @@
       "Pawpaw",
       "Tropical"
     ]
+  },
+  {
+    "name": "Kirkstall Mango IPA",
+    "brewery": "Kirkstall",
+    "style": "IPA",
+    "abv": 5.5,
+    "hops": [
+      "Galaxy",
+      "Citra",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Mango",
+      "Tropical",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "Saltaire Full Tilt",
+    "brewery": "Saltaire",
+    "style": "Pale Ale",
+    "abv": 5.2,
+    "hops": [
+      "Galaxy",
+      "Motueka"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Tropical",
+      "Dank",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Harviestoun Schiehallion",
+    "brewery": "Harviestoun",
+    "style": "Craft Lager",
+    "abv": 4.8,
+    "hops": [
+      "Challenger",
+      "Styrian Goldings",
+      "Hersbrucker"
+    ],
+    "malts": [
+      "Lager",
+      "Wheat"
+    ],
+    "flavours": [
+      "Crisp",
+      "Grapefruit",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Innis & Gunn Session IPA",
+    "brewery": "Innis & Gunn",
+    "style": "Session IPA",
+    "abv": 4.2,
+    "hops": [
+      "Citra",
+      "Centennial",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Berry",
+      "Lemon"
+    ]
+  },
+  {
+    "name": "Brooklyn Fonio Rising",
+    "brewery": "Brooklyn",
+    "style": "Double Pilsner",
+    "abv": 6.4,
+    "hops": [
+      "Hallertau",
+      "Perle",
+      "Saaz"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Floral",
+      "Tropical",
+      "Mango",
+      "Lychee"
+    ]
   }
 ]
