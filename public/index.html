@@ -13,6 +13,19 @@
 
 <body>
 
+    <!-- AGE GATE (shown once, until confirmed) -->
+    <div id="age-gate" class="age-gate hidden">
+        <div class="age-card">
+            <div class="age-emoji">🍺</div>
+            <h2>Are you 18 or over?</h2>
+            <p>Beer Finder features alcoholic drinks. Please confirm you are of
+               legal drinking age to continue.</p>
+            <button class="age-yes" onclick="confirmAge()">Yes, I'm 18 or over</button>
+            <p class="age-note">By entering, you confirm that you are 18 years of age or older.</p>
+        </div>
+    </div>
+
+
     <!-- Top navigation bar -->
     <header class="nav">
 
@@ -21,9 +34,11 @@
         </div>
 
         <nav class="nav-links">
+            <button class="nav-btn" data-view="search">Search Beer</button>
             <button class="nav-btn" data-view="find">Find Your Beer</button>
             <button class="nav-btn" data-view="hops">Hops</button>
             <button class="nav-btn" data-view="brewery">Brewery</button>
+            <button class="nav-btn" data-view="gifts">Gifts</button>
             <button class="nav-btn" data-view="contact">Contact</button>
         </nav>
 
@@ -48,10 +63,36 @@
                         Find Beers
                     </button>
                 </div>
+
+                <div class="quick-actions">
+                    <button class="qa-btn qa-af" onclick="showAlcoholFree()">🚫🍺 Alcohol-free</button>
+                    <button class="qa-btn" onclick="showAllBeers()">📋 Show all beers</button>
+                    <button class="qa-btn qa-clear" onclick="clearSearch()">✕ Clear</button>
+                </div>
+            </div>
+
+            <!-- Sort + store filter toolbar -->
+            <div class="toolbar" id="toolbar">
+                <label class="toolbar-sort">
+                    <span>Sort</span>
+                    <select id="sortBy" onchange="applyFiltersAndRender()">
+                        <option value="relevance">Relevance</option>
+                        <option value="name">Name A–Z</option>
+                        <option value="brewery">Brewery A–Z</option>
+                        <option value="price">Price (low → high)</option>
+                        <option value="abv">ABV (high → low)</option>
+                    </select>
+                </label>
+
+                <div class="toolbar-stores" id="storeFilters">
+                    <span class="toolbar-label">Stores</span>
+                    <!-- store checkboxes injected by JS -->
+                </div>
             </div>
 
             <div class="ad-slot" data-ad="search-top"></div>
 
+            <p id="results-count" class="results-count"></p>
             <div id="results"></div>
 
         </section>
@@ -60,9 +101,18 @@
         <!-- FIND YOUR BEER VIEW -->
         <section id="find-view" class="view hidden">
             <h1>Find your beer ✨</h1>
-            <p class="view-intro">Pick the flavours you fancy, then hit “Show my beers”.</p>
+            <p class="view-intro">Pick a flavour and/or a beer type, then hit “Show my beers”.</p>
 
-            <div id="flavour-chips" class="flavour-chips"></div>
+            <div class="finder-controls">
+                <label class="finder-select">
+                    <span>Flavour</span>
+                    <select id="flavourSelect"></select>
+                </label>
+                <label class="finder-select">
+                    <span>Beer type</span>
+                    <select id="typeSelect"></select>
+                </label>
+            </div>
 
             <div class="find-actions">
                 <button id="findBtn" class="find-btn" onclick="findByFlavour()">
@@ -75,6 +125,7 @@
 
             <div class="ad-slot" data-ad="find-top"></div>
 
+            <p id="find-count" class="results-count"></p>
             <div id="find-results"></div>
         </section>
 
@@ -82,16 +133,24 @@
         <!-- HOPS VIEW -->
         <section id="hops-view" class="view hidden">
             <h1>Hops we know 🌿</h1>
-            <p class="view-intro">Hops in the beers you can buy right now, and which beers use them.</p>
-            <div id="hops-list" class="list-grid"></div>
+            <p class="view-intro">Hops in the beers you can buy right now — tap a hop to see its beers.</p>
+            <div id="hops-list" class="accordion-list"></div>
         </section>
 
 
         <!-- BREWERY VIEW -->
         <section id="brewery-view" class="view hidden">
             <h1>Breweries we know 🏭</h1>
-            <p class="view-intro">Breweries whose beers you can buy right now, and their beers.</p>
-            <div id="brewery-list" class="list-grid"></div>
+            <p class="view-intro">Breweries whose beers you can buy right now — tap one to see its beers.</p>
+            <div id="brewery-list" class="accordion-list"></div>
+        </section>
+
+
+        <!-- GIFTS VIEW -->
+        <section id="gifts-view" class="view hidden">
+            <h1>Beer gifts &amp; merch 🎁</h1>
+            <p class="view-intro">Glassware, gift baskets and beer-lover merch. A great pairing for the beers you find here.</p>
+            <div id="gifts-list" class="gifts-grid"></div>
         </section>
 
 
