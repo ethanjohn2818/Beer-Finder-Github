@@ -1269,3 +1269,12 @@ html[data-theme="dark"] .footer { box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.5); }
 @media (max-width: 560px) {
     .theme-toggle { right: 14px; bottom: 14px; width: 46px; height: 46px; font-size: 1.3rem; }
 }
+
+
+/* Last-updated line at the foot of the Contact page (bottom-left) */
+.last-updated {
+    margin: 28px 0 0;
+    text-align: left;
+    color: var(--muted);
+    font-size: 0.82rem;
+}

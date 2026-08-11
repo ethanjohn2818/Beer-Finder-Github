@@ -24,6 +24,7 @@ const {
 
 
 const CATALOG_FILE = path.join(__dirname, "../public/data/catalog.json");
+const META_FILE = path.join(__dirname, "../public/data/meta.json");
 
 
 function enc(query) {
@@ -138,6 +139,24 @@ async function crawlCatalog(query = "craft beer") {
 
 function saveCatalog(products) {
     fs.writeFileSync(CATALOG_FILE, JSON.stringify(products, null, 2));
+    writeMeta(products);
+}
+
+
+// Record when the catalogue was last built, and per-shop counts, so the site
+// can show "beer list last updated ...".
+function writeMeta(products) {
+    const byStore = {};
+    for (const p of products) {
+        const s = p.supermarket || "Tesco";
+        byStore[s] = (byStore[s] || 0) + 1;
+    }
+    const meta = {
+        lastUpdated: new Date().toISOString(),
+        total: products.length,
+        byStore
+    };
+    fs.writeFileSync(META_FILE, JSON.stringify(meta, null, 2));
 }
 
 
@@ -168,5 +187,6 @@ module.exports = {
     saveCatalog,
     loadCatalog,
     mergeCatalog,
-    CATALOG_FILE
+    CATALOG_FILE,
+    META_FILE
 };

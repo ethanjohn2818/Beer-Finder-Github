@@ -39,7 +39,7 @@ const {
     productName
 } = require("./lib");
 
-const { mergeCatalog, CATALOG_FILE } = require("./catalog");
+const { mergeCatalog, CATALOG_FILE, META_FILE } = require("./catalog");
 
 
 // ---- Where the results go -------------------------------------
@@ -464,12 +464,12 @@ function pushCatalog(message) {
     }
 
     try {
-        execSync(`git add "${CATALOG_FILE}"`, { cwd });
+        execSync(`git add "${CATALOG_FILE}" "${META_FILE}"`, { cwd });
 
-        // Only commit if the catalogue actually changed.
+        // Commit if the catalogue or the "last updated" stamp changed.
         let changed = true;
         try {
-            execSync(`git diff --cached --quiet -- "${CATALOG_FILE}"`, { cwd });
+            execSync(`git diff --cached --quiet -- "${CATALOG_FILE}" "${META_FILE}"`, { cwd });
             changed = false;
         } catch { changed = true; }
 

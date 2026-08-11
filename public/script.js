@@ -92,6 +92,12 @@ async function loadBeerData() {
         breweryData = {};
         Object.keys(rawBreweries).forEach(k => { breweryData[k.toLowerCase()] = rawBreweries[k]; });
 
+        // When the scrapers last ran (shown on the Contact page).
+        const meta = await fetch("data/meta.json")
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null);
+        renderLastUpdated(meta);
+
         let catalog = await fetch("data/catalog.json")
             .then(r => r.ok ? r.json() : [])
             .catch(() => []);
@@ -792,6 +798,21 @@ function renderGifts() {
 // ---------------------------------------------------------------
 
 const CONTACT_EMAIL = "hello@mybeerfinder.co.uk";
+
+// Show when the scrapers last ran, at the foot of the Contact page.
+function renderLastUpdated(meta) {
+    const el = document.getElementById("last-updated");
+    if (!el) return;
+    if (!meta || !meta.lastUpdated) { el.textContent = ""; return; }
+    const when = new Date(meta.lastUpdated);
+    const nice = when.toLocaleString("en-GB", {
+        day: "numeric", month: "long", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+    });
+    const count = meta.total ? ` · ${meta.total} products` : "";
+    el.textContent = `Beer list last updated: ${nice}${count}`;
+}
+
 
 function sendMessage(event) {
     event.preventDefault();
