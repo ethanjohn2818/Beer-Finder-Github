@@ -247,8 +247,9 @@ function matchesSearch(searchTerm, name) {
 //   • Morrisons lists the real price after the word "Price", e.g.
 //     "...(£7.61/litre) | Price | £3.35 | Add" — so the first £ on the tile
 //     is the per-litre rate, not what you pay.
-// So: prefer an explicit "Price £X" label; otherwise strip any per-unit
-// rate and take the first remaining £. "£5.50 Clubcard Price" -> "£5.50".
+// So: prefer an explicit "Price £X" label; otherwise strip per-unit rates
+// AND multibuy offer amounts ("Any 2 for £10"), then take the first
+// remaining £. "£5.50 Clubcard Price" -> "£5.50".
 function extractPrice(text) {
     if (!text) return null;
     const s = String(text);
@@ -257,11 +258,17 @@ function extractPrice(text) {
     const labelled = s.match(/\bPrice\b\s*£\s?(\d+(?:\.\d{1,2})?)/i);
     if (labelled) return "£" + labelled[1];
 
-    // 2. Remove per-unit rates so we can't pick one, then take the first £.
-    const cleaned = s.replace(
-        /£\s?\d+(?:\.\d{1,2})?\s*(?:\/|per\b)\s*(?:litre|liter|l\b|100\s?ml|100g|cl|ml|kg|g\b|each)/gi,
-        " "
-    );
+    // 2. Remove things that AREN'T the single price, then take the first £:
+    //    - per-unit rates ("£7.61/litre", "£4.17 per litre");
+    //    - multibuy offers ("Any 2 for £10", "Buy 2 for £10") — Tesco lists
+    //      these before the real per-item price.
+    const cleaned = s
+        .replace(
+            /£\s?\d+(?:\.\d{1,2})?\s*(?:\/|per\b)\s*(?:litre|liter|l\b|100\s?ml|100g|cl|ml|kg|g\b|each)/gi,
+            " "
+        )
+        .replace(/\bfor\s*£\s?\d+(?:\.\d{1,2})?/gi, " ");
+
     const match = cleaned.match(/£\s?\d+(?:\.\d{1,2})?/);
     return match ? match[0].replace(/\s/g, "") : null;
 }

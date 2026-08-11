@@ -52,10 +52,12 @@ function extractPrice(text) {
     const labelled = s.match(/\bPrice\b\s*£\s?(\d+(?:\.\d{1,2})?)/i);
     if (labelled) return "£" + labelled[1];
 
-    const cleaned = s.replace(
-        /£\s?\d+(?:\.\d{1,2})?\s*(?:\/|per\b)\s*(?:litre|liter|l\b|100\s?ml|100g|cl|ml|kg|g\b|each)/gi,
-        " "
-    );
+    const cleaned = s
+        .replace(
+            /£\s?\d+(?:\.\d{1,2})?\s*(?:\/|per\b)\s*(?:litre|liter|l\b|100\s?ml|100g|cl|ml|kg|g\b|each)/gi,
+            " "
+        )
+        .replace(/\bfor\s*£\s?\d+(?:\.\d{1,2})?/gi, " ");
     const match = cleaned.match(/£\s?\d+(?:\.\d{1,2})?/);
     return match ? match[0].replace(/\s/g, "") : null;
 }
