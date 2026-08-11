@@ -186,14 +186,24 @@ const STYLE_SUFFIX = new Set([
     "scottish", "london", "yorkshire",
     "session", "hazy", "pale", "unfiltered", "craft", "premium", "original",
     "classic", "infused", "style", "vol", "abv", "gluten", "vegan", "edition",
-    "limited", "special"
+    "limited", "special",
+    // Generic "brewery" words some shops append and others don't
+    // ("Vocation Brewery ..." vs "Vocation ...").
+    "brewery", "brewing", "brewers", "brewco", "company", "ltd", "town", "ales",
+    // Process / marketing descriptors that don't change the beer's identity
+    // ("Emerald Daze Terpene Infused Hazy IPA" == "Emerald Daze Hazy IPA").
+    "terpene", "ddh", "tdh", "ndh", "dry", "hopped", "cold"
 ]);
 
-// Words of 2+ chars, lowercased, punctuation stripped (keeps "af").
+// Words of 2+ chars, lowercased, punctuation stripped (keeps "af"). We also
+// normalise "alcohol free" / "non alcoholic" to the single token "af" so the
+// two ways shops write it ("Punk AF" vs "Punk Alcohol Free") merge into one.
 function nameTokens(name) {
     return new Set(
         String(name || "")
             .toLowerCase()
+            .replace(/alcohol[\s-]?free/g, " af ")
+            .replace(/non[\s-]?alcoholic/g, " af ")
             .replace(/[^a-z0-9 ]/g, " ")
             .split(/\s+/)
             .filter(w => w.length >= 2)
@@ -209,6 +219,11 @@ function identityWords(clean, brewery) {
     for (const bw of nameTokens(brewery)) words.delete(bw);
     const identity = new Set([...words].filter(w => !STYLE_SUFFIX.has(w)));
     return identity.size ? identity : words;
+}
+
+// Does this beer read as alcohol-free? (name says AF / alcohol-free / 0.0 / 0.5)
+function looksAlcoholFree(name) {
+    return /\baf\b|alcohol[\s-]?free|non[\s-]?alcoholic|\b0\.0\b|\b0\.5\b/i.test(String(name || ""));
 }
 
 
@@ -288,11 +303,22 @@ function buildCatalogBeers(catalog, curated) {
         const name = g.names.slice().sort((a, b) => b.length - a.length)[0];
         const match = g.match;
 
+        // Alcohol-free beers must never inherit a full-strength ABV from a
+        // matched regular beer (e.g. Punk AF matching Punk IPA at 5.4%).
+        let abv = match ? match.abv : null;
+        let style = match ? match.style : "";
+        if (looksAlcoholFree(name)) {
+            abv = 0.5;
+            if (!/alcohol[\s-]?free|\baf\b/i.test(style)) {
+                style = (style ? style + " · " : "") + "Alcohol-free";
+            }
+        }
+
         beers.push({
             name,
             brewery: match ? match.brewery : (g.brewery || deriveBrewery(name, breweries)),
-            style: match ? match.style : "",
-            abv: match ? match.abv : null,
+            style,
+            abv,
             hops: match ? (match.hops || []) : [],
             flavours: match ? (match.flavours || []) : [],
             offers
