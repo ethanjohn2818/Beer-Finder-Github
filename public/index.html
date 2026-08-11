@@ -25,7 +25,7 @@
     <meta name="twitter:title" content="Beer Finder — craft beer by hop, brewery &amp; flavour">
     <meta name="twitter:description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets.">
 
-    <link rel="stylesheet" href="style.css?v=20260810g">
+    <link rel="stylesheet" href="style.css?v=20260810h">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -61,16 +61,19 @@
     <!-- Top navigation bar -->
     <header class="nav">
 
-        <div class="nav-brand" data-view="search">
-            🍺 Beer Finder
+        <div class="nav-left">
+            <div class="nav-brand" data-view="search">
+                🍺 Beer Finder
+            </div>
+            <button class="nav-btn nav-search-btn" data-view="search">🔎 Search Beer</button>
         </div>
 
         <nav class="nav-links">
-            <button class="nav-btn" data-view="search">Search Beer</button>
             <button class="nav-btn" data-view="find">Find Your Beer</button>
             <button class="nav-btn" data-view="hops">Hops</button>
             <button class="nav-btn" data-view="brewery">Brewery</button>
             <button class="nav-btn" data-view="gifts">Gifts</button>
+            <button class="nav-btn" data-view="about">About</button>
             <button class="nav-btn" data-view="contact">Contact</button>
         </nav>
 
@@ -101,28 +104,28 @@
                     <button class="qa-btn" onclick="showAllBeers()">📋 Show all beers</button>
                     <button class="qa-btn qa-clear" onclick="clearSearch()">✕ Clear</button>
                 </div>
+
+                <p class="hero-help">New here? <button class="link-btn" data-view="about">See how it works &rsaquo;</button></p>
             </div>
 
-            <!-- Sort + store filter toolbar -->
+            <!-- Sort + type + store filter toolbar -->
             <div class="toolbar" id="toolbar">
                 <label class="toolbar-sort">
                     <span>Sort</span>
                     <select id="sortBy" onchange="applyFiltersAndRender()">
                         <option value="relevance">Relevance</option>
-                        <option value="name">Name A–Z</option>
                         <option value="brewery">Brewery A–Z</option>
                         <option value="price">Price (low → high)</option>
+                        <option value="price-desc">Price (high → low)</option>
                         <option value="abv">ABV (high → low)</option>
+                        <option value="abv-asc">ABV (low → high)</option>
                     </select>
                 </label>
 
-                <label class="toolbar-sort">
-                    <span>Type</span>
-                    <select id="typeFilter" onchange="applyFiltersAndRender()">
-                        <option value="">All types</option>
-                        <!-- beer-type options injected by JS -->
-                    </select>
-                </label>
+                <div class="toolbar-types" id="typeFilters">
+                    <span class="toolbar-label">Type</span>
+                    <!-- beer-type checkboxes injected by JS -->
+                </div>
 
                 <div class="toolbar-stores" id="storeFilters">
                     <span class="toolbar-label">Stores</span>
@@ -176,7 +179,20 @@
         <!-- BREWERY VIEW -->
         <section id="brewery-view" class="view hidden">
             <h1>Breweries we know 🏭</h1>
-            <p class="view-intro">Breweries whose beers you can buy right now — tap one to see its beers.</p>
+            <p class="view-intro">Breweries whose beers you can buy right now — expand one, or jump straight to its beers.</p>
+
+            <div class="toolbar">
+                <label class="toolbar-sort">
+                    <span>Sort breweries</span>
+                    <select id="brewerySort" onchange="buildBreweryList(allBeers)">
+                        <option value="az">Name A–Z</option>
+                        <option value="za">Name Z–A</option>
+                        <option value="most">Most beers first</option>
+                        <option value="fewest">Fewest beers first</option>
+                    </select>
+                </label>
+            </div>
+
             <div id="brewery-list" class="accordion-list"></div>
         </section>
 
@@ -186,6 +202,38 @@
             <h1>Beer gifts &amp; merch 🎁</h1>
             <p class="view-intro">Glassware, gift baskets and beer-lover merch. A great pairing for the beers you find here.</p>
             <div id="gifts-list" class="gifts-grid"></div>
+        </section>
+
+
+        <!-- ABOUT VIEW -->
+        <section id="about-view" class="view hidden">
+            <h1>About Beer Finder 🍺</h1>
+            <p class="view-intro">What this site is, and how to find the perfect beer for you.</p>
+
+            <div class="about">
+                <div class="about-card">
+                    <h2>What is Beer Finder?</h2>
+                    <p>Beer Finder helps you discover craft beer and see <strong>exactly where to buy it</strong> at UK supermarkets. We scan Tesco and Morrisons for real craft beers, then tell you what each one tastes like — right down to the hops that give it its flavour — and where it's cheapest.</p>
+                    <p>No jargon, no guesswork. If you've ever stood in the beer aisle wondering what something actually tastes like, this is for you.</p>
+                </div>
+
+                <div class="about-card">
+                    <h2>How to use it</h2>
+                    <ol class="about-steps">
+                        <li><strong>Search</strong> — on the <button class="link-btn" data-view="search">Search Beer</button> page, type a beer, brewery or hop (try "Citra" or "BrewDog"). Or hit <em>Show all beers</em> to browse everything.</li>
+                        <li><strong>Filter &amp; sort</strong> — narrow by beer type or supermarket, and sort by price or ABV to find your match.</li>
+                        <li><strong>Not sure what you like?</strong> — use <button class="link-btn" data-view="find">Find Your Beer</button> and tap the flavours you enjoy (fruity, hoppy, dark…) — we'll show beers that fit.</li>
+                        <li><strong>Tap any beer</strong> — to open its page and see its full taste profile, the hops it uses and what each one brings, and where to buy it.</li>
+                        <li><strong>Explore</strong> — browse by <button class="link-btn" data-view="hops">Hops</button> or by <button class="link-btn" data-view="brewery">Brewery</button> to learn as you go.</li>
+                    </ol>
+                </div>
+
+                <div class="about-card">
+                    <h2>A few things to know</h2>
+                    <p>Prices, images and links come from the supermarkets' own websites and can change — always double-check on the retailer's page before buying. We're not affiliated with any supermarket. Please drink responsibly. 🍻</p>
+                    <p>Got a beer we should add or a question? <button class="link-btn" data-view="contact">Get in touch</button>.</p>
+                </div>
+            </div>
         </section>
 
 
@@ -270,9 +318,9 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260810g"></script>
-    <script src="script.js?v=20260810g"></script>
-    <script src="ads.js?v=20260810g"></script>
+    <script src="beerlogic.js?v=20260810h"></script>
+    <script src="script.js?v=20260810h"></script>
+    <script src="ads.js?v=20260810h"></script>
 
 </body>
 </html>

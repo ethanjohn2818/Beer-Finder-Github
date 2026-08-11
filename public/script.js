@@ -191,20 +191,22 @@ function applyFiltersAndRender() {
         })
         .filter(Boolean);
 
-    // Beer-type filter (IPA / Stout / Sour / ...)
-    const typeVal = (document.getElementById("typeFilter") || {}).value;
-    if (typeVal !== "" && typeVal != null) {
-        beers = beers.filter(b => BEER_TYPES[Number(typeVal)].match(b));
+    // Beer-type filter (multi-select checklist) — a beer passes if it matches
+    // ANY of the ticked types.
+    const types = checkedTypes();
+    if (types.length) {
+        beers = beers.filter(b => types.some(i => BEER_TYPES[i].match(b)));
     }
 
     // Sort
     const sort = (document.getElementById("sortBy") || {}).value || "relevance";
     const cheapest = b => Math.min(...b.offers.map(o => priceValue(o.price)));
-    if (sort === "name") beers.sort((a, b) => a.name.localeCompare(b.name));
-    else if (sort === "brewery") beers.sort((a, b) =>
+    if (sort === "brewery") beers.sort((a, b) =>
         (a.brewery || "").localeCompare(b.brewery || "") || a.name.localeCompare(b.name));
     else if (sort === "price") beers.sort((a, b) => cheapest(a) - cheapest(b));
+    else if (sort === "price-desc") beers.sort((a, b) => cheapest(b) - cheapest(a));
     else if (sort === "abv") beers.sort((a, b) => (b.abv || 0) - (a.abv || 0));
+    else if (sort === "abv-asc") beers.sort((a, b) => (a.abv || 0) - (b.abv || 0));
 
     if (beers.length === 0) {
         resultsDiv.innerHTML = "<p class='searching'>No beers match 😔</p>";
@@ -554,7 +556,7 @@ function buildBreweryList(beers) {
     });
 
     const container = document.getElementById("brewery-list");
-    const breweries = Object.keys(breweryMap).sort((a, b) => a.localeCompare(b));
+    let breweries = Object.keys(breweryMap);
 
     if (!breweries.length) {
         container.innerHTML =
@@ -562,9 +564,17 @@ function buildBreweryList(beers) {
         return;
     }
 
+    // Sort as chosen in the brewery-page control.
+    const sort = (document.getElementById("brewerySort") || {}).value || "az";
+    if (sort === "az") breweries.sort((a, b) => a.localeCompare(b));
+    else if (sort === "za") breweries.sort((a, b) => b.localeCompare(a));
+    else if (sort === "most") breweries.sort((a, b) => breweryMap[b].length - breweryMap[a].length || a.localeCompare(b));
+    else if (sort === "fewest") breweries.sort((a, b) => breweryMap[a].length - breweryMap[b].length || a.localeCompare(b));
+
     container.innerHTML = breweries.map(brewery => {
         const loc = breweryLocation(brewery);
         const inline = loc ? `<span class="acc-flavour">📍 ${loc}</span>` : "";
+        const safe = brewery.replace(/"/g, "&quot;");
         return `<details class="acc">
             <summary>
                 <span class="acc-title">${brewery}</span>
@@ -573,11 +583,20 @@ function buildBreweryList(beers) {
             </summary>
             <div class="acc-body">
                 ${loc ? `<p class="hop-notes">📍 Based in ${loc}</p>` : ""}
+                <button class="see-beers-btn" onclick="showBreweryBeers('${safe.replace(/'/g, "\\'")}')">🔎 See all ${breweryMap[brewery].length} beers</button>
                 <p class="hop-beers-label">Beers we found</p>
                 <ul>${breweryMap[brewery].sort().map(n => `<li>${n}</li>`).join("")}</ul>
             </div>
         </details>`;
     }).join("");
+}
+
+// Jump to the search page showing just this brewery's beers.
+function showBreweryBeers(brewery) {
+    currentResults = allBeers.filter(b => (b.brewery || "") === brewery);
+    document.getElementById("hopInput").value = "";
+    showView("search");
+    applyFiltersAndRender();
 }
 
 
@@ -616,11 +635,23 @@ const BEER_TYPES = [
     { label: "Alcohol-free",    match: b => isAlcoholFree(b) }
 ];
 
+// Beer type is a multi-select checklist: tick as many as you like.
 function renderTypeFilter() {
-    const sel = document.getElementById("typeFilter");
-    if (!sel) return;
-    sel.innerHTML = `<option value="">All types</option>` +
-        BEER_TYPES.map((c, i) => `<option value="${i}">${c.label}</option>`).join("");
+    const box = document.getElementById("typeFilters");
+    if (!box) return;
+    box.querySelectorAll(".type-check").forEach(el => el.remove());
+    BEER_TYPES.forEach((c, i) => {
+        const label = document.createElement("label");
+        label.className = "type-check";
+        label.innerHTML =
+            `<input type="checkbox" value="${i}" onchange="applyFiltersAndRender()"> ${c.label}`;
+        box.appendChild(label);
+    });
+}
+
+function checkedTypes() {
+    const boxes = document.querySelectorAll("#typeFilters input:checked");
+    return [...boxes].map(b => Number(b.value));
 }
 
 
@@ -728,14 +759,29 @@ function renderGifts() {
 
 
 // ---------------------------------------------------------------
-// Contact form (front-end only for now)
+// Contact form — opens the visitor's email app addressed to us
 // ---------------------------------------------------------------
+
+const CONTACT_EMAIL = "hello@mybeerfinder.co.uk";
 
 function sendMessage(event) {
     event.preventDefault();
+
+    const name = document.getElementById("c-name").value.trim();
+    const email = document.getElementById("c-email").value.trim();
+    const message = document.getElementById("c-message").value.trim();
+
+    const subject = `Beer Finder enquiry from ${name || "a visitor"}`;
+    const body =
+        `${message}\n\n— ${name}${email ? " (" + email + ")" : ""}`;
+
+    // Static site (no server), so hand off to the visitor's email client,
+    // pre-addressed to us with their message filled in.
+    window.location.href =
+        `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
     document.getElementById("contact-status").textContent =
-        "Thanks! Your message has been noted. 🍻";
-    event.target.reset();
+        `Opening your email app to send to ${CONTACT_EMAIL}… 🍻`;
 }
 
 
