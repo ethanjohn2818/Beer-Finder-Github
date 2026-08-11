@@ -192,7 +192,10 @@ const STYLE_SUFFIX = new Set([
     "brewery", "brewing", "brewers", "brewco", "company", "ltd", "town", "ales",
     // Process / marketing descriptors that don't change the beer's identity
     // ("Emerald Daze Terpene Infused Hazy IPA" == "Emerald Daze Hazy IPA").
-    "terpene", "ddh", "tdh", "ndh", "dry", "hopped", "cold"
+    "terpene", "ddh", "tdh", "ndh", "dry", "hopped", "cold",
+    // Filler words some shops add ("Brooklyn The Stonewall Inn" vs
+    // "Brooklyn Brewery Stonewall Inn").
+    "the", "and", "of", "with", "an", "for"
 ]);
 
 // Words of 2+ chars, lowercased, punctuation stripped (keeps "af"). We also
