@@ -11,6 +11,17 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#d97706">
 
+    <!-- Apply saved dark/light theme before paint (no flash of light). -->
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem("bf_theme") === "dark") {
+                    document.documentElement.setAttribute("data-theme", "dark");
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     <!-- Favicon -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/favicon.svg">
@@ -25,7 +36,7 @@
     <meta name="twitter:title" content="Beer Finder — craft beer by hop, brewery &amp; flavour">
     <meta name="twitter:description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets.">
 
-    <link rel="stylesheet" href="style.css?v=20260810j">
+    <link rel="stylesheet" href="style.css?v=20260810k">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -316,11 +327,16 @@
     </footer>
 
 
+    <!-- Dark / light mode toggle (persistent, bottom-right of every page) -->
+    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()"
+        aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+
+
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260810j"></script>
-    <script src="script.js?v=20260810j"></script>
-    <script src="ads.js?v=20260810j"></script>
+    <script src="beerlogic.js?v=20260810k"></script>
+    <script src="script.js?v=20260810k"></script>
+    <script src="ads.js?v=20260810k"></script>
 
 </body>
 </html>

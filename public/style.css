@@ -1181,3 +1181,91 @@ main {
 .about-card p { margin: 0 0 12px; }
 .about-steps { margin: 0; padding-left: 22px; }
 .about-steps li { margin: 10px 0; }
+
+
+/* ---------------------------------------------------------------
+   Dark mode
+--------------------------------------------------------------- */
+html[data-theme="dark"] {
+    --ink: #e6e8eb;
+    --muted: #9aa3af;
+    --bg: #0f1216;
+    --card: #1a1f27;
+    --border: #2c333d;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.55);
+    --shadow-lg: 0 14px 34px rgba(0, 0, 0, 0.6);
+}
+
+/* Hardcoded light backgrounds that don't use the theme variables */
+html[data-theme="dark"] .nav-btn,
+html[data-theme="dark"] .qa-btn,
+html[data-theme="dark"] .store-btn,
+html[data-theme="dark"] .opt-btn {
+    background: #252c36;
+    color: var(--ink);
+}
+html[data-theme="dark"] .nav-btn:hover,
+html[data-theme="dark"] .qa-btn:hover { background: #3a2f22; }
+
+html[data-theme="dark"] .store-btn { color: var(--muted); }
+html[data-theme="dark"] .store-btn.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: #fff;
+}
+
+html[data-theme="dark"] .qa-af { background: #0f2e22; border-color: #1f5c46; }
+
+html[data-theme="dark"] .search-bar input,
+html[data-theme="dark"] .contact-form input,
+html[data-theme="dark"] .contact-form textarea,
+html[data-theme="dark"] .toolbar-sort select,
+html[data-theme="dark"] .finder-select select {
+    background: #20262e;
+    color: var(--ink);
+}
+
+html[data-theme="dark"] .tag {
+    background: #3a2f22;
+    border-color: #5b4420;
+    color: #fcd9a6;
+}
+
+html[data-theme="dark"] .acc-count { background: #252c36; color: var(--muted); }
+html[data-theme="dark"] .acc summary:hover { background: #22282f; }
+html[data-theme="dark"] .hop-profile { background: #20262e; }
+html[data-theme="dark"] .flavour-chip { background: #20262e; }
+html[data-theme="dark"] .flavour-chip.active { background: var(--amber); }
+
+html[data-theme="dark"] .footer { box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.5); }
+
+
+/* ---------------------------------------------------------------
+   Theme toggle button (fixed, bottom-right, on every page)
+--------------------------------------------------------------- */
+.theme-toggle {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 900;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.theme-toggle:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 560px) {
+    .theme-toggle { right: 14px; bottom: 14px; width: 46px; height: 46px; font-size: 1.3rem; }
+}

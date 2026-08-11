@@ -7,6 +7,34 @@ function confirmAge() {
     document.getElementById("age-gate").classList.add("hidden");
 }
 
+
+// ---------------------------------------------------------------
+// Dark / light theme toggle (persisted in localStorage)
+// ---------------------------------------------------------------
+
+function updateThemeIcon() {
+    const btn = document.getElementById("theme-toggle");
+    if (!btn) return;
+    const dark = document.documentElement.getAttribute("data-theme") === "dark";
+    btn.textContent = dark ? "☀️" : "🌙";
+    btn.title = dark ? "Switch to light mode" : "Switch to dark mode";
+}
+
+function toggleTheme() {
+    const el = document.documentElement;
+    const dark = el.getAttribute("data-theme") === "dark";
+    if (dark) {
+        el.removeAttribute("data-theme");
+        try { localStorage.setItem("bf_theme", "light"); } catch (e) {}
+    } else {
+        el.setAttribute("data-theme", "dark");
+        try { localStorage.setItem("bf_theme", "dark"); } catch (e) {}
+    }
+    updateThemeIcon();
+}
+
+updateThemeIcon();
+
 (function ageGate() {
     let ok = false;
     try { ok = localStorage.getItem("bf_age_ok") === "1"; } catch (e) {}
