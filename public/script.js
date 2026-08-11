@@ -155,11 +155,12 @@ function showAllBeers() {
 }
 
 // A beer counts as alcohol-free at 0.5% ABV or below, or if its name/style
-// says so ("alcohol free", "0.0%", "AF").
+// says so ("alcohol free", "AF", "0.0%"). The %-match is anchored so it only
+// catches a real 0/0.0/0.5, NOT the "0%" that appears inside "4.0%".
 function isAlcoholFree(beer) {
     if (typeof beer.abv === "number" && beer.abv > 0 && beer.abv <= 0.5) return true;
     const text = `${beer.name} ${beer.style || ""}`.toLowerCase();
-    return /alcohol[\s-]?free|\b0\.0\b|\b0%|\baf\b|non[\s-]?alcoholic/.test(text);
+    return /alcohol[\s-]?free|non[\s-]?alcoholic|\baf\b|(?:^|[^\d.])0(?:\.[05])?\s*%/.test(text);
 }
 
 function showAlcoholFree() {
