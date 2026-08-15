@@ -173,7 +173,12 @@ const NAME_ALIASES = [
     [/\bclwb tropical\b/gi, "Clwb Tropica"],   // Tiny Rebel Clwb Tropica misspelt
     [/\blil tropical\b/gi, "Lil Tropic"],      // Vault City Lil Tropic misspelt
     [/\btropica tropical\b/gi, "Tropica"],     // drop the redundant descriptor
-    [/\bjungle juice tropical\b/gi, "Jungle Juice"]  // redundant "Tropical" after the name
+    // Vault City Jumbo Jungle Juice: shops write it "Jumbo Jungle Juice",
+    // plain "Jungle Juice", and with a redundant trailing "Tropical".
+    // Normalise all of them to the real name so they stack as one card.
+    [/\bjumbo jungle juice\b/gi, "Jungle Juice"],
+    [/\bjungle juice tropical\b/gi, "Jungle Juice"],
+    [/\bjungle juice\b/gi, "Jumbo Jungle Juice"]
 ];
 
 function applyAliases(s) {
