@@ -172,7 +172,8 @@ const NAME_ALIASES = [
     [/\btiger'?s? blood\b/gi, "Tigerblood"],   // Tiny Rebel Tigerblood
     [/\bclwb tropical\b/gi, "Clwb Tropica"],   // Tiny Rebel Clwb Tropica misspelt
     [/\blil tropical\b/gi, "Lil Tropic"],      // Vault City Lil Tropic misspelt
-    [/\btropica tropical\b/gi, "Tropica"]      // drop the redundant descriptor
+    [/\btropica tropical\b/gi, "Tropica"],     // drop the redundant descriptor
+    [/\bjungle juice tropical\b/gi, "Jungle Juice"]  // redundant "Tropical" after the name
 ];
 
 function applyAliases(s) {
@@ -223,6 +224,7 @@ const STYLE_SUFFIX = new Set([
     // "opulent" (NM Oath), "cooler" (Fierce). Strength/flavour words are still
     // KEPT elsewhere on purpose.
     "amber", "sour", "ice", "cream", "lolly", "cut", "bold", "opulent", "cooler",
+    "jumbo",
     // Generic "brewery" words some shops append and others don't
     // ("Vocation Brewery ..." vs "Vocation ...").
     "brewery", "brewing", "brewers", "brewco", "company", "ltd", "town", "ales",
