@@ -6,6 +6,7 @@
   "scripts": {
     "catalog": "node scripts/buildCatalog.js",
     "morrisons": "node scrapers/morrisons.js",
+    "sainsburys": "node scrapers/sainsburys.js",
     "build": "node scripts/buildAll.js",
     "hops": "node scripts/missingHops.js",
     "gaps": "node scrapers/hopGaps.js",

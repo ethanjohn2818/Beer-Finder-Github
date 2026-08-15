@@ -298,6 +298,15 @@ function detectPackLabel(text) {
         return `${count} × ${vol}ml`;
     }
 
+    // Reversed orderings some shops use (e.g. Sainsbury's): the count comes
+    // after an "x" then the volume ("x4 330ml"), or after the volume
+    // ("330ml x 4"). Only reached when the "4 x 330ml" form above didn't match,
+    // so Tesco/Morrisons are unaffected. Volume constrained to 3–4 digits.
+    let rev = t.match(/\b[x×]\s*(\d+)\b.*?(\d{3,4})\s*ml/);
+    if (rev && Number(rev[1]) > 1) return `${Number(rev[1])} × ${rev[2]}ml`;
+    rev = t.match(/(\d{3,4})\s*ml\s*[x×]\s*(\d+)\b/);
+    if (rev && Number(rev[2]) > 1) return `${Number(rev[2])} × ${rev[1]}ml`;
+
     if (/\b(case|crate)\b/.test(t)) return "Case";
 
     const pack = t.match(/(\d+)\s*-?\s*pack/);

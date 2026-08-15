@@ -6,13 +6,16 @@ from `main`.
 
 ## The scrapers (run on Katie's laptop only)
 
-The scrapers need a **visible, real Chrome** window to get past Tesco's and
-Morrisons' bot detection, so they only run locally (VS Code terminal), never
-in the cloud.
+The scrapers need a **visible, real Chrome** window to get past the shops' bot
+detection, so they only run locally (VS Code terminal), never in the cloud.
 
-- `npm run build` — Tesco then Morrisons, merges into `public/data/catalog.json`,
-  writes `public/data/meta.json`, refreshes `hop-gaps.txt`, and pushes to `main`.
-- `npm run catalog` — Tesco only. `npm run morrisons` — Morrisons only.
+- `npm run build` — Tesco, then Morrisons, then Sainsbury's; merges into
+  `public/data/catalog.json`, writes `public/data/meta.json`, refreshes
+  `hop-gaps.txt`, and pushes to `main`.
+- Individual shops: `npm run catalog` (Tesco), `npm run morrisons`,
+  `npm run sainsburys`.
+- Morrisons puts every beer on one virtualised page (slow ~3-min harvest);
+  Sainsbury's paginates (`?pageNumber=`), so its scraper walks the pages.
 - If `git pull` is blocked by local `catalog.json` changes: `git stash` then pull.
 
 ## The hop database — how beers get their flavour info
