@@ -5060,5 +5060,161 @@
       "Malty",
       "Crisp"
     ]
+  },
+  {
+    "name": "Athletic Run Wild",
+    "brewery": "Athletic Brewing",
+    "style": "Alcohol-Free IPA",
+    "abv": 0.5,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Munich"
+    ],
+    "flavours": [
+      "Citrus",
+      "Grapefruit",
+      "Orange"
+    ]
+  },
+  {
+    "name": "La Chouffe",
+    "brewery": "La Chouffe",
+    "style": "Belgian Golden Ale",
+    "abv": 8,
+    "hops": [
+      "Saaz",
+      "Styrian Goldings"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Pear",
+      "Spicy",
+      "Fruity"
+    ]
+  },
+  {
+    "name": "Lucky Saint",
+    "brewery": "Lucky Saint",
+    "style": "Alcohol-Free Lager",
+    "abv": 0.5,
+    "hops": [
+      "Hallertau"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Bready",
+      "Herbal",
+      "Crisp"
+    ]
+  },
+  {
+    "name": "Vocation Roll With It",
+    "brewery": "Vocation",
+    "style": "DDH Pale Ale",
+    "abv": 5.2,
+    "hops": [
+      "Amarillo",
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Orange",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "BrewDog Mr President",
+    "brewery": "BrewDog",
+    "style": "Double IPA",
+    "abv": 9.2,
+    "hops": [
+      "Amarillo",
+      "Centennial",
+      "Citra",
+      "Columbus",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Caramel"
+    ],
+    "flavours": [
+      "Apricot",
+      "Mango",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Arbor Transpacific",
+    "brewery": "Arbor Ales",
+    "style": "New England IPA",
+    "abv": 6,
+    "hops": [
+      "Ekuanot",
+      "Galaxy",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Gooseberry",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "North Brewing Ultra Phase",
+    "brewery": "North Brewing",
+    "style": "Double IPA",
+    "abv": 8.4,
+    "hops": [
+      "Citra",
+      "Enigma",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat",
+      "Oats"
+    ],
+    "flavours": [
+      "Melon",
+      "Grapefruit",
+      "Grape"
+    ]
+  },
+  {
+    "name": "Ilkley Pale Ale",
+    "brewery": "Ilkley",
+    "style": "Pale Ale",
+    "abv": 4.2,
+    "hops": [
+      "Chinook",
+      "Centennial",
+      "Nelson Sauvin"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Floral",
+      "Grapefruit",
+      "Tropical"
+    ]
   }
 ]

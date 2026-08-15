@@ -513,5 +513,37 @@
       "Honey"
     ],
     "notes": "English hop — delicate floral, lavender and honey character."
+  },
+  "Boadicea": {
+    "flavours": [
+      "Floral",
+      "Grassy",
+      "Citrus"
+    ],
+    "notes": "Gentle English aroma hop with soft floral, grassy and light citrus notes."
+  },
+  "Liberty": {
+    "flavours": [
+      "Floral",
+      "Spicy",
+      "Lemon"
+    ],
+    "notes": "Delicate American noble-type hop with floral, mildly spicy, lemony character."
+  },
+  "Northdown": {
+    "flavours": [
+      "Earthy",
+      "Spicy",
+      "Pine"
+    ],
+    "notes": "Robust English hop with earthy, resinous, mildly spicy bitterness."
+  },
+  "Northern Brewer": {
+    "flavours": [
+      "Pine",
+      "Minty",
+      "Earthy"
+    ],
+    "notes": "Classic bittering hop with woody, minty, evergreen character."
   }
 }
