@@ -15,6 +15,9 @@ public/data/beers.full.json
 # Debug screenshot from `npm run debug`
 debug-page.png
 
+# Hop-gap worklist — regenerated every `npm run build` / `npm run gaps`
+hop-gaps.txt
+
 # Catalogue crawl diagnostic screenshots (one per shop)
 catalog-page-1.png
 catalog-*-page1.png

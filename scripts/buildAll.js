@@ -28,6 +28,8 @@ const {
     SPONSORED_ONLY
 } = require("../scrapers/morrisons");
 
+const { writeHopGaps } = require("../scrapers/hopGaps");
+
 
 (async () => {
 
@@ -78,7 +80,16 @@ const {
         console.log(`Morrisons crawl failed (${error.message}). Keeping existing Morrisons data.`);
     }
 
-    // ---- 3. Push once ---------------------------------------------
+    // ---- 3. Refresh the hop-gap worklist --------------------------
+    // Writes hop-gaps.txt: the hop-forward beers still missing hops, so we
+    // know exactly which cans to read next to grow the hop database.
+    try {
+        writeHopGaps();
+    } catch (error) {
+        console.log(`Could not write hop-gaps.txt (${error.message}).`);
+    }
+
+    // ---- 4. Push once ---------------------------------------------
     console.log(`\n########## PUBLISH ##########`);
     if (tescoCount > 0 || morrisonsCount > 0) {
         const parts = [];
