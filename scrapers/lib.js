@@ -325,7 +325,7 @@ function detectPackLabel(text) {
 // always carries a drink volume (ml/cl/litre/pint) OR a beer style word, and
 // never the obvious household/nav phrases below. Anything failing this is
 // dropped before it reaches the catalogue.
-const NON_BEER = /(drynites|dry nites|incontinence|bed[\s-]?mat|bed[\s-]?wetting|huggies|nappy|nappies|baby wipes|skip to content)/i;
+const NON_BEER = /(drynites|dry nites|incontinence|bed[\s-]?mat|bed[\s-]?wetting|huggies|nappy|nappies|baby wipes|skip to content|pepsi|coca.cola|fentimans|dandelion\s*&?\s*burdock|lemonade|schweppes)/i;
 
 function looksLikeBeer(text) {
     if (!text) return false;

@@ -3556,15 +3556,6 @@
   },
   {
     "supermarket": "Sainsbury's",
-    "title": "Fentimans Dandelion & Burdock 750ml",
-    "text": "Sponsored\nFentimans Dandelion & Burdock 750ml\n4.3/5(31)\n£3.60£4.80 / ltr\nAdd",
-    "price": "£3.60",
-    "image": "https://assets.sainsburys-groceries.co.uk/gol/8149663/image.jpg",
-    "link": "https://www.sainsburys.co.uk/gol-ui/product/fentimans-dandelion-burdock-750ml",
-    "pack": "Single (750ml)"
-  },
-  {
-    "supermarket": "Sainsbury's",
     "title": "Erdinger 500ml Brauhaus Helles Lagerbier Bottle",
     "text": "Erdinger 500ml Brauhaus Helles Lagerbier Bottle\n5/5(2)\nNEW\nBuy 4 get cheapest 1 free with Nectar\n£3.10£6.20 / ltr\nAdd",
     "price": "£3.10",
@@ -3958,14 +3949,5 @@
     "image": "https://assets.sainsburys-groceries.co.uk/gol/8265996/image.jpg",
     "link": "https://www.sainsburys.co.uk/gol-ui/product/ProductDisplay?productUid=8265996",
     "pack": "10 × 440ml"
-  },
-  {
-    "supermarket": "Sainsbury's",
-    "title": "Pepsi Max 15 x 330ml No Sugar Cans",
-    "text": "Sponsored\nPepsi Max 15 x 330ml No Sugar Cans\n5/5(6)\n£5.75\n£1.16 / ltr\n£8.25£1.67 / ltr\nAdd",
-    "price": "£5.75",
-    "image": "https://assets.sainsburys-groceries.co.uk/gol/8266135/image.jpg",
-    "link": "https://www.sainsburys.co.uk/gol-ui/product/pepsi-max-15-x-330ml-no-sugar-cans",
-    "pack": "15 × 330ml"
   }
 ]

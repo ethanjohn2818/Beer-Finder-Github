@@ -300,9 +300,16 @@ function looksAlcoholFree(name) {
 // Each beer keeps the LONGEST (most detailed) name, takes hop data from
 // whichever listing our hop DB recognised, and carries one "offer" per shop
 // (shop toggle) with that shop's pack sizes (buy-option toggle).
-function buildCatalogBeers(catalog, curated) {
+function buildCatalogBeers(catalog, curated, knownBreweries = []) {
 
-    const breweries = [...new Set(curated.map(c => c.brewery).filter(Boolean))];
+    // Breweries we can recognise by name-prefix when a beer isn't in the hop
+    // DB: the curated brewers, plus every brewery in breweries.json. This lets
+    // a listing like "Mad Squirrel Foggy Pale" resolve to "Mad Squirrel"
+    // instead of the first word "Mad".
+    const breweries = [...new Set([
+        ...curated.map(c => c.brewery).filter(Boolean),
+        ...knownBreweries.filter(Boolean)
+    ])];
 
     function findCurated(text) {
         return curated.find(c => matchesBeer(c.name, c.brewery, text)) || null;

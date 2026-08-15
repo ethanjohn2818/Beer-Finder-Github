@@ -107,7 +107,7 @@ async function loadBeerData() {
                 .catch(() => []);
         }
 
-        allBeers = buildCatalogBeers(catalog, curated);
+        allBeers = buildCatalogBeers(catalog, curated, Object.keys(rawBreweries));
         allBeers.forEach((b, i) => { b._id = i; });   // stable id for detail lookup
 
         initStoreFilters();
