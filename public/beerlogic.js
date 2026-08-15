@@ -224,7 +224,6 @@ const STYLE_SUFFIX = new Set([
     // "opulent" (NM Oath), "cooler" (Fierce). Strength/flavour words are still
     // KEPT elsewhere on purpose.
     "amber", "sour", "ice", "cream", "lolly", "cut", "bold", "opulent", "cooler",
-    "jumbo",
     // Generic "brewery" words some shops append and others don't
     // ("Vocation Brewery ..." vs "Vocation ...").
     "brewery", "brewing", "brewers", "brewco", "company", "ltd", "town", "ales",
