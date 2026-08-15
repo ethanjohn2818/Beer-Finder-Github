@@ -3978,5 +3978,1087 @@
       "Dark Fruit",
       "Orange"
     ]
+  },
+  {
+    "name": "Fuller's London Pride",
+    "brewery": "Fuller's",
+    "style": "Best Bitter",
+    "abv": 4.7,
+    "hops": [
+      "Target",
+      "Challenger",
+      "Northdown",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Marmalade",
+      "Caramel",
+      "Earthy"
+    ]
+  },
+  {
+    "name": "Fuller's ESB",
+    "brewery": "Fuller's",
+    "style": "Extra Special Bitter",
+    "abv": 5.5,
+    "hops": [
+      "Northdown",
+      "Target",
+      "Challenger",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Toffee",
+      "Marmalade",
+      "Peppery"
+    ]
+  },
+  {
+    "name": "Fuller's Frontier",
+    "brewery": "Fuller's",
+    "style": "Craft Lager",
+    "abv": 4.5,
+    "hops": [
+      "Liberty"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Citrus",
+      "Crisp",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Fuller's Oliver's Island",
+    "brewery": "Fuller's",
+    "style": "Golden Ale",
+    "abv": 3.8,
+    "hops": [
+      "Boadicea",
+      "Target"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Orange",
+      "Biscuit",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Greene King IPA",
+    "brewery": "Greene King",
+    "style": "English IPA",
+    "abv": 3.6,
+    "hops": [
+      "First Gold",
+      "Challenger"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Biscuit",
+      "Earthy",
+      "Hoppy"
+    ]
+  },
+  {
+    "name": "Greene King Abbot Ale",
+    "brewery": "Greene King",
+    "style": "Premium Bitter",
+    "abv": 5,
+    "hops": [
+      "Fuggles",
+      "Challenger",
+      "First Gold"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal",
+      "Amber"
+    ],
+    "flavours": [
+      "Fruity",
+      "Toffee",
+      "Nutty"
+    ]
+  },
+  {
+    "name": "Greene King Old Golden Hen",
+    "brewery": "Greene King",
+    "style": "Golden Ale",
+    "abv": 4.1,
+    "hops": [
+      "Galaxy"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Passion Fruit",
+      "Citrus",
+      "Smooth"
+    ]
+  },
+  {
+    "name": "Shepherd Neame Spitfire",
+    "brewery": "Shepherd Neame",
+    "style": "Kentish Ale",
+    "abv": 4.2,
+    "hops": [
+      "East Kent Goldings",
+      "Target"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Caramel",
+      "Citrus",
+      "Earthy"
+    ]
+  },
+  {
+    "name": "Shepherd Neame Bishops Finger",
+    "brewery": "Shepherd Neame",
+    "style": "Kentish Strong Ale",
+    "abv": 5.4,
+    "hops": [
+      "East Kent Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Fruity",
+      "Malty",
+      "Spicy"
+    ]
+  },
+  {
+    "name": "Shepherd Neame Whitstable Bay Pale Ale",
+    "brewery": "Shepherd Neame",
+    "style": "Pale Ale",
+    "abv": 4,
+    "hops": [
+      "East Kent Goldings",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral",
+      "Crisp"
+    ]
+  },
+  {
+    "name": "Sharp's Doom Bar",
+    "brewery": "Sharp's",
+    "style": "Amber Ale",
+    "abv": 4,
+    "hops": [
+      "Cascade",
+      "Willamette",
+      "Fuggles"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Biscuit",
+      "Toffee",
+      "Dried Fruit"
+    ]
+  },
+  {
+    "name": "St Austell Tribute",
+    "brewery": "St Austell",
+    "style": "Cornish Pale Ale",
+    "abv": 4.2,
+    "hops": [
+      "Willamette",
+      "Fuggles",
+      "Celeia"
+    ],
+    "malts": [
+      "Pale",
+      "Cornish Gold"
+    ],
+    "flavours": [
+      "Orange",
+      "Biscuit",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "Timothy Taylor Boltmaker",
+    "brewery": "Timothy Taylor",
+    "style": "Yorkshire Bitter",
+    "abv": 4,
+    "hops": [
+      "Fuggles",
+      "Goldings"
+    ],
+    "malts": [
+      "Golden Promise",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Hoppy",
+      "Balanced"
+    ]
+  },
+  {
+    "name": "Wychwood Hobgoblin Gold",
+    "brewery": "Wychwood",
+    "style": "Golden Ale",
+    "abv": 4.5,
+    "hops": [
+      "Styrian Goldings",
+      "Cascade",
+      "Celeia"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral",
+      "Crisp"
+    ]
+  },
+  {
+    "name": "Wychwood King Goblin",
+    "brewery": "Wychwood",
+    "style": "Special Reserve Ale",
+    "abv": 6,
+    "hops": [
+      "Goldings",
+      "Fuggles"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal",
+      "Chocolate"
+    ],
+    "flavours": [
+      "Rich",
+      "Fruity",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Marston's Pedigree",
+    "brewery": "Marston's",
+    "style": "Burton Pale Ale",
+    "abv": 4.5,
+    "hops": [
+      "Fuggles",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Biscuit",
+      "Nutty",
+      "Sulphur"
+    ]
+  },
+  {
+    "name": "Bombardier",
+    "brewery": "Charles Wells",
+    "style": "English Bitter",
+    "abv": 4.1,
+    "hops": [
+      "Goldings",
+      "Fuggles",
+      "Bramling Cross"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Toffee",
+      "Redcurrant",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Young's London Special",
+    "brewery": "Young's",
+    "style": "Premium Bitter",
+    "abv": 4.5,
+    "hops": [
+      "Fuggles",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Fruity",
+      "Balanced"
+    ]
+  },
+  {
+    "name": "Young's London Original",
+    "brewery": "Young's",
+    "style": "Bitter",
+    "abv": 3.7,
+    "hops": [
+      "Fuggles",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Biscuit",
+      "Hoppy",
+      "Smooth"
+    ]
+  },
+  {
+    "name": "Hook Norton Old Hooky",
+    "brewery": "Hook Norton",
+    "style": "Strong Ale",
+    "abv": 4.6,
+    "hops": [
+      "Goldings",
+      "Fuggles"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Fruity",
+      "Malty",
+      "Nutty"
+    ]
+  },
+  {
+    "name": "Robinsons Trooper",
+    "brewery": "Robinsons",
+    "style": "Premium British Ale",
+    "abv": 4.7,
+    "hops": [
+      "Bobek",
+      "Goldings",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Citrus",
+      "Malty",
+      "Biscuit"
+    ]
+  },
+  {
+    "name": "Butcombe Original",
+    "brewery": "Butcombe",
+    "style": "Bitter",
+    "abv": 4,
+    "hops": [
+      "Goldings",
+      "Progress"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Hoppy",
+      "Dry",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Exmoor Gold",
+    "brewery": "Exmoor Ales",
+    "style": "Golden Ale",
+    "abv": 4.5,
+    "hops": [
+      "Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Honey",
+      "Malty",
+      "Smooth"
+    ]
+  },
+  {
+    "name": "Otter Bitter",
+    "brewery": "Otter Brewery",
+    "style": "Bitter",
+    "abv": 3.6,
+    "hops": [
+      "Fuggles",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Hoppy",
+      "Balanced"
+    ]
+  },
+  {
+    "name": "Theakston Old Peculier",
+    "brewery": "Theakston",
+    "style": "Old Ale",
+    "abv": 5.6,
+    "hops": [
+      "Fuggles"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal",
+      "Chocolate"
+    ],
+    "flavours": [
+      "Rich",
+      "Fruity",
+      "Roasted"
+    ]
+  },
+  {
+    "name": "Theakston Best Bitter",
+    "brewery": "Theakston",
+    "style": "Bitter",
+    "abv": 3.8,
+    "hops": [
+      "Fuggles",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Hoppy",
+      "Balanced"
+    ]
+  },
+  {
+    "name": "Black Sheep Best Bitter",
+    "brewery": "Black Sheep",
+    "style": "Bitter",
+    "abv": 3.8,
+    "hops": [
+      "Fuggles",
+      "Goldings",
+      "Progress"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Fruity",
+      "Hoppy",
+      "Bitter"
+    ]
+  },
+  {
+    "name": "Wadworth 6X",
+    "brewery": "Wadworth",
+    "style": "Amber Ale",
+    "abv": 4.1,
+    "hops": [
+      "Fuggles",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Fruity",
+      "Nutty"
+    ]
+  },
+  {
+    "name": "Ringwood Fortyniner",
+    "brewery": "Ringwood",
+    "style": "Golden Bitter",
+    "abv": 4.9,
+    "hops": [
+      "Goldings",
+      "Challenger"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Honey",
+      "Fruity",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Brains SA",
+    "brewery": "Brains",
+    "style": "Premium Bitter",
+    "abv": 4.2,
+    "hops": [
+      "Goldings",
+      "Fuggles",
+      "Challenger"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Nutty",
+      "Hoppy"
+    ]
+  },
+  {
+    "name": "Brains The Rev James",
+    "brewery": "Brains",
+    "style": "Original Ale",
+    "abv": 4.5,
+    "hops": [
+      "Goldings",
+      "Fuggles"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal",
+      "Chocolate"
+    ],
+    "flavours": [
+      "Fruity",
+      "Spicy",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Badger Tanglefoot",
+    "brewery": "Badger",
+    "style": "Golden Ale",
+    "abv": 4.7,
+    "hops": [
+      "Goldings",
+      "Challenger"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Honey",
+      "Pear",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Badger Hopping Hare",
+    "brewery": "Badger",
+    "style": "Pale Ale",
+    "abv": 4.4,
+    "hops": [
+      "Cascade",
+      "Willamette",
+      "Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral",
+      "Biscuit"
+    ]
+  },
+  {
+    "name": "Hobgoblin Ruby",
+    "brewery": "Wychwood",
+    "style": "Ruby Ale",
+    "abv": 4.5,
+    "hops": [
+      "Fuggles",
+      "Styrian Goldings"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal",
+      "Chocolate"
+    ],
+    "flavours": [
+      "Toffee",
+      "Fruity",
+      "Roasted"
+    ]
+  },
+  {
+    "name": "Beavertown 8 Ball",
+    "brewery": "Beavertown",
+    "style": "Rye IPA",
+    "abv": 6.2,
+    "hops": [
+      "Columbus",
+      "Chinook",
+      "Cascade",
+      "Amarillo",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Rye",
+      "Crystal"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Pine",
+      "Spicy"
+    ]
+  },
+  {
+    "name": "Thornbridge Chiron",
+    "brewery": "Thornbridge",
+    "style": "American Pale Ale",
+    "abv": 5,
+    "hops": [
+      "Chinook",
+      "Cascade",
+      "Centennial",
+      "Amarillo",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Munich"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Tropical",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Thornbridge Halcyon",
+    "brewery": "Thornbridge",
+    "style": "Imperial IPA",
+    "abv": 7.4,
+    "hops": [
+      "Centennial",
+      "Chinook",
+      "Columbus",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale",
+      "Munich"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Resinous",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Oakham Green Devil IPA",
+    "brewery": "Oakham Ales",
+    "style": "IPA",
+    "abv": 6,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Lychee",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Verdant Putty",
+    "brewery": "Verdant",
+    "style": "Pale Ale",
+    "abv": 4.5,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Magic Rock Fantasma",
+    "brewery": "Magic Rock",
+    "style": "Gluten Free IPA",
+    "abv": 6.5,
+    "hops": [
+      "Citra",
+      "Amarillo",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Pine"
+    ]
+  },
+  {
+    "name": "Adnams Broadside",
+    "brewery": "Adnams",
+    "style": "Strong Ale",
+    "abv": 4.7,
+    "hops": [
+      "First Gold"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Fruity",
+      "Malty",
+      "Rich"
+    ]
+  },
+  {
+    "name": "Adnams Mosaic Pale Ale",
+    "brewery": "Adnams",
+    "style": "Pale Ale",
+    "abv": 4.1,
+    "hops": [
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Blueberry"
+    ]
+  },
+  {
+    "name": "Fourpure Juicebox",
+    "brewery": "Fourpure",
+    "style": "Citrus IPA",
+    "abv": 5.9,
+    "hops": [
+      "Citra",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Orange",
+      "Tropical",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Fourpure Shape Shifter",
+    "brewery": "Fourpure",
+    "style": "West Coast IPA",
+    "abv": 6.4,
+    "hops": [
+      "Citra",
+      "Amarillo"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Pine",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Signature Brew Backstage IPA",
+    "brewery": "Signature Brew",
+    "style": "IPA",
+    "abv": 5.4,
+    "hops": [
+      "Citra",
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "BrewDog Nanny State",
+    "brewery": "BrewDog",
+    "style": "Alcohol-Free Hoppy Ale",
+    "abv": 0.5,
+    "hops": [
+      "Amarillo",
+      "Centennial",
+      "Columbus",
+      "Cascade",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Citrus",
+      "Pine",
+      "Caramel"
+    ]
+  },
+  {
+    "name": "BrewDog Punk AF",
+    "brewery": "BrewDog",
+    "style": "Alcohol-Free IPA",
+    "abv": 0.5,
+    "hops": [
+      "Ahtanum",
+      "Chinook",
+      "Cascade",
+      "Simcoe",
+      "Amarillo"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Grapefruit",
+      "Pine"
+    ]
+  },
+  {
+    "name": "BrewDog Clockwork Tangerine",
+    "brewery": "BrewDog",
+    "style": "Session IPA",
+    "abv": 4.5,
+    "hops": [
+      "Simcoe",
+      "Amarillo",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tangerine",
+      "Citrus",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "BrewDog Vagabond Pale Ale",
+    "brewery": "BrewDog",
+    "style": "Gluten Free Pale Ale",
+    "abv": 4.5,
+    "hops": [
+      "Cascade",
+      "Amarillo",
+      "Simcoe",
+      "Centennial"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Pine"
+    ]
+  },
+  {
+    "name": "BrewDog Hazy Jane Guava",
+    "brewery": "BrewDog",
+    "style": "Hazy IPA",
+    "abv": 5,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Oats",
+      "Wheat"
+    ],
+    "flavours": [
+      "Guava",
+      "Tropical",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Sierra Nevada Hazy Little Thing",
+    "brewery": "Sierra Nevada",
+    "style": "Hazy IPA",
+    "abv": 6.7,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Comet",
+      "Simcoe",
+      "El Dorado"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Juicy"
+    ]
+  },
+  {
+    "name": "Lagunitas Little Sumpin' Sumpin'",
+    "brewery": "Lagunitas",
+    "style": "Wheat IPA",
+    "abv": 7.5,
+    "hops": [
+      "Cascade",
+      "Chinook",
+      "Amarillo",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale",
+      "Wheat"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Smooth"
+    ]
+  },
+  {
+    "name": "Anchor Liberty Ale",
+    "brewery": "Anchor",
+    "style": "American IPA",
+    "abv": 5.9,
+    "hops": [
+      "Cascade"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Floral",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Anchor Steam Beer",
+    "brewery": "Anchor",
+    "style": "California Common",
+    "abv": 4.9,
+    "hops": [
+      "Northern Brewer"
+    ],
+    "malts": [
+      "Pale",
+      "Caramel"
+    ],
+    "flavours": [
+      "Woody",
+      "Minty",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Pilsner Urquell",
+    "brewery": "Pilsner Urquell",
+    "style": "Czech Pilsner",
+    "abv": 4.4,
+    "hops": [
+      "Saaz"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Floral",
+      "Spicy",
+      "Crisp"
+    ]
+  },
+  {
+    "name": "Budweiser Budvar",
+    "brewery": "Budweiser Budvar",
+    "style": "Czech Lager",
+    "abv": 5,
+    "hops": [
+      "Saaz"
+    ],
+    "malts": [
+      "Pilsner"
+    ],
+    "flavours": [
+      "Floral",
+      "Malty",
+      "Crisp"
+    ]
   }
 ]
