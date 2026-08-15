@@ -319,6 +319,23 @@ function detectPackLabel(text) {
 }
 
 
+// Does this product tile actually look like a beer? Sainsbury's (and, via a
+// stray nav link, Morrisons) sometimes surface non-beers on a "craft beer"
+// search — nappies, cod loin, a "skip to content" link. A real beer tile
+// always carries a drink volume (ml/cl/litre/pint) OR a beer style word, and
+// never the obvious household/nav phrases below. Anything failing this is
+// dropped before it reaches the catalogue.
+const NON_BEER = /(drynites|dry nites|incontinence|bed[\s-]?mat|bed[\s-]?wetting|huggies|nappy|nappies|baby wipes|skip to content)/i;
+
+function looksLikeBeer(text) {
+    if (!text) return false;
+    if (NON_BEER.test(text)) return false;
+    const hasVolume = /\d\s?(ml|cl|l|litre|litres|pint|pints)\b/i.test(text);
+    const hasStyle  = /\b(ipa|neipa|dipa|apa|xpa|lager|pilsner|pils|stout|porter|bitter|saison|gose|ale|pale|beer|cider)\b/i.test(text);
+    return hasVolume || hasStyle;
+}
+
+
 // Order options: singles first, then packs, then cases.
 function packRank(label) {
     if (/single/i.test(label)) return 0;
@@ -734,6 +751,7 @@ module.exports = {
     packRank,
     absolute,
     productName,
+    looksLikeBeer,
     matchesSearch,
     matchesBeer
 };

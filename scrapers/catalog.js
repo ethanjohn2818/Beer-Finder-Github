@@ -19,7 +19,8 @@ const {
     priceValue,
     detectPackLabel,
     absolute,
-    productName
+    productName,
+    looksLikeBeer
 } = require("./lib");
 
 
@@ -92,6 +93,8 @@ async function crawlStore(store, query, products) {
         let added = 0;
 
         for (const tile of tiles) {
+
+            if (!looksLikeBeer(tile.text)) continue;   // drop non-beers
 
             const price = extractPrice(tile.text);
             if (priceValue(price) <= 0) continue;

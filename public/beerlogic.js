@@ -162,14 +162,33 @@ function baseKey(title) {
         .trim();
 }
 
+// Known shop spelling quirks for the SAME beer — one shop writes it one way,
+// another slightly differently. Normalising these lets the same beer stack
+// instead of splitting into look-alike cards.
+const NAME_ALIASES = [
+    [/innis\s*&\s*gun\b/gi, "Innis & Gunn"],   // shop typo: missing final "n"
+    [/\bpin ball\b/gi, "Pinball"],             // BrewDog Pinball
+    [/\bdouble dry[\s-]?hopped\b/gi, "DDH"],   // process descriptor, not strength
+    [/\btiger'?s? blood\b/gi, "Tigerblood"],   // Tiny Rebel Tigerblood
+    [/\bclwb tropical\b/gi, "Clwb Tropica"],   // Tiny Rebel Clwb Tropica misspelt
+    [/\blil tropical\b/gi, "Lil Tropic"],      // Vault City Lil Tropic misspelt
+    [/\btropica tropical\b/gi, "Tropica"]      // drop the redundant descriptor
+];
+
+function applyAliases(s) {
+    for (const [re, to] of NAME_ALIASES) s = s.replace(re, to);
+    return s;
+}
+
 function cleanName(title) {
-    return String(title || "")
+    const s = String(title || "")
         .replace(/\d+\s*[x×]\s*\d+\s*ml/gi, " ")
         .replace(/\d+\s*(ml|cl|l|litre|litres|pint|pints)\b/gi, " ")
         .replace(/\b(case|crate|pack|cans?|bottles?|multipack)\b/gi, " ")
         .replace(/\s+/g, " ")
         .replace(/[-–,]\s*$/, "")
         .trim();
+    return applyAliases(s);
 }
 
 function deriveBrewery(name, breweries) {
@@ -189,8 +208,8 @@ function deriveBrewery(name, breweries) {
 const STYLE_SUFFIX = new Set([
     "ipa", "neipa", "dipa", "apa", "xpa", "ale", "lager", "pilsner", "pils",
     "stout", "porter", "bitter", "saison", "gose",
-    "beer", "beers", "keg", "cask", "can", "cans",
-    "new", "england", "west", "coast", "american", "cornish", "welsh",
+    "beer", "beers", "keg", "cask", "can", "cans", "single",
+    "new", "world", "england", "west", "coast", "american", "cornish", "welsh",
     "scottish", "london", "yorkshire",
     "session", "hazy", "pale", "unfiltered", "craft", "premium", "original",
     "classic", "infused", "style", "vol", "abv", "gluten", "vegan", "edition",
@@ -198,6 +217,12 @@ const STYLE_SUFFIX = new Set([
     // "India Pale Ale" == "IPA"; and BrewDog's "Post Modern Classic" tagline
     // (plus shops' "Modern Pale Ale" wording) doesn't change a beer's identity.
     "india", "post", "modern",
+    // More style / format / marketing words shops add inconsistently:
+    // "amber" (amber ale), "sour"/"ice"/"cream"/"lolly" (Vault City's ice-cream
+    // sours), "cut" (Jubel "beer cut with peach"), "bold" (Northern Monk),
+    // "opulent" (NM Oath), "cooler" (Fierce). Strength/flavour words are still
+    // KEPT elsewhere on purpose.
+    "amber", "sour", "ice", "cream", "lolly", "cut", "bold", "opulent", "cooler",
     // Generic "brewery" words some shops append and others don't
     // ("Vocation Brewery ..." vs "Vocation ...").
     "brewery", "brewing", "brewers", "brewco", "company", "ltd", "town", "ales",
@@ -228,11 +253,26 @@ function nameTokens(name) {
 // the style/packaging words above. Two products are the SAME beer only if
 // these match exactly. Falls back to the un-stripped words if stripping
 // leaves nothing (e.g. a beer literally called "Pale Ale").
+// Pure "noise" words — packaging, "beer", brewery-suffix, stray label bits —
+// that carry no identity. Used only in the fallback below, when a name has
+// nothing BUT these plus style words.
+const IDENTITY_NOISE = new Set([
+    "brewery", "brewing", "brewers", "brewco", "company", "co", "ltd", "town",
+    "ales", "the", "and", "of", "with",
+    "beer", "beers", "can", "cans", "bottle", "bottles", "keg", "cask",
+    "pack", "multipack", "case", "crate", "cooler", "abv", "vol"
+]);
+
 function identityWords(clean, brewery) {
     const words = nameTokens(clean);
     for (const bw of nameTokens(brewery)) words.delete(bw);
     const identity = new Set([...words].filter(w => !STYLE_SUFFIX.has(w)));
-    return identity.size ? identity : words;
+    if (identity.size) return identity;
+    // Nothing left after stripping style words — the name is only brewery +
+    // style/packaging (e.g. "Camden Pale Ale", "Innis & Gunn Lager Beer").
+    // Fall back to those words but drop pure noise, so one shop's "Lager Beer
+    // (Abv 4.6%)" and another's "Lager Beer 10x330ml" both reduce to {lager}.
+    return new Set([...words].filter(w => !IDENTITY_NOISE.has(w)));
 }
 
 // Does this beer read as alcohol-free? (name says AF / alcohol-free / 0.0 / 0.5)
@@ -276,7 +316,10 @@ function buildCatalogBeers(catalog, curated) {
         const brewery = match ? match.brewery : deriveBrewery(clean, breweries);
 
         const identity = identityWords(clean, brewery);
-        const sig = `${(brewery || "").toLowerCase()}||${[...identity].sort().join(" ")}`;
+        // Key the brewery by its core words only, so "Fierce" and "Fierce Beer"
+        // (or "Camden" and "Camden Town Brewery") group as the same brewer.
+        const breweryKey = breweryTokens(brewery).sort().join(" ") || (brewery || "").toLowerCase();
+        const sig = `${breweryKey}||${[...identity].sort().join(" ")}`;
 
         if (!groups.has(sig)) {
             groups.set(sig, { brewery, names: [], match: null, stores: new Map() });

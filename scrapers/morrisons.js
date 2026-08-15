@@ -36,7 +36,8 @@ const {
     priceValue,
     detectPackLabel,
     absolute,
-    productName
+    productName,
+    looksLikeBeer
 } = require("./lib");
 
 const { mergeCatalog, CATALOG_FILE, META_FILE } = require("./catalog");
@@ -384,6 +385,8 @@ async function crawl(query = "craft beer") {
 
             let kept = 0;
             for (const tile of tiles) {
+                if (!looksLikeBeer(tile.text)) continue;      // drop non-beers
+
                 const price = extractPrice(tile.text);
                 if (priceValue(price) <= 0) continue;        // no real price → skip
 
