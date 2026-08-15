@@ -8,6 +8,7 @@
     "morrisons": "node scrapers/morrisons.js",
     "build": "node scripts/buildAll.js",
     "hops": "node scripts/missingHops.js",
+    "gaps": "node scrapers/hopGaps.js",
     "start": "node server.js",
     "debug": "node scripts/debugSearch.js",
     "report": "node scripts/matchReport.js",
