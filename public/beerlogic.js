@@ -14,7 +14,7 @@ const GENERIC_WORDS = new Set([
     "pale", "hazy", "double", "extra", "beer", "beers", "can", "cans",
     "brewery", "brewing", "brew", "blonde", "golden", "amber", "red",
     "helles", "pils", "pilsner", "keller", "sour", "new", "england",
-    "west", "coast", "the", "and"
+    "west", "coast", "the", "and", "india"
 ]);
 
 const BEER_STYLE_WORDS = [
