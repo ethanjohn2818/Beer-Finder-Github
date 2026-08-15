@@ -195,6 +195,9 @@ const STYLE_SUFFIX = new Set([
     "session", "hazy", "pale", "unfiltered", "craft", "premium", "original",
     "classic", "infused", "style", "vol", "abv", "gluten", "vegan", "edition",
     "limited", "special",
+    // "India Pale Ale" == "IPA"; and BrewDog's "Post Modern Classic" tagline
+    // (plus shops' "Modern Pale Ale" wording) doesn't change a beer's identity.
+    "india", "post", "modern",
     // Generic "brewery" words some shops append and others don't
     // ("Vocation Brewery ..." vs "Vocation ...").
     "brewery", "brewing", "brewers", "brewco", "company", "ltd", "town", "ales",
