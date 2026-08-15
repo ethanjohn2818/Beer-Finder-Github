@@ -139,6 +139,12 @@ function matchesBeer(name, brewery, productText) {
         wordsMatch = breweryPresent && styleWords.every(w => hasWord(text, w));
     }
 
+    // If 2+ distinctive name words all matched, that's already a strong,
+    // specific hit — accept it even when the shop's title carries no style
+    // word or brewery name (e.g. "Old Speckled Hen Cans", brewery Greene King
+    // never printed). The looksLikeDrink guard still covers weaker 0-1 word
+    // cases.
+    if (wordsMatch && productWords.length >= 2) return true;
     return wordsMatch && looksLikeDrink(text, brewery);
 }
 
