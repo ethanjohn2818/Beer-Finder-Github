@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Resolve all relative URLs from the site root, so pages served at
+         /hops, /brewery, etc. still load the CSS, JS and data correctly. -->
+    <base href="/">
+
     <!-- SEO -->
     <title>Beer Finder — Find craft beer by hop, brewery &amp; flavour | UK supermarkets</title>
     <meta name="description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets like Tesco and Morrisons. Explore hop flavour profiles and discover what every beer tastes like.">
@@ -36,7 +40,7 @@
     <meta name="twitter:title" content="Beer Finder — craft beer by hop, brewery &amp; flavour">
     <meta name="twitter:description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets.">
 
-    <link rel="stylesheet" href="style.css?v=20260815b">
+    <link rel="stylesheet" href="style.css?v=20260818a">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -73,19 +77,19 @@
     <header class="nav">
 
         <div class="nav-left">
-            <div class="nav-brand" data-view="search">
+            <a class="nav-brand" href="/" data-view="search">
                 🍺 Beer Finder
-            </div>
-            <button class="nav-btn nav-search-btn" data-view="search">🔎 Search Beer</button>
+            </a>
+            <a class="nav-btn nav-search-btn" href="/" data-view="search">🔎 Search Beer</a>
         </div>
 
         <nav class="nav-links">
-            <button class="nav-btn" data-view="find">Find Your Beer</button>
-            <button class="nav-btn" data-view="hops">Hops</button>
-            <button class="nav-btn" data-view="brewery">Brewery</button>
-            <button class="nav-btn" data-view="gifts">Gifts</button>
-            <button class="nav-btn" data-view="about">About</button>
-            <button class="nav-btn" data-view="contact">Contact</button>
+            <a class="nav-btn" href="/find" data-view="find">Find Your Beer</a>
+            <a class="nav-btn" href="/hops" data-view="hops">Hops</a>
+            <a class="nav-btn" href="/brewery" data-view="brewery">Brewery</a>
+            <a class="nav-btn" href="/gifts" data-view="gifts">Gifts</a>
+            <a class="nav-btn" href="/about" data-view="about">About</a>
+            <a class="nav-btn" href="/contact" data-view="contact">Contact</a>
         </nav>
 
     </header>
@@ -336,9 +340,9 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260815b"></script>
-    <script src="script.js?v=20260815b"></script>
-    <script src="ads.js?v=20260815b"></script>
+    <script src="beerlogic.js?v=20260818a"></script>
+    <script src="script.js?v=20260818a"></script>
+    <script src="ads.js?v=20260818a"></script>
 
 </body>
 </html>

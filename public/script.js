@@ -46,6 +46,50 @@ updateThemeIcon();
 // View switching (top nav)
 // ---------------------------------------------------------------
 
+// Top-level views that get their own real URL. (The beer "detail" view is a
+// transient overlay — it keeps whatever URL you opened it from.)
+const VIEW_PATHS = {
+    search:  "/",
+    find:    "/find",
+    hops:    "/hops",
+    brewery: "/brewery",
+    gifts:   "/gifts",
+    about:   "/about",
+    contact: "/contact"
+};
+const PATH_VIEWS = Object.fromEntries(
+    Object.entries(VIEW_PATHS).map(([view, path]) => [path, view])
+);
+
+// Per-view <title> + meta description, so each URL reads as its own page to
+// Google (the main SEO payoff of having separate URLs).
+const VIEW_META = {
+    search:  ["Beer Finder — Find craft beer by hop, brewery & flavour | UK supermarkets",
+              "Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets."],
+    find:    ["Find Your Beer by flavour | Beer Finder",
+              "Pick the flavours you like and discover craft beers that match, with where to buy them."],
+    hops:    ["Hop flavour profiles | Beer Finder",
+              "Explore the hops behind UK craft beer and what each one tastes like — citrus, pine, tropical and more."],
+    brewery: ["Breweries & where they're based | Beer Finder",
+              "Browse craft breweries stocked at UK supermarkets, where each is based, and the beers we found."],
+    gifts:   ["Beer gifts & glassware | Beer Finder",
+              "Craft beer gift ideas — glassware, merch and gift sets for beer lovers."],
+    about:   ["About Beer Finder — how it works",
+              "How Beer Finder helps you discover craft beer and what it tastes like, right down to the hops."],
+    contact: ["Contact | Beer Finder",
+              "Get in touch with Beer Finder."]
+};
+
+function applyViewMeta(name) {
+    const m = VIEW_META[name];
+    if (!m) return;
+    document.title = m[0];
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) desc.setAttribute("content", m[1]);
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", "https://mybeerfinder.co.uk" + (VIEW_PATHS[name] || "/"));
+}
+
 function showView(name) {
 
     document.querySelectorAll(".view").forEach(view => {
@@ -59,12 +103,36 @@ function showView(name) {
         btn.classList.toggle("active", btn.dataset.view === name);
     });
 
+    if (VIEW_PATHS[name]) applyViewMeta(name);   // only for real routes
     window.scrollTo(0, 0);
 }
 
-// Wire up anything with a data-view attribute (nav buttons + brand + footer)
+// Switch view AND update the URL (adds a browser history entry).
+function navigate(name) {
+    const path = VIEW_PATHS[name];
+    if (path && location.pathname !== path) {
+        history.pushState({ view: name }, "", path);
+    }
+    showView(name);
+}
+
+// Show whichever view matches the current URL (first load + back/forward).
+function routeFromUrl() {
+    showView(PATH_VIEWS[location.pathname] || "search");
+}
+window.addEventListener("popstate", routeFromUrl);
+
+// Wire up anything with a data-view attribute (nav links, brand, footer,
+// in-page buttons). Real routes update the URL; the rest just switch view.
 document.querySelectorAll("[data-view]").forEach(el => {
-    el.addEventListener("click", () => showView(el.dataset.view));
+    el.addEventListener("click", event => {
+        // Let ctrl/cmd/middle-click open the link in a new tab as normal.
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) return;
+        event.preventDefault();
+        const name = el.dataset.view;
+        if (VIEW_PATHS[name]) navigate(name);
+        else showView(name);
+    });
 });
 
 
@@ -120,6 +188,10 @@ async function loadBeerData() {
         // Populate the homepage with every beer straight away, so the site
         // never looks empty before you've searched.
         showAllBeers();
+
+        // Then show whichever view the URL asks for (so a deep link or a
+        // refresh on /hops, /brewery, etc. opens that page, not the homepage).
+        routeFromUrl();
 
     } catch (error) {
         console.error("Could not load beers:", error);
@@ -630,7 +702,7 @@ function buildBreweryList(beers) {
 function showBreweryBeers(brewery) {
     currentResults = allBeers.filter(b => (b.brewery || "") === brewery);
     document.getElementById("hopInput").value = "";
-    showView("search");
+    navigate("search");            // land on the homepage URL, filtered
     applyFiltersAndRender();
 }
 
