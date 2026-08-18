@@ -9,6 +9,25 @@ function confirmAge() {
 
 
 // ---------------------------------------------------------------
+// Re-open the cookie/consent choices (Google's certified CMP)
+// ---------------------------------------------------------------
+// Google's consent tool exposes googlefc.showRevocationMessage(). It's only
+// present for visitors in regions where the consent banner shows (UK/EEA),
+// so we guard for it and explain if it isn't available.
+function openCookieSettings() {
+    try {
+        if (window.googlefc && typeof window.googlefc.showRevocationMessage === "function") {
+            window.googlefc.showRevocationMessage();
+            return;
+        }
+    } catch (e) {}
+    alert("Cookie choices are handled by our consent tool, which only appears for " +
+          "visitors in regions that require an advertising-cookie choice (the UK and EU). " +
+          "If you don't see it, your region may not require one.");
+}
+
+
+// ---------------------------------------------------------------
 // Dark / light theme toggle (persisted in localStorage)
 // ---------------------------------------------------------------
 
