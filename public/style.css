@@ -573,8 +573,6 @@ main {
 }
 
 @media (max-width: 560px) {
-    #results,
-    #find-results,
     .list-grid {
         grid-template-columns: 1fr;
     }
@@ -588,6 +586,47 @@ main {
        the logo + prominent Search Beer button + burger all fit on one row. */
     .nav-brand span { display: none; }
     .nav-left { gap: 10px; }
+
+    /* Compact 4-wide "thumbnail" grid on phones: image, name, price. The
+       heavier controls (store toggle, size, buy, compare) are hidden here —
+       tapping a card opens the full detail page, which has all of them. */
+    #results,
+    #find-results {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    .beer-card {
+        padding: 8px;
+        border-radius: 12px;
+    }
+    .beer-card img {
+        height: 92px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+    .beer-card h2 {
+        font-size: 0.72rem;
+        line-height: 1.2;
+        margin: 7px 0 3px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .beer-price {
+        font-size: 0.72rem;
+        font-weight: 800;
+        margin: 3px 0 0;
+    }
+    .beer-card .beer-style,
+    .beer-card .beer-hops,
+    .beer-card .card-more,
+    .beer-card .store-row,
+    .beer-card .opt-row,
+    .beer-card .buy-btn,
+    .beer-card .compare-check {
+        display: none;
+    }
 }
 
 
