@@ -1506,3 +1506,36 @@ html[data-theme="dark"] .compare-remove { background: rgba(255,255,255,0.12); }
     .compare-col { min-width: 168px; }
     .compare-inner { padding: 20px 14px; }
 }
+
+/* Cheapest-of-the-bunch highlight in the compare modal */
+.compare-col.best {
+    border: 2px solid var(--amber);
+    background: #fff7ed;
+}
+html[data-theme="dark"] .compare-col.best { background: #2a2417; }
+.compare-best-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--amber);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.3px;
+}
+
+/* Compare control on the beer detail page (more prominent than the card one) */
+.detail-compare {
+    display: inline-flex;
+    justify-content: flex-start;
+    gap: 8px;
+    margin: 4px 0 20px;
+    padding: 9px 16px;
+    border: 1.5px solid var(--amber);
+    border-radius: 999px;
+    color: var(--amber-dark);
+    background: transparent;
+}
+html[data-theme="dark"] .detail-compare { color: var(--amber); }

@@ -638,12 +638,13 @@ function clearCompare() {
     closeCompare();
 }
 
-function compareColumn(beer) {
+function compareColumn(beer, isBest) {
     const buy = cheapestBuy(beer);
     const flavours = beerHopFlavours(beer);
     const img = (beer.offers && beer.offers[0] && beer.offers[0].image) || "";
     return `
-        <div class="compare-col">
+        <div class="compare-col${isBest ? " best" : ""}">
+            ${isBest ? `<span class="compare-best-badge">👑 Cheapest</span>` : ""}
             <button class="compare-remove" onclick="toggleCompare(${beer._id})" aria-label="Remove">✕</button>
             ${img
                 ? `<img src="${img}" alt="${beer.name}" loading="lazy">`
@@ -670,12 +671,20 @@ function compareColumn(beer) {
 
 function openCompare() {
     if (compareIds.length < 2) return;
-    const grid = document.getElementById("compare-grid");
-    grid.innerHTML = compareIds
+    const beers = compareIds
         .map(id => allBeers.find(b => b._id === id))
-        .filter(Boolean)
-        .map(compareColumn)
-        .join("");
+        .filter(Boolean);
+
+    // Cheapest price among the compared beers, so we can crown the best value.
+    let min = Infinity;
+    beers.forEach(b => { const c = cheapestBuy(b); if (c && c.value < min) min = c.value; });
+
+    const grid = document.getElementById("compare-grid");
+    grid.innerHTML = beers.map(b => {
+        const c = cheapestBuy(b);
+        const isBest = c && min !== Infinity && c.value === min;
+        return compareColumn(b, isBest);
+    }).join("");
     document.getElementById("compare-modal").classList.remove("hidden");
     document.body.style.overflow = "hidden";
 }
@@ -785,6 +794,13 @@ function openBeerDetail(id) {
                     : ""}
                 <p class="detail-style">${beer.style || "Craft beer"}${beer.abv ? " • " + beer.abv + "% ABV" : ""}</p>
                 <p class="detail-desc">${describeBeer(beer)}</p>
+
+                <label class="compare-check detail-compare">
+                    <input type="checkbox" data-cmp="${beer._id}"
+                        ${compareIds.includes(beer._id) ? "checked" : ""}
+                        onchange="toggleCompare(${beer._id})">
+                    <span>Add to compare</span>
+                </label>
 
                 <div class="detail-section">
                     <h2>What it tastes like</h2>
