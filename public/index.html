@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
 
     <!-- SEO -->
     <title>Beer Finder — Find craft beer by hop, brewery &amp; flavour | UK supermarkets</title>
-    <meta name="description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets like Tesco and Morrisons. Explore hop flavour profiles and discover what every beer tastes like.">
+    <meta name="description" content="Find craft beer by hop, brewery or flavour and see where to buy it cheapest at Tesco, Morrisons and Sainsbury's. Discover what every beer tastes like from its hops.">
     <link rel="canonical" href="https://mybeerfinder.co.uk/">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#d97706">
@@ -36,22 +36,50 @@
     <meta property="og:title" content="Beer Finder — craft beer by hop, brewery &amp; flavour">
     <meta property="og:description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets. Discover what every beer tastes like from its hops.">
     <meta property="og:url" content="https://mybeerfinder.co.uk/">
+    <meta property="og:locale" content="en_GB">
     <meta property="og:image" content="https://mybeerfinder.co.uk/logo.png">
+    <meta property="og:image:width" content="3000">
+    <meta property="og:image:height" content="600">
+    <meta property="og:image:alt" content="Beer Finder logo">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Beer Finder — craft beer by hop, brewery &amp; flavour">
     <meta name="twitter:description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets.">
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
+    <meta name="twitter:image:alt" content="Beer Finder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260818f">
+    <link rel="stylesheet" href="style.css?v=20260818g">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Beer Finder",
-      "url": "https://mybeerfinder.co.uk/",
-      "description": "Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets like Tesco and Morrisons."
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://mybeerfinder.co.uk/#website",
+          "name": "Beer Finder",
+          "url": "https://mybeerfinder.co.uk/",
+          "description": "Find craft beer by hop, brewery or flavour and see where to buy it cheapest at Tesco, Morrisons and Sainsbury's.",
+          "inLanguage": "en-GB",
+          "publisher": { "@id": "https://mybeerfinder.co.uk/#org" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://mybeerfinder.co.uk/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://mybeerfinder.co.uk/#org",
+          "name": "Beer Finder",
+          "url": "https://mybeerfinder.co.uk/",
+          "logo": "https://mybeerfinder.co.uk/logo.png",
+          "email": "hello@mybeerfinder.co.uk"
+        }
+      ]
     }
     </script>
 
@@ -364,9 +392,9 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260818f"></script>
-    <script src="script.js?v=20260818f"></script>
-    <script src="ads.js?v=20260818f"></script>
+    <script src="beerlogic.js?v=20260818g"></script>
+    <script src="script.js?v=20260818g"></script>
+    <script src="ads.js?v=20260818g"></script>
 
 </body>
 </html>

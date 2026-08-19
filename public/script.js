@@ -247,6 +247,16 @@ async function loadBeerData() {
         // refresh on /hops, /brewery, etc. opens that page, not the homepage).
         routeFromUrl();
 
+        // A ?q= in the URL (a shared search link, or Google's search box) runs
+        // the search straight away.
+        const q = new URLSearchParams(location.search).get("q");
+        if (q) {
+            const input = document.getElementById("hopInput");
+            if (input) input.value = q;
+            navigate("search");
+            searchBeers();
+        }
+
     } catch (error) {
         console.error("Could not load beers:", error);
         const resultsDiv = document.getElementById("results");
@@ -447,7 +457,7 @@ function renderCard(result, index) {
 
     return `
         <div class="beer-card clickable" data-beer="${beer._id}">
-            <img id="img-${index}" src="${opt.image || ""}" alt="${beer.name}">
+            <img id="img-${index}" src="${opt.image || ""}" alt="${beer.name}" loading="lazy" decoding="async">
             <h2>${beer.name}</h2>
             <p class="beer-style">
                 ${beer.style || "Craft beer"}
