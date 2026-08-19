@@ -1355,3 +1355,154 @@ html[data-theme="dark"] .footer { box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.5); }
     color: var(--muted);
     font-size: 0.82rem;
 }
+
+
+/* ---------------------------------------------------------------
+   Compare up to 4 beers
+--------------------------------------------------------------- */
+
+/* Checkbox on each beer card */
+.compare-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+}
+.compare-check input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--amber); }
+
+/* Floating tray */
+.compare-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    background: var(--card);
+    border-radius: 999px;
+    box-shadow: var(--shadow-md);
+    font-weight: 600;
+    color: var(--ink);
+}
+.compare-bar.hidden { display: none; }
+.compare-go, .compare-clear {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.compare-go { background: var(--amber); color: #fff; }
+.compare-go:disabled { opacity: 0.5; cursor: not-allowed; }
+.compare-clear { background: transparent; color: var(--muted); }
+
+/* Modal */
+.compare-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px;
+    background: rgba(0, 0, 0, 0.55);
+    overflow: auto;
+}
+.compare-modal.hidden { display: none; }
+.compare-inner {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    background: var(--card);
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    padding: 26px;
+}
+.compare-inner h2 { margin: 0 0 4px; }
+.compare-intro { margin: 0 0 18px; color: var(--muted); }
+.compare-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: var(--ink);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+/* Columns */
+.compare-grid {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+.compare-col {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 190px;
+    padding: 16px 14px;
+    border-radius: 14px;
+    background: var(--bg, #faf7f2);
+    text-align: center;
+}
+.compare-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.08);
+    color: var(--ink);
+    cursor: pointer;
+    line-height: 1;
+}
+.compare-col img {
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
+.compare-noimg { font-size: 3rem; height: 120px; display: flex; align-items: center; justify-content: center; }
+.compare-col h3 { margin: 6px 0 2px; font-size: 1.02rem; }
+.compare-sub { margin: 0 0 2px; color: var(--muted); font-size: 0.85rem; }
+.compare-style { margin: 0 0 10px; font-size: 0.85rem; }
+.compare-price { margin: 0 0 12px; }
+.compare-price strong { color: var(--amber); font-size: 1.25rem; }
+.compare-price-sub { display: block; color: var(--muted); font-size: 0.78rem; }
+.compare-section { margin-top: 10px; text-align: left; }
+.compare-label {
+    margin: 0 0 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+}
+.compare-hops { margin: 0; font-size: 0.88rem; }
+.compare-none { margin: 0; color: var(--muted); font-size: 0.85rem; }
+.compare-section .tag-row { justify-content: flex-start; }
+
+html[data-theme="dark"] .compare-col { background: #20262f; }
+html[data-theme="dark"] .compare-close { background: #252c36; }
+html[data-theme="dark"] .compare-remove { background: rgba(255,255,255,0.12); }
+
+@media (max-width: 560px) {
+    .compare-col { min-width: 168px; }
+    .compare-inner { padding: 20px 14px; }
+}

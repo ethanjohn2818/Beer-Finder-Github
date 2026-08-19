@@ -47,7 +47,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="Beer Finder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260818g">
+    <link rel="stylesheet" href="style.css?v=20260818h">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -385,6 +385,24 @@
     </footer>
 
 
+    <!-- Compare tray (appears when you tick 'Compare' on beer cards) -->
+    <div id="compare-bar" class="compare-bar hidden">
+        <span id="compare-count"></span>
+        <button id="compare-open-btn" class="compare-go" onclick="openCompare()">Compare</button>
+        <button class="compare-clear" onclick="clearCompare()">Clear</button>
+    </div>
+
+    <!-- Compare modal (up to 4 beers side by side) -->
+    <div id="compare-modal" class="compare-modal hidden" onclick="if(event.target===this)closeCompare()">
+        <div class="compare-inner">
+            <button class="compare-close" onclick="closeCompare()" aria-label="Close">✕</button>
+            <h2>Compare beers 🍺</h2>
+            <p class="compare-intro">Cheapest price, hops and the flavours they bring.</p>
+            <div id="compare-grid" class="compare-grid"></div>
+        </div>
+    </div>
+
+
     <!-- Dark / light mode toggle (persistent, bottom-right of every page) -->
     <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()"
         aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
@@ -392,9 +410,9 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260818g"></script>
-    <script src="script.js?v=20260818g"></script>
-    <script src="ads.js?v=20260818g"></script>
+    <script src="beerlogic.js?v=20260818h"></script>
+    <script src="script.js?v=20260818h"></script>
+    <script src="ads.js?v=20260818h"></script>
 
 </body>
 </html>

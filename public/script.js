@@ -475,6 +475,12 @@ function renderCard(result, index) {
             <a id="buy-${index}" class="buy-btn" href="${opt.link || "#"}" target="_blank">
                 Buy at <span id="buylabel-${index}">${store.supermarket}</span>
             </a>
+            <label class="compare-check" onclick="event.stopPropagation()">
+                <input type="checkbox" data-cmp="${beer._id}"
+                    ${compareIds.includes(beer._id) ? "checked" : ""}
+                    onchange="toggleCompare(${beer._id})">
+                <span>Compare</span>
+            </label>
         </div>`;
 }
 
@@ -529,6 +535,9 @@ document.addEventListener("click", event => {
     // Clicking the buy link should just buy — don't open the detail page.
     if (event.target.closest(".buy-btn")) return;
 
+    // The compare checkbox shouldn't open the detail page.
+    if (event.target.closest(".compare-check")) return;
+
     // A click anywhere else on a card opens its detail page.
     const card = event.target.closest(".beer-card");
     if (card && card.dataset.beer != null) {
@@ -541,6 +550,145 @@ document.getElementById("hopInput")
     .addEventListener("keydown", event => {
         if (event.key === "Enter") searchBeers();
     });
+
+
+// ---------------------------------------------------------------
+// Compare up to 4 beers
+// ---------------------------------------------------------------
+
+let compareIds = [];   // beer._id values, in the order picked (max 4)
+const COMPARE_MAX = 4;
+
+// The cheapest single buy across every shop and pack size for a beer.
+function cheapestBuy(beer) {
+    let best = null;
+    (beer.offers || []).forEach(offer => {
+        (offer.options || []).forEach(opt => {
+            const v = priceValue(opt.price);
+            if (v > 0 && (!best || v < best.value)) {
+                best = { value: v, price: opt.price, label: opt.label, supermarket: offer.supermarket };
+            }
+        });
+    });
+    return best;
+}
+
+// The beer's flavour profile: the three main flavours of EACH of its hops
+// (same as the Hops page), combined and de-duplicated so a shared flavour
+// (e.g. two hops that are both "Tropical") only shows once.
+function beerHopFlavours(beer) {
+    const seen = new Set();
+    const out = [];
+    (beer.hops || []).forEach(hop => {
+        const profile = hopProfile(hop);
+        (profile && profile.flavours ? profile.flavours.slice(0, 3) : []).forEach(f => {
+            const key = f.toLowerCase();
+            if (!seen.has(key)) { seen.add(key); out.push(f); }
+        });
+    });
+    return out;
+}
+
+function toggleCompare(id) {
+    id = Number(id);
+    const at = compareIds.indexOf(id);
+    if (at >= 0) {
+        compareIds.splice(at, 1);
+    } else if (compareIds.length >= COMPARE_MAX) {
+        alert(`You can compare up to ${COMPARE_MAX} beers at once. Remove one first.`);
+        syncCompareChecks();
+        return;
+    } else {
+        compareIds.push(id);
+    }
+    syncCompareChecks();
+    renderCompareBar();
+
+    const modal = document.getElementById("compare-modal");
+    if (modal && !modal.classList.contains("hidden")) {
+        if (compareIds.length >= 2) openCompare();
+        else closeCompare();
+    }
+}
+
+// Make every card checkbox reflect the current selection.
+function syncCompareChecks() {
+    document.querySelectorAll("input[data-cmp]").forEach(cb => {
+        cb.checked = compareIds.includes(Number(cb.dataset.cmp));
+    });
+}
+
+function renderCompareBar() {
+    const bar = document.getElementById("compare-bar");
+    if (!bar) return;
+    const count = document.getElementById("compare-count");
+    const openBtn = document.getElementById("compare-open-btn");
+    if (compareIds.length === 0) { bar.classList.add("hidden"); return; }
+    bar.classList.remove("hidden");
+    count.textContent = compareIds.length === 1
+        ? "1 beer selected"
+        : `${compareIds.length} beers selected`;
+    openBtn.disabled = compareIds.length < 2;
+}
+
+function clearCompare() {
+    compareIds = [];
+    syncCompareChecks();
+    renderCompareBar();
+    closeCompare();
+}
+
+function compareColumn(beer) {
+    const buy = cheapestBuy(beer);
+    const flavours = beerHopFlavours(beer);
+    const img = (beer.offers && beer.offers[0] && beer.offers[0].image) || "";
+    return `
+        <div class="compare-col">
+            <button class="compare-remove" onclick="toggleCompare(${beer._id})" aria-label="Remove">✕</button>
+            ${img
+                ? `<img src="${img}" alt="${beer.name}" loading="lazy">`
+                : `<div class="compare-noimg">🍺</div>`}
+            <h3>${beer.name}</h3>
+            <p class="compare-sub">${beer.brewery || ""}${beer.abv ? " · " + beer.abv + "%" : ""}</p>
+            <p class="compare-style">${beer.style || "Craft beer"}</p>
+            ${buy
+                ? `<p class="compare-price">💷 <strong>${cleanPrice(buy.price)}</strong>
+                     <span class="compare-price-sub">${buy.label} · at ${buy.supermarket}</span></p>`
+                : `<p class="compare-price">Price unavailable</p>`}
+            <div class="compare-section">
+                <p class="compare-label">Hops</p>
+                ${beer.hops && beer.hops.length
+                    ? `<p class="compare-hops">🌿 ${beer.hops.join(", ")}</p>`
+                    : `<p class="compare-none">Not known yet</p>`}
+            </div>
+            <div class="compare-section">
+                <p class="compare-label">Flavour</p>
+                ${flavours.length ? tagRow(flavours) : `<p class="compare-none">—</p>`}
+            </div>
+        </div>`;
+}
+
+function openCompare() {
+    if (compareIds.length < 2) return;
+    const grid = document.getElementById("compare-grid");
+    grid.innerHTML = compareIds
+        .map(id => allBeers.find(b => b._id === id))
+        .filter(Boolean)
+        .map(compareColumn)
+        .join("");
+    document.getElementById("compare-modal").classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+}
+
+function closeCompare() {
+    const modal = document.getElementById("compare-modal");
+    if (modal) modal.classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeCompare();
+});
 
 
 // ---------------------------------------------------------------
