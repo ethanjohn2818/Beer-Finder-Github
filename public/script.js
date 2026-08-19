@@ -156,6 +156,41 @@ document.querySelectorAll("[data-view]").forEach(el => {
 
 
 // ---------------------------------------------------------------
+// Burger menu (open/close the nav dropdown)
+// ---------------------------------------------------------------
+(function setupMenu() {
+    const toggle = document.getElementById("navToggle");
+    const menu = document.getElementById("navMenu");
+    if (!toggle || !menu) return;
+
+    function setOpen(open) {
+        toggle.classList.toggle("open", open);
+        menu.classList.toggle("open", open);
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    toggle.addEventListener("click", event => {
+        event.stopPropagation();
+        setOpen(!menu.classList.contains("open"));
+    });
+
+    // Close after picking a menu item.
+    menu.addEventListener("click", () => setOpen(false));
+
+    // Close when clicking outside the menu, or pressing Escape.
+    document.addEventListener("click", event => {
+        if (menu.classList.contains("open") &&
+            !menu.contains(event.target) && !toggle.contains(event.target)) {
+            setOpen(false);
+        }
+    });
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") setOpen(false);
+    });
+})();
+
+
+// ---------------------------------------------------------------
 // Load the beer database once, then build every view
 // ---------------------------------------------------------------
 

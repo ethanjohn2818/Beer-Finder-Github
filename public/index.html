@@ -42,7 +42,7 @@
     <meta name="twitter:description" content="Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets.">
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
 
-    <link rel="stylesheet" href="style.css?v=20260818c">
+    <link rel="stylesheet" href="style.css?v=20260818d">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -92,10 +92,17 @@
                 </svg>
                 <span>Beer Finder</span>
             </a>
-            <a class="nav-btn nav-search-btn" href="/" data-view="search">🔎 Search Beer</a>
         </div>
 
-        <nav class="nav-links">
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu"
+                aria-expanded="false" aria-controls="navMenu">
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+        </button>
+
+        <nav class="nav-links" id="navMenu">
+            <a class="nav-btn nav-search-btn" href="/" data-view="search">🔎 Search Beer</a>
             <a class="nav-btn" href="/find" data-view="find">Find Your Beer</a>
             <a class="nav-btn" href="/hops" data-view="hops">Hops</a>
             <a class="nav-btn" href="/brewery" data-view="brewery">Brewery</a>
@@ -274,7 +281,6 @@
                 <div class="contact-info">
                     <h2>Get in touch</h2>
                     <p>📧 <a href="mailto:hello@mybeerfinder.co.uk">hello@mybeerfinder.co.uk</a></p>
-                    <p>📞 <a href="tel:+441234567890">+44 1234 567890</a></p>
                     <p>📍 United Kingdom</p>
 
                     <div class="socials">
@@ -364,9 +370,9 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260818c"></script>
-    <script src="script.js?v=20260818c"></script>
-    <script src="ads.js?v=20260818c"></script>
+    <script src="beerlogic.js?v=20260818d"></script>
+    <script src="script.js?v=20260818d"></script>
+    <script src="ads.js?v=20260818d"></script>
 
 </body>
 </html>
