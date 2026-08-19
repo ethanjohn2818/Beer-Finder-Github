@@ -584,6 +584,10 @@ main {
     .nav-btn {
         padding: 8px 12px;
     }
+    /* On small phones keep the mug logo but drop the "Beer Finder" text, so
+       the logo + prominent Search Beer button + burger all fit on one row. */
+    .nav-brand span { display: none; }
+    .nav-left { gap: 10px; }
 }
 
 
