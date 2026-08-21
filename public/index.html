@@ -13,6 +13,7 @@
     <meta name="description" content="Find craft beer by hop, brewery or flavour and see where to buy it cheapest at Tesco, Morrisons and Sainsbury's. Discover what every beer tastes like from its hops.">
     <link rel="canonical" href="https://mybeerfinder.co.uk/">
     <meta name="robots" content="index, follow">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="theme-color" content="#d97706">
 
     <!-- Apply saved dark/light theme before paint (no flash of light). -->
@@ -47,7 +48,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="Beer Finder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260818k">
+    <link rel="stylesheet" href="style.css?v=20260818l">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -378,9 +379,9 @@
         <p>
             <a href="mailto:hello@mybeerfinder.co.uk">hello@mybeerfinder.co.uk</a>
             &nbsp;·&nbsp;
-            <a href="#" data-view="privacy">Privacy policy</a>
+            <a href="/privacy" data-view="privacy">Privacy policy</a>
             &nbsp;·&nbsp;
-            <a href="#" onclick="openCookieSettings(); return false;">Cookie settings</a>
+            <button type="button" class="footer-link" onclick="openCookieSettings()">Cookie settings</button>
         </p>
     </footer>
 
@@ -410,9 +411,9 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260818k"></script>
-    <script src="script.js?v=20260818k"></script>
-    <script src="ads.js?v=20260818k"></script>
+    <script src="beerlogic.js?v=20260818l"></script>
+    <script src="script.js?v=20260818l"></script>
+    <script src="ads.js?v=20260818l"></script>
 
 </body>
 </html>

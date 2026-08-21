@@ -11,19 +11,25 @@ function confirmAge() {
 // ---------------------------------------------------------------
 // Re-open the cookie/consent choices (Google's certified CMP)
 // ---------------------------------------------------------------
-// Google's consent tool exposes googlefc.showRevocationMessage(). It's only
-// present for visitors in regions where the consent banner shows (UK/EEA),
-// so we guard for it and explain if it isn't available.
+// Google's consent tool (Funding Choices) reopens the consent choices via
+// googlefc.showRevocationMessage(). We queue it through the CONSENT_API_READY
+// callback so the click still works if the API hasn't finished loading yet.
 function openCookieSettings() {
+    window.googlefc = window.googlefc || {};
+    window.googlefc.callbackQueue = window.googlefc.callbackQueue || [];
+    window.googlefc.callbackQueue.push({
+        CONSENT_API_READY: function () {
+            if (typeof window.googlefc.showRevocationMessage === "function") {
+                window.googlefc.showRevocationMessage();
+            }
+        }
+    });
+    // If the API is already live, fire it now too.
     try {
         if (window.googlefc && typeof window.googlefc.showRevocationMessage === "function") {
             window.googlefc.showRevocationMessage();
-            return;
         }
     } catch (e) {}
-    alert("Cookie choices are handled by our consent tool, which only appears for " +
-          "visitors in regions that require an advertising-cookie choice (the UK and EU). " +
-          "If you don't see it, your region may not require one.");
 }
 
 
@@ -74,7 +80,8 @@ const VIEW_PATHS = {
     brewery: "/brewery",
     gifts:   "/gifts",
     about:   "/about",
-    contact: "/contact"
+    contact: "/contact",
+    privacy: "/privacy"
 };
 const PATH_VIEWS = Object.fromEntries(
     Object.entries(VIEW_PATHS).map(([view, path]) => [path, view])
@@ -96,7 +103,9 @@ const VIEW_META = {
     about:   ["About Beer Finder — how it works",
               "How Beer Finder helps you discover craft beer and what it tastes like, right down to the hops."],
     contact: ["Contact | Beer Finder",
-              "Get in touch with Beer Finder."]
+              "Get in touch with Beer Finder."],
+    privacy: ["Privacy policy | Beer Finder",
+              "How Beer Finder handles cookies, advertising and your data."]
 };
 
 function applyViewMeta(name) {
