@@ -80,8 +80,7 @@ const VIEW_PATHS = {
     brewery: "/brewery",
     gifts:   "/gifts",
     about:   "/about",
-    contact: "/contact",
-    privacy: "/privacy"
+    contact: "/contact"
 };
 const PATH_VIEWS = Object.fromEntries(
     Object.entries(VIEW_PATHS).map(([view, path]) => [path, view])
@@ -103,9 +102,7 @@ const VIEW_META = {
     about:   ["About Beer Finder — how it works",
               "How Beer Finder helps you discover craft beer and what it tastes like, right down to the hops."],
     contact: ["Contact | Beer Finder",
-              "Get in touch with Beer Finder."],
-    privacy: ["Privacy policy | Beer Finder",
-              "How Beer Finder handles cookies, advertising and your data."]
+              "Get in touch with Beer Finder."]
 };
 
 function applyViewMeta(name) {
