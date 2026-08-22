@@ -80,7 +80,9 @@ const VIEW_PATHS = {
     brewery: "/brewery",
     gifts:   "/gifts",
     about:   "/about",
-    contact: "/contact"
+    contact: "/contact",
+    account: "/account",
+    leaderboard: "/leaderboard"
 };
 const PATH_VIEWS = Object.fromEntries(
     Object.entries(VIEW_PATHS).map(([view, path]) => [path, view])
@@ -102,7 +104,11 @@ const VIEW_META = {
     about:   ["About Beer Finder — how it works",
               "How Beer Finder helps you discover craft beer and what it tastes like, right down to the hops."],
     contact: ["Contact | Beer Finder",
-              "Get in touch with Beer Finder."]
+              "Get in touch with Beer Finder."],
+    account: ["Your account | Beer Finder",
+              "Track the beers you've had, get recommendations and climb the leaderboard."],
+    leaderboard: ["Leaderboard | Beer Finder",
+              "See who's tried the most craft beers on Beer Finder."]
 };
 
 function applyViewMeta(name) {
@@ -129,6 +135,11 @@ function showView(name) {
     });
 
     if (VIEW_PATHS[name]) applyViewMeta(name);   // only for real routes
+
+    // Account / leaderboard content is built by auth.js (loaded after this).
+    if (name === "account" && typeof renderAccount === "function") renderAccount();
+    if (name === "leaderboard" && typeof renderLeaderboard === "function") renderLeaderboard();
+
     window.scrollTo(0, 0);
 }
 
@@ -801,12 +812,15 @@ function openBeerDetail(id) {
                 <p class="detail-style">${beer.style || "Craft beer"}${beer.abv ? " • " + beer.abv + "% ABV" : ""}</p>
                 <p class="detail-desc">${describeBeer(beer)}</p>
 
-                <label class="compare-check detail-compare">
-                    <input type="checkbox" data-cmp="${beer._id}"
-                        ${compareIds.includes(beer._id) ? "checked" : ""}
-                        onchange="toggleCompare(${beer._id})">
-                    <span>Add to compare</span>
-                </label>
+                <div class="detail-actions">
+                    ${typeof hadButtonHtml === "function" ? hadButtonHtml(beer) : ""}
+                    <label class="compare-check detail-compare">
+                        <input type="checkbox" data-cmp="${beer._id}"
+                            ${compareIds.includes(beer._id) ? "checked" : ""}
+                            onchange="toggleCompare(${beer._id})">
+                        <span>Add to compare</span>
+                    </label>
+                </div>
 
                 <div class="detail-section">
                     <h2>What it tastes like</h2>

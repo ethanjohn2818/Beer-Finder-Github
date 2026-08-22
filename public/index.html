@@ -48,7 +48,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="Beer Finder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260818m">
+    <link rel="stylesheet" href="style.css?v=20260818n">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -132,6 +132,8 @@
         </button>
 
         <nav class="nav-links" id="navMenu">
+            <a class="nav-btn" href="/account" data-view="account">👤 <span id="account-label">Account</span></a>
+            <a class="nav-btn" href="/leaderboard" data-view="leaderboard">🏆 Leaderboard</a>
             <a class="nav-btn" href="/find" data-view="find">Find Your Beer</a>
             <a class="nav-btn" href="/hops" data-view="hops">Hops</a>
             <a class="nav-btn" href="/brewery" data-view="brewery">Brewery</a>
@@ -336,6 +338,21 @@
         </section>
 
 
+        <!-- ACCOUNT VIEW (built by auth.js) -->
+        <section id="account-view" class="view hidden">
+            <h1>Your account 👤</h1>
+            <div id="account-body"></div>
+        </section>
+
+
+        <!-- LEADERBOARD VIEW (built by auth.js) -->
+        <section id="leaderboard-view" class="view hidden">
+            <h1>Leaderboard 🏆</h1>
+            <p class="view-intro">Who's tried the most beers on Beer Finder.</p>
+            <div id="leaderboard-body"></div>
+        </section>
+
+
         <!-- PRIVACY VIEW -->
         <section id="privacy-view" class="view hidden">
             <h1>Privacy policy 🔒</h1>
@@ -345,7 +362,10 @@
                 <p>Beer Finder is a simple site that helps you find craft beers and where to buy them. We keep this short and plain.</p>
 
                 <h2>What we collect</h2>
-                <p>We don't ask you to create an account and we don't collect your name or contact details unless you choose to email us. The beer search runs in your browser.</p>
+                <p>You can use the whole site without an account — the beer search runs in your browser and we don't collect your name or contact details unless you email us.</p>
+
+                <h2>Accounts (optional)</h2>
+                <p>If you create an account, we store your <strong>email address</strong> and a <strong>username</strong> you choose, plus the beers you mark as "had", so we can log you in, remember your list, give you recommendations and show you on the leaderboard. Only your <strong>username and beer count</strong> are shown publicly — never your email. Accounts and login are handled by <strong>Supabase</strong>. To delete your account and data, email <a href="mailto:hello@mybeerfinder.co.uk">hello@mybeerfinder.co.uk</a>.</p>
 
                 <h2>Cookies &amp; advertising</h2>
                 <p>We show adverts through <strong>Google AdSense</strong>. Google and its partners may use cookies to show and measure ads, including personalised ads based on your prior visits to this and other websites. You can learn how Google uses information from sites that use its services at
@@ -404,6 +424,18 @@
     </div>
 
 
+    <!-- Pick-a-username modal (shown once, on first login) -->
+    <div id="username-modal" class="compare-modal hidden">
+        <div class="compare-inner username-inner">
+            <h2>Pick a username 🍺</h2>
+            <p class="muted">This is what shows on the leaderboard. 3–20 letters, numbers or underscores.</p>
+            <input id="username-input" type="text" placeholder="hoppyhannah" maxlength="20" autocomplete="off">
+            <p id="username-msg" class="auth-msg"></p>
+            <button class="primary-btn" onclick="saveUsername()">Save username</button>
+        </div>
+    </div>
+
+
     <!-- Dark / light mode toggle (persistent, bottom-right of every page) -->
     <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()"
         aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
@@ -411,9 +443,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260818m"></script>
-    <script src="script.js?v=20260818m"></script>
-    <script src="ads.js?v=20260818m"></script>
+    <script src="beerlogic.js?v=20260818n"></script>
+    <script src="script.js?v=20260818n"></script>
+    <script src="ads.js?v=20260818n"></script>
+    <!-- User accounts (Supabase) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js?v=20260818n"></script>
 
 </body>
 </html>
