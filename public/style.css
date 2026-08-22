@@ -1718,3 +1718,75 @@ html[data-theme="dark"] .lb-count { color: var(--amber); }
 /* Clickable rows in the "most-loved beers" chart */
 .beer-lb { cursor: pointer; transition: box-shadow 0.15s ease, transform 0.12s ease; }
 .beer-lb:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+/* ---- Blog -------------------------------------------------------- */
+.blog-list {
+    max-width: 760px;
+    margin: 0 auto;
+    display: grid;
+    gap: 18px;
+}
+.blog-card {
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    padding: 22px 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.15s ease, transform 0.12s ease, border-color 0.15s ease;
+}
+.blog-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--amber);
+}
+.blog-card-date {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.blog-card h2 {
+    margin: 6px 0 8px;
+    font-size: 1.35rem;
+    line-height: 1.25;
+}
+.blog-card p {
+    margin: 0 0 12px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+.blog-card-more { font-weight: 800; color: var(--amber-dark); }
+html[data-theme="dark"] .blog-card-more { color: var(--amber); }
+
+.blog-post {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    padding: 32px 34px;
+}
+.blog-breadcrumb { font-size: 0.85rem; color: var(--muted); margin: 0 0 18px; }
+.blog-breadcrumb a { color: var(--amber-dark); text-decoration: none; font-weight: 700; }
+html[data-theme="dark"] .blog-breadcrumb a { color: var(--amber); }
+.blog-post h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 6px; }
+.blog-meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 24px; }
+.blog-post h2 { font-size: 1.4rem; margin: 30px 0 10px; }
+.blog-post p { line-height: 1.7; margin: 0 0 16px; }
+.blog-post ul { line-height: 1.7; margin: 0 0 16px; padding-left: 22px; }
+.blog-post li { margin-bottom: 8px; }
+.blog-post a { color: var(--amber-dark); font-weight: 600; }
+html[data-theme="dark"] .blog-post a { color: var(--amber); }
+.blog-back { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); }
+.blog-back a { font-weight: 800; text-decoration: none; }
+
+@media (max-width: 560px) {
+    .blog-post { padding: 22px 18px; }
+    .blog-post h1 { font-size: 1.6rem; }
+    .blog-card { padding: 18px; }
+}
