@@ -1714,3 +1714,7 @@ html[data-theme="dark"] .lb-count { color: var(--amber); }
     .had-list { columns: 1; }
     .account-head { flex-direction: column; }
 }
+
+/* Clickable rows in the "most-loved beers" chart */
+.beer-lb { cursor: pointer; transition: box-shadow 0.15s ease, transform 0.12s ease; }
+.beer-lb:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }

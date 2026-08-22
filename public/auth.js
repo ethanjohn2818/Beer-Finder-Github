@@ -220,6 +220,13 @@ async function fetchLeaderboard() {
     return data || [];
 }
 
+async function fetchPopularBeers() {
+    if (!sb) return [];
+    const { data, error } = await sb.rpc("popular_beers", { lim: 40 });
+    if (error) { console.warn("popular_beers error", error.message); return []; }
+    return data || [];
+}
+
 
 // ---- Views / UI -----------------------------------------------
 
@@ -276,21 +283,46 @@ async function renderLeaderboard() {
     const el = document.getElementById("leaderboard-body");
     if (!el) return;
     el.innerHTML = `<p class="muted">Loading…</p>`;
-    const rows = await fetchLeaderboard();
-    if (!rows.length) {
-        el.innerHTML = `<p class="muted">No one's on the board yet — be the first! Sign in and start ticking beers.</p>`;
-        return;
-    }
+
+    // Map every beer currently on the site by its stable key, so a beer that's
+    // been delisted simply drops out of the chart and the rest move up.
+    const byKey = {};
+    (allBeers || []).forEach(b => { byKey[beerKey(b)] = b; });
+
+    const [popularRaw, users] = await Promise.all([fetchPopularBeers(), fetchLeaderboard()]);
+    const popular = popularRaw
+        .map(r => ({ beer: byKey[r.beer_key], ticks: r.ticks }))
+        .filter(x => x.beer)          // keep only beers still on the site
+        .slice(0, 10);                // top 10
+
     const me = profile ? profile.username : null;
+
     el.innerHTML = `
-        <ol class="leaderboard">
-            ${rows.map((r, i) => `
-                <li class="${r.username === me ? "is-me" : ""}">
-                    <span class="lb-rank">${i + 1}</span>
-                    <span class="lb-name">${r.username}${r.username === me ? " (you)" : ""}</span>
-                    <span class="lb-count">${r.beer_count} 🍺</span>
-                </li>`).join("")}
-        </ol>`;
+        <h2>🍺 Most-loved beers</h2>
+        <p class="muted small">The beers ticked "had" by the most people right now.</p>
+        ${popular.length
+            ? `<ol class="leaderboard">
+                ${popular.map((x, i) => `
+                    <li class="beer-lb" onclick="openBeerDetail(${x.beer._id})">
+                        <span class="lb-rank">${i + 1}</span>
+                        <span class="lb-name">${x.beer.name}<span class="muted"> — ${x.beer.brewery || ""}</span></span>
+                        <span class="lb-count">${x.ticks} 🍺</span>
+                    </li>`).join("")}
+               </ol>`
+            : `<p class="muted">No beers ticked yet — be the first! Open a beer and tap "I've had this".</p>`}
+
+        <h2 style="margin-top:32px">🏆 Top beer hunters</h2>
+        <p class="muted small">Who's tried the most beers.</p>
+        ${users.length
+            ? `<ol class="leaderboard">
+                ${users.map((r, i) => `
+                    <li class="${r.username === me ? "is-me" : ""}">
+                        <span class="lb-rank">${i + 1}</span>
+                        <span class="lb-name">${r.username}${r.username === me ? " (you)" : ""}</span>
+                        <span class="lb-count">${r.beer_count} 🍺</span>
+                    </li>`).join("")}
+               </ol>`
+            : `<p class="muted">No one's on the board yet — sign in and start ticking beers.</p>`}`;
 }
 
 // Boot once the page + Supabase client are ready.
