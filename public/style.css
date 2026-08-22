@@ -1701,6 +1701,16 @@ html[data-theme="dark"] .auth-msg { color: var(--amber); }
     margin-bottom: 8px;
 }
 .leaderboard li.is-me { border: 2px solid var(--amber); }
+.leaderboard li.lb-divider {
+    justify-content: center;
+    padding: 2px 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--muted);
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+}
 .lb-rank { font-weight: 800; color: var(--muted); width: 28px; text-align: center; }
 .lb-name { flex: 1; font-weight: 700; }
 .lb-count { font-weight: 800; color: var(--amber-dark); }

@@ -297,8 +297,38 @@ async function renderLeaderboard() {
 
     const me = profile ? profile.username : null;
 
+    // Order the hunters by beers tried (stable sort keeps the server's tie-break),
+    // work out where I sit, then take the top 10.
+    const ranked = (users || []).slice()
+        .sort((a, b) => (b.beer_count || 0) - (a.beer_count || 0));
+    const myRank = me ? (ranked.findIndex(r => r.username === me) + 1) : 0; // 0 = not ranked
+    const topUsers = ranked.slice(0, 10);
+
+    // A single hunter row.
+    const userRow = (r, rank) => `
+        <li class="${r.username === me ? "is-me" : ""}">
+            <span class="lb-rank">${rank}</span>
+            <span class="lb-name">${r.username}${r.username === me ? " (you)" : ""}</span>
+            <span class="lb-count">${r.beer_count} 🍺</span>
+        </li>`;
+
+    // If I'm signed in but outside the top 10, add a divider + my own position.
+    const myTile = (myRank > 10)
+        ? `<li class="lb-divider" aria-hidden="true"><span>⋯</span></li>
+           ${userRow(ranked[myRank - 1], myRank)}`
+        : "";
+
     el.innerHTML = `
-        <h2>🍺 Most-loved beers</h2>
+        <h2>🏆 Top beer hunters</h2>
+        <p class="muted small">Who's tried the most beers.</p>
+        ${topUsers.length
+            ? `<ol class="leaderboard">
+                ${topUsers.map((r, i) => userRow(r, i + 1)).join("")}
+                ${myTile}
+               </ol>`
+            : `<p class="muted">No one's on the board yet — sign in and start ticking beers.</p>`}
+
+        <h2 style="margin-top:32px">🍺 Most-loved beers</h2>
         <p class="muted small">The beers ticked "had" by the most people right now.</p>
         ${popular.length
             ? `<ol class="leaderboard">
@@ -309,20 +339,7 @@ async function renderLeaderboard() {
                         <span class="lb-count">${x.ticks} 🍺</span>
                     </li>`).join("")}
                </ol>`
-            : `<p class="muted">No beers ticked yet — be the first! Open a beer and tap "I've had this".</p>`}
-
-        <h2 style="margin-top:32px">🏆 Top beer hunters</h2>
-        <p class="muted small">Who's tried the most beers.</p>
-        ${users.length
-            ? `<ol class="leaderboard">
-                ${users.map((r, i) => `
-                    <li class="${r.username === me ? "is-me" : ""}">
-                        <span class="lb-rank">${i + 1}</span>
-                        <span class="lb-name">${r.username}${r.username === me ? " (you)" : ""}</span>
-                        <span class="lb-count">${r.beer_count} 🍺</span>
-                    </li>`).join("")}
-               </ol>`
-            : `<p class="muted">No one's on the board yet — sign in and start ticking beers.</p>`}`;
+            : `<p class="muted">No beers ticked yet — be the first! Open a beer and tap "I've had this".</p>`}`;
 }
 
 // Boot once the page + Supabase client are ready.
