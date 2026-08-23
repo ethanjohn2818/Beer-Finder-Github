@@ -205,6 +205,11 @@ function cleanName(title) {
     const s = String(title || "")
         .replace(/\d+\s*[x×]\s*\d+\s*ml/gi, " ")
         .replace(/\d+\s*(ml|cl|l|litre|litres|pint|pints)\b/gi, " ")
+        // Standalone pack counts a shop tacks on ("... x4", "4 x", "x 6"),
+        // once the "NxNml" form above has already gone. Otherwise "x4" leaks
+        // into a beer's identity and splits it from the same beer without it.
+        .replace(/\b\d+\s*[x×]\b/gi, " ")
+        .replace(/\b[x×]\s*\d+\b/gi, " ")
         .replace(/\b(case|crate|pack|cans?|bottles?|multipack)\b/gi, " ")
         .replace(/\s+/g, " ")
         .replace(/[-–,]\s*$/, "")
@@ -252,7 +257,12 @@ const STYLE_SUFFIX = new Set([
     "terpene", "ddh", "tdh", "ndh", "dry", "hopped", "cold",
     // Filler words some shops add ("Brooklyn The Stonewall Inn" vs
     // "Brooklyn Brewery Stonewall Inn").
-    "the", "and", "of", "with", "an", "for"
+    "the", "and", "of", "with", "an", "for",
+    // Place / brand descriptors some shops append and others don't
+    // ("Adnams Southwold Ghost Ship" == "Adnams Ghost Ship"), and the
+    // "Abbey" style word on Belgian abbey ales ("Leffe Blonde Abbey Beer"
+    // == "Leffe Blonde").
+    "southwold", "abbey"
 ]);
 
 // Words of 2+ chars, lowercased, punctuation stripped (keeps "af"). We also
