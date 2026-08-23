@@ -166,6 +166,10 @@ function baseKey(title) {
 // another slightly differently. Normalising these lets the same beer stack
 // instead of splitting into look-alike cards.
 const NAME_ALIASES = [
+    // Brewery spelling: some shops write "Brew Dog" (with a space), which leaks
+    // the words "brew" + "dog" into the beer's identity and splits every BrewDog
+    // beer in two. Normalise to the one-word brand so they stack.
+    [/\bbrew\s+dog\b/gi, "BrewDog"],
     [/innis\s*&\s*gun\b/gi, "Innis & Gunn"],   // shop typo: missing final "n"
     [/\bpin ball\b/gi, "Pinball"],             // BrewDog Pinball
     [/\bdouble dry[\s-]?hopped\b/gi, "DDH"],   // process descriptor, not strength
@@ -173,6 +177,17 @@ const NAME_ALIASES = [
     [/\bclwb tropical\b/gi, "Clwb Tropica"],   // Tiny Rebel Clwb Tropica misspelt
     [/\blil tropical\b/gi, "Lil Tropic"],      // Vault City Lil Tropic misspelt
     [/\btropica tropical\b/gi, "Tropica"],     // drop the redundant descriptor
+    // BrewDog Elvis Juice IS the grapefruit IPA, but only some shops print
+    // "Grapefruit". Drop that descriptor so all the regular Elvis listings
+    // reduce to {elvis, juice} and stack (the AF "Elvis" stays separate).
+    [/\belvis juice grapefruit\b/gi, "Elvis Juice"],
+    // BrewDog Double Hazy Jane: two shops shorten it to just "Double Hazy".
+    // Only rewrite when "Double Hazy" is the WHOLE tail of the name (the
+    // standalone product), so we don't touch "Double Hazy <something> IPA"
+    // like Northern Monk's "Double Hazy Even More Faith IPA".
+    [/\bdouble hazy\s*$/i, "Double Hazy Jane"],
+    // Mixed packs: one shop writes "Mix", another "Mixed". Normalise to "Mixed".
+    [/\bmix\b(?!ed)/gi, "Mixed"],
     // Vault City Jumbo Jungle Juice: shops write it "Jumbo Jungle Juice",
     // plain "Jungle Juice", and with a redundant trailing "Tropical".
     // Normalise all of them to the real name so they stack as one card.
@@ -249,6 +264,7 @@ function nameTokens(name) {
             .toLowerCase()
             .replace(/alcohol[\s-]?free/g, " af ")
             .replace(/non[\s-]?alcoholic/g, " af ")
+            .replace(/low[\s-]?alcohol/g, " af ")
             .replace(/[^a-z0-9 ]/g, " ")
             .split(/\s+/)
             .filter(w => w.length >= 2)
