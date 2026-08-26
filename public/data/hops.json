@@ -1,4 +1,13 @@
 {
+  "Admiral": {
+    "flavours": [
+      "Orange",
+      "Marmalade",
+      "Herbal",
+      "Resin"
+    ],
+    "notes": "English bittering hop with orange-marmalade and resinous, herbal notes."
+  },
   "Ahtanum": {
     "flavours": [
       "Grapefruit",
@@ -33,6 +42,22 @@
       "Pine"
     ],
     "notes": "Big tropical mango and pineapple with a citrus lift."
+  },
+  "Boadicea": {
+    "flavours": [
+      "Floral",
+      "Grassy",
+      "Citrus"
+    ],
+    "notes": "Gentle English aroma hop with soft floral, grassy and light citrus notes."
+  },
+  "Bobek": {
+    "flavours": [
+      "Floral",
+      "Herbal",
+      "Citrus"
+    ],
+    "notes": "Slovenian hop — floral and herbal with a light citrus note."
   },
   "Bramling Cross": {
     "flavours": [
@@ -84,6 +109,14 @@
     ],
     "notes": "Intense citrus, sometimes called a 'super Cascade'."
   },
+  "Challenger": {
+    "flavours": [
+      "Spicy",
+      "Cedar",
+      "Fruity"
+    ],
+    "notes": "Versatile English hop — spicy, cedary and lightly fruity."
+  },
   "Chinook": {
     "flavours": [
       "Pine",
@@ -125,6 +158,15 @@
     ],
     "notes": "Gentle floral, spicy and herbal noble-type hop."
   },
+  "Dolcita": {
+    "flavours": [
+      "Tropical",
+      "Stone Fruit",
+      "Melon",
+      "Fruity"
+    ],
+    "notes": "Modern American hop — sweet tropical and stone-fruit character with soft melon."
+  },
   "East Kent Goldings": {
     "flavours": [
       "Honey",
@@ -151,6 +193,15 @@
     ],
     "notes": "Sweet stone fruit, watermelon and pear-drop candy."
   },
+  "Ella": {
+    "flavours": [
+      "Floral",
+      "Spice",
+      "Tropical",
+      "Grapefruit"
+    ],
+    "notes": "Australian hop — floral and spicy, with a tropical, grapefruit lift when late-hopped."
+  },
   "Enigma": {
     "flavours": [
       "Redcurrant",
@@ -158,6 +209,23 @@
       "White Wine"
     ],
     "notes": "Australian hop — redcurrant, melon and white-wine notes."
+  },
+  "Ernest": {
+    "flavours": [
+      "Floral",
+      "Lavender",
+      "Honey"
+    ],
+    "notes": "English hop — delicate floral, lavender and honey character."
+  },
+  "Farnham White Bine": {
+    "flavours": [
+      "Earthy",
+      "Floral",
+      "Grassy",
+      "Herbal"
+    ],
+    "notes": "A rare historic English hop — delicate, earthy, floral and grassy."
   },
   "First Gold": {
     "flavours": [
@@ -199,13 +267,14 @@
     ],
     "notes": "Smooth, sweet, honeyed English aroma hop."
   },
-  "HBC 586": {
+  "Green Bullet": {
     "flavours": [
-      "Melon",
-      "Tropical",
+      "Pine",
+      "Spice",
+      "Dark Fruit",
       "Floral"
     ],
-    "notes": "Experimental hop with juicy melon and tropical fruit."
+    "notes": "New Zealand dual-purpose hop — piney and spicy with dark-fruit, raisin depth."
   },
   "Hallertau": {
     "flavours": [
@@ -215,6 +284,15 @@
     ],
     "notes": "Noble German hop — delicate floral, herbal and spicy."
   },
+  "Hallertauer Blanc": {
+    "flavours": [
+      "White Wine",
+      "Gooseberry",
+      "Tropical",
+      "Grassy"
+    ],
+    "notes": "German aroma hop with white-wine, gooseberry and tropical-fruit character."
+  },
   "Harlequin": {
     "flavours": [
       "Pineapple",
@@ -222,6 +300,31 @@
       "Tropical"
     ],
     "notes": "British modern hop — tropical pineapple and gooseberry."
+  },
+  "HBC 586": {
+    "flavours": [
+      "Melon",
+      "Tropical",
+      "Floral"
+    ],
+    "notes": "Experimental hop with juicy melon and tropical fruit."
+  },
+  "Herkules": {
+    "flavours": [
+      "Spice",
+      "Herbal",
+      "Pine",
+      "Citrus"
+    ],
+    "notes": "German high-alpha hop — clean spicy and herbal with pine and a hint of citrus."
+  },
+  "Hersbrucker": {
+    "flavours": [
+      "Floral",
+      "Herbal",
+      "Spice"
+    ],
+    "notes": "Noble German hop — soft floral, herbal and spicy."
   },
   "Idaho 7": {
     "flavours": [
@@ -239,6 +342,14 @@
       "Citrus"
     ],
     "notes": "Soft peach and melon with gentle citrus."
+  },
+  "Liberty": {
+    "flavours": [
+      "Floral",
+      "Spicy",
+      "Lemon"
+    ],
+    "notes": "Delicate American noble-type hop with floral, mildly spicy, lemony character."
   },
   "Loral": {
     "flavours": [
@@ -304,6 +415,38 @@
     ],
     "notes": "Unmistakable New Zealand hop — white wine and gooseberry."
   },
+  "Northdown": {
+    "flavours": [
+      "Earthy",
+      "Spicy",
+      "Pine"
+    ],
+    "notes": "Robust English hop with earthy, resinous, mildly spicy bitterness."
+  },
+  "Northern Brewer": {
+    "flavours": [
+      "Pine",
+      "Minty",
+      "Earthy"
+    ],
+    "notes": "Classic bittering hop with woody, minty, evergreen character."
+  },
+  "Pacific Gem": {
+    "flavours": [
+      "Blackberry",
+      "Oak",
+      "Plum"
+    ],
+    "notes": "New Zealand hop with blackberry, plum and a woody, oaky depth."
+  },
+  "Pacifica": {
+    "flavours": [
+      "Orange",
+      "Floral",
+      "Apricot"
+    ],
+    "notes": "New Zealand hop — orange citrus, floral and apricot."
+  },
   "Perle": {
     "flavours": [
       "Floral",
@@ -319,6 +462,38 @@
       "Berry"
     ],
     "notes": "English dual-purpose hop — lemon, spice and soft fruit."
+  },
+  "Pioneer": {
+    "flavours": [
+      "Lemon",
+      "Grapefruit",
+      "Herbal"
+    ],
+    "notes": "English hedgerow hop — lemon, grapefruit and herbal notes."
+  },
+  "Progress": {
+    "flavours": [
+      "Floral",
+      "Honey",
+      "Earthy"
+    ],
+    "notes": "English hop — soft floral, honeyed and earthy, a Fuggle-like aroma."
+  },
+  "Rakau": {
+    "flavours": [
+      "Apricot",
+      "Stone Fruit",
+      "Tropical"
+    ],
+    "notes": "New Zealand hop — apricot, stone fruit and clean tropical character."
+  },
+  "Riwaka": {
+    "flavours": [
+      "Grapefruit",
+      "Passionfruit",
+      "Citrus"
+    ],
+    "notes": "New Zealand hop — intense grapefruit and passionfruit with citrus zest."
   },
   "Saaz": {
     "flavours": [
@@ -353,6 +528,15 @@
     ],
     "notes": "Piney and resinous with passionfruit and apricot."
   },
+  "Spalt Select": {
+    "flavours": [
+      "Floral",
+      "Herbal",
+      "Spice",
+      "Earthy"
+    ],
+    "notes": "Noble German hop — delicate floral, herbal and mildly spicy."
+  },
   "Strata": {
     "flavours": [
       "Passionfruit",
@@ -385,6 +569,15 @@
     ],
     "notes": "Pineapple, apricot and citrus (formerly known as Denali)."
   },
+  "Super Styrian": {
+    "flavours": [
+      "Earthy",
+      "Herbal",
+      "Floral",
+      "Spice"
+    ],
+    "notes": "Slovenian Styrian hop — earthy, herbal and gently floral with light spice."
+  },
   "Superdelic": {
     "flavours": [
       "Grape",
@@ -410,6 +603,24 @@
     ],
     "notes": "English hop — orange-marmalade, spice and earth."
   },
+  "Tettnang": {
+    "flavours": [
+      "Floral",
+      "Herbal",
+      "Spice",
+      "Earthy"
+    ],
+    "notes": "Classic noble German hop — soft floral, herbal and mildly spicy."
+  },
+  "Tradition": {
+    "flavours": [
+      "Floral",
+      "Herbal",
+      "Spice",
+      "Honey"
+    ],
+    "notes": "German noble-type hop — clean floral and herbal with light spice and honey."
+  },
   "Vanguard": {
     "flavours": [
       "Floral",
@@ -426,6 +637,15 @@
     ],
     "notes": "Australian hop — clean pineapple, passionfruit and pine."
   },
+  "Whitbread Golding": {
+    "flavours": [
+      "Earthy",
+      "Fruity",
+      "Floral",
+      "Spice"
+    ],
+    "notes": "English hop (WGV) — earthy and sweetly fruity with floral, spicy notes."
+  },
   "Willamette": {
     "flavours": [
       "Earthy",
@@ -433,117 +653,5 @@
       "Blackcurrant"
     ],
     "notes": "American take on Fuggle — earthy, floral, mild dark fruit."
-  },
-  "Pacific Gem": {
-    "flavours": [
-      "Blackberry",
-      "Oak",
-      "Plum"
-    ],
-    "notes": "New Zealand hop with blackberry, plum and a woody, oaky depth."
-  },
-  "Challenger": {
-    "flavours": [
-      "Spicy",
-      "Cedar",
-      "Fruity"
-    ],
-    "notes": "Versatile English hop — spicy, cedary and lightly fruity."
-  },
-  "Hersbrucker": {
-    "flavours": [
-      "Floral",
-      "Herbal",
-      "Spice"
-    ],
-    "notes": "Noble German hop — soft floral, herbal and spicy."
-  },
-  "Bobek": {
-    "flavours": [
-      "Floral",
-      "Herbal",
-      "Citrus"
-    ],
-    "notes": "Slovenian hop — floral and herbal with a light citrus note."
-  },
-  "Rakau": {
-    "flavours": [
-      "Apricot",
-      "Stone Fruit",
-      "Tropical"
-    ],
-    "notes": "New Zealand hop — apricot, stone fruit and clean tropical character."
-  },
-  "Pacifica": {
-    "flavours": [
-      "Orange",
-      "Floral",
-      "Apricot"
-    ],
-    "notes": "New Zealand hop — orange citrus, floral and apricot."
-  },
-  "Pioneer": {
-    "flavours": [
-      "Lemon",
-      "Grapefruit",
-      "Herbal"
-    ],
-    "notes": "English hedgerow hop — lemon, grapefruit and herbal notes."
-  },
-  "Progress": {
-    "flavours": [
-      "Floral",
-      "Honey",
-      "Earthy"
-    ],
-    "notes": "English hop — soft floral, honeyed and earthy, a Fuggle-like aroma."
-  },
-  "Riwaka": {
-    "flavours": [
-      "Grapefruit",
-      "Passionfruit",
-      "Citrus"
-    ],
-    "notes": "New Zealand hop — intense grapefruit and passionfruit with citrus zest."
-  },
-  "Ernest": {
-    "flavours": [
-      "Floral",
-      "Lavender",
-      "Honey"
-    ],
-    "notes": "English hop — delicate floral, lavender and honey character."
-  },
-  "Boadicea": {
-    "flavours": [
-      "Floral",
-      "Grassy",
-      "Citrus"
-    ],
-    "notes": "Gentle English aroma hop with soft floral, grassy and light citrus notes."
-  },
-  "Liberty": {
-    "flavours": [
-      "Floral",
-      "Spicy",
-      "Lemon"
-    ],
-    "notes": "Delicate American noble-type hop with floral, mildly spicy, lemony character."
-  },
-  "Northdown": {
-    "flavours": [
-      "Earthy",
-      "Spicy",
-      "Pine"
-    ],
-    "notes": "Robust English hop with earthy, resinous, mildly spicy bitterness."
-  },
-  "Northern Brewer": {
-    "flavours": [
-      "Pine",
-      "Minty",
-      "Earthy"
-    ],
-    "notes": "Classic bittering hop with woody, minty, evergreen character."
   }
 }

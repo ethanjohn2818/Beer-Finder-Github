@@ -14,7 +14,13 @@ const GENERIC_WORDS = new Set([
     "pale", "hazy", "double", "extra", "beer", "beers", "can", "cans",
     "brewery", "brewing", "brew", "blonde", "golden", "amber", "red",
     "helles", "pils", "pilsner", "keller", "sour", "new", "england",
-    "west", "coast", "the", "and", "india"
+    "west", "coast", "the", "and", "india", "abv",
+    // Always-noise words: units, brewery-suffix and marketing words that are
+    // never a distinctive beer name. Without these, an entry like "Leffe Blonde
+    // 0% Alcohol Free Beer" would key on "alcohol free" and match every AF beer,
+    // or "Harbour Brewing Company …" would key on "brewing company".
+    "vol", "alcohol", "free", "original", "brewing", "company",
+    "proper", "premium", "unfiltered"
 ]);
 
 const BEER_STYLE_WORDS = [
