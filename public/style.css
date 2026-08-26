@@ -1800,3 +1800,82 @@ html[data-theme="dark"] .blog-post a { color: var(--amber); }
     .blog-post h1 { font-size: 1.6rem; }
     .blog-card { padding: 18px; }
 }
+
+/* ---- Coming-soon / under-development pages ---------------------- */
+.soon-card {
+    max-width: 620px;
+    margin: 8px auto 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-md);
+    padding: 40px 32px;
+    text-align: center;
+}
+.soon-badge {
+    display: inline-block;
+    background: var(--amber);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    box-shadow: var(--shadow-sm);
+}
+.soon-emoji { font-size: 3.2rem; margin: 16px 0 4px; }
+.soon-card h2 { margin: 6px 0 12px; font-size: 1.4rem; }
+.soon-card p { color: var(--muted); margin: 0 auto 12px; max-width: 48ch; line-height: 1.6; }
+.soon-card p:last-child { margin-bottom: 0; }
+.soon-cta { font-weight: 500; }
+.soon-cta a { color: var(--amber-dark); font-weight: 700; }
+html[data-theme="dark"] .soon-cta a { color: var(--amber); }
+
+.soon-placeholders {
+    max-width: 620px;
+    margin: 22px auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+.soon-slot {
+    border: 2px dashed var(--border);
+    border-radius: 14px;
+    min-height: 96px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    opacity: 0.75;
+}
+@media (max-width: 560px) {
+    .soon-placeholders { grid-template-columns: 1fr; }
+    .soon-card { padding: 30px 20px; }
+}
+
+.view-back { margin: 0 0 6px; }
+
+/* "Coming soon" ribbon on each gift card + button reset for .buy-btn */
+.gift-card { position: relative; }
+.gift-soon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--amber);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 100px;
+}
+button.buy-btn {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+}

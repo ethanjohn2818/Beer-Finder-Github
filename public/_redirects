@@ -4,7 +4,9 @@
 /find      /index.html   200
 /hops      /index.html   200
 /brewery   /index.html   200
+/partners  /index.html   200
 /gifts     /index.html   200
+/gift-shop /index.html   200
 /about     /index.html   200
 /contact   /index.html   200
 /account       /index.html   200

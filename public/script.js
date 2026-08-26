@@ -78,7 +78,9 @@ const VIEW_PATHS = {
     find:    "/find",
     hops:    "/hops",
     brewery: "/brewery",
+    partners: "/partners",
     gifts:   "/gifts",
+    giftshop: "/gift-shop",
     about:   "/about",
     contact: "/contact",
     account: "/account",
@@ -99,8 +101,12 @@ const VIEW_META = {
               "Explore the hops behind UK craft beer and what each one tastes like — citrus, pine, tropical and more."],
     brewery: ["Breweries & where they're based | Beer Finder",
               "Browse craft breweries stocked at UK supermarkets, where each is based, and the beers we found."],
+    partners: ["Partner breweries | Beer Finder",
+              "The independent breweries we partner with — coming soon to Beer Finder."],
     gifts:   ["Beer gifts & glassware | Beer Finder",
               "Craft beer gift ideas — glassware, merch and gift sets for beer lovers."],
+    giftshop: ["Gift shop (coming soon) | Beer Finder",
+              "Our beer gift shop — glassware, gift sets and merch — is coming soon."],
     about:   ["About Beer Finder — how it works",
               "How Beer Finder helps you discover craft beer and what it tastes like, right down to the hops."],
     contact: ["Contact | Beer Finder",
@@ -1102,14 +1108,28 @@ const GIFTS = [
 function renderGifts() {
     const el = document.getElementById("gifts-list");
     if (!el) return;
-    el.innerHTML = GIFTS.map(g => `
+    el.innerHTML = GIFTS.map((g, i) => `
         <div class="gift-card">
+            <span class="gift-soon">Coming soon</span>
             <div class="gift-emoji">${g.emoji}</div>
             <h3>${g.title}</h3>
             <p>${g.desc}</p>
-            <a class="buy-btn" href="${g.link || "#"}" target="_blank" rel="noopener">${g.cta}</a>
+            <button class="buy-btn" onclick="openGiftShop(${i})">${g.cta}</button>
         </div>
     `).join("");
+}
+
+// A gift category was tapped — show the (coming-soon) gift shop, named for it.
+function openGiftShop(index) {
+    const g = GIFTS[index];
+    const title = document.getElementById("giftshop-title");
+    const copy = document.getElementById("giftshop-copy");
+    if (g && title) title.textContent = g.title + " — coming soon";
+    if (g && copy) {
+        copy.innerHTML = `We're getting <strong>${g.title.toLowerCase()}</strong> ready for the shop.
+            This part isn't quite live yet — check back soon and it'll be here.`;
+    }
+    navigate("giftshop");
 }
 
 

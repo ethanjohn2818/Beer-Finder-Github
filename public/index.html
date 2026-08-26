@@ -48,7 +48,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="Beer Finder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260826a">
+    <link rel="stylesheet" href="style.css?v=20260826b">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -137,6 +137,7 @@
             <a class="nav-btn" href="/find" data-view="find">Find Your Beer</a>
             <a class="nav-btn" href="/hops" data-view="hops">Hops</a>
             <a class="nav-btn" href="/brewery" data-view="brewery">Brewery</a>
+            <a class="nav-btn" href="/partners" data-view="partners">🤝 Partners</a>
             <a class="nav-btn" href="/gifts" data-view="gifts">Gifts</a>
             <a class="nav-btn" href="/blog">📝 Blog</a>
             <a class="nav-btn" href="/about" data-view="about">About</a>
@@ -268,6 +269,44 @@
             <h1>Beer gifts &amp; merch 🎁</h1>
             <p class="view-intro">Glassware, gift baskets and beer-lover merch. A great pairing for the beers you find here.</p>
             <div id="gifts-list" class="gifts-grid"></div>
+        </section>
+
+
+        <!-- PARTNERS VIEW -->
+        <section id="partners-view" class="view hidden">
+            <h1>Our partner breweries 🤝</h1>
+            <p class="view-intro">Independent breweries we work with — their beers, their stories and their latest news, all in one place.</p>
+
+            <div class="soon-card">
+                <span class="soon-badge">Coming soon</span>
+                <div class="soon-emoji">🍺</div>
+                <h2>Our first partner breweries are on their way</h2>
+                <p>We're teaming up with independent brewers right now. Very soon this page will fill up with the breweries we partner with — browse their beers, read what they're up to, and find out where to get them.</p>
+                <p class="soon-cta">Run a brewery and fancy being one of the first? We'd love to hear from you.
+                    <a href="mailto:hello@mybeerfinder.co.uk?subject=Partnering%20with%20Beer%20Finder">hello@mybeerfinder.co.uk</a>
+                </p>
+            </div>
+
+            <div class="soon-placeholders" aria-hidden="true">
+                <div class="soon-slot"><span>Your brewery here</span></div>
+                <div class="soon-slot"><span>Your brewery here</span></div>
+                <div class="soon-slot"><span>Your brewery here</span></div>
+            </div>
+        </section>
+
+
+        <!-- GIFT SHOP VIEW (coming soon) -->
+        <section id="giftshop-view" class="view hidden">
+            <p class="view-back"><button class="link-btn" data-view="gifts">&larr; Back to gifts</button></p>
+            <h1>Gift shop 🎁</h1>
+
+            <div class="soon-card">
+                <span class="soon-badge">Coming soon</span>
+                <div class="soon-emoji">🎀</div>
+                <h2 id="giftshop-title">Our gift shop is coming soon</h2>
+                <p id="giftshop-copy">We're putting together glassware, gift sets and beer-lover treats. This part of the shop isn't quite ready yet — check back soon and it'll be stocked.</p>
+                <p class="soon-cta"><button class="link-btn" data-view="search">Find a beer while you wait &rsaquo;</button></p>
+            </div>
         </section>
 
 
@@ -446,12 +485,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260826a"></script>
-    <script src="script.js?v=20260826a"></script>
-    <script src="ads.js?v=20260826a"></script>
+    <script src="beerlogic.js?v=20260826b"></script>
+    <script src="script.js?v=20260826b"></script>
+    <script src="ads.js?v=20260826b"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260826a"></script>
+    <script src="auth.js?v=20260826b"></script>
 
 </body>
 </html>
