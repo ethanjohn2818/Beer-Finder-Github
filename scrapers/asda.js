@@ -26,6 +26,7 @@
 const { chromium } = require("playwright");
 const { execSync } = require("child_process");
 const path = require("path");
+const os = require("os");
 
 const {
     extractPrice,
@@ -78,14 +79,33 @@ const MIN_OK = TUNING.minOk;
 const PRODUCT_SELECTOR = "a[href*='/product/']";
 
 
-// ---- The browser (identical to Morrisons) ---------------------
+// ---- The browser ----------------------------------------------
+//
+// Asda sits behind Cloudflare bot protection, which is tougher than the wall
+// on Morrisons/Sainsbury's — it fingerprints more than the webdriver flag and
+// will outright BLOCK a plain automated browser. Two things give us the best
+// chance:
+//   1. A PERSISTENT real-Chrome profile (launchPersistentContext). It behaves
+//      like a genuine, returning browser and — crucially — REMEMBERS the
+//      Cloudflare "you're human" clearance cookie between runs, so once you've
+//      passed the challenge once, future runs should sail straight through.
+//   2. A visible window, so you can solve any one-time Cloudflare challenge by
+//      hand (tick the box / wait it out). We detect the block and wait for you.
+//
+// The profile lives outside your normal Chrome profile so it can't disturb it.
+const PROFILE_DIR = process.env.ASDA_PROFILE_DIR
+    || path.join(os.homedir(), ".beerfinder", "asda-chrome-profile");
 
-async function launchBrowser() {
+async function launchPersistent() {
 
     const headless = process.env.HEADLESS === "true";
 
-    const launchOpts = {
+    const opts = {
+        channel: "chrome",
         headless,
+        viewport: { width: 1366, height: 900 },
+        locale: "en-GB",
+        timezoneId: "Europe/London",
         args: [
             "--disable-blink-features=AutomationControlled",
             "--disable-features=IsolateOrigins,site-per-process",
@@ -93,43 +113,67 @@ async function launchBrowser() {
         ]
     };
 
+    let context;
     try {
-        const browser = await chromium.launch({ ...launchOpts, channel: "chrome" });
-        console.log("Using real Chrome (best for avoiding bot detection).");
-        return browser;
+        context = await chromium.launchPersistentContext(PROFILE_DIR, opts);
+        console.log(`Using real Chrome with a saved profile (best chance vs Cloudflare).`);
+        console.log(`  Profile: ${PROFILE_DIR}`);
     } catch {
-        console.log("Real Chrome not found — falling back to bundled Chromium.");
+        console.log("Real Chrome not found — falling back to bundled Chromium (Cloudflare may still block).");
+        delete opts.channel;
+        if (process.env.CHROMIUM_PATH) opts.executablePath = process.env.CHROMIUM_PATH;
+        context = await chromium.launchPersistentContext(PROFILE_DIR, opts);
     }
 
-    if (process.env.CHROMIUM_PATH) {
-        launchOpts.executablePath = process.env.CHROMIUM_PATH;
-    }
-    return chromium.launch(launchOpts);
+    // Only hide the webdriver flag. The real profile already provides genuine
+    // languages / plugins / chrome objects, so we DON'T fake those — faking
+    // them is itself a signal Cloudflare looks for.
+    await context.addInitScript(() => {
+        Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+    });
+
+    const page = context.pages()[0] || await context.newPage();
+    return { context, page };
 }
 
 
-async function makeContext(browser) {
+// ---- Cloudflare challenge / block handling --------------------
 
-    const context = await browser.newContext({
-        locale: "en-GB",
-        timezoneId: "Europe/London",
-        viewport: { width: 1366, height: 900 },
-        userAgent:
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
-            "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        extraHTTPHeaders: {
-            "Accept-Language": "en-GB,en;q=0.9"
-        }
-    });
+// Does the page currently look like a Cloudflare interstitial rather than the
+// real results? (No product tiles + tell-tale CF wording.)
+async function looksBlocked(page) {
+    try {
+        const hasGrid = await page.locator(PRODUCT_SELECTOR).first()
+            .isVisible({ timeout: 800 }).catch(() => false);
+        if (hasGrid) return false;
+        const title = (await page.title().catch(() => "")).toLowerCase();
+        const body = (await page.locator("body").innerText({ timeout: 2000 }).catch(() => "")) || "";
+        return /just a moment|attention required|you have been blocked|verify you are human|checking your browser/i
+            .test(title + " " + body);
+    } catch {
+        return false;
+    }
+}
 
-    await context.addInitScript(() => {
-        Object.defineProperty(navigator, "webdriver", { get: () => undefined });
-        Object.defineProperty(navigator, "languages", { get: () => ["en-GB", "en"] });
-        Object.defineProperty(navigator, "plugins", { get: () => [1, 2, 3, 4, 5] });
-        window.chrome = window.chrome || { runtime: {} };
-    });
-
-    return context;
+// Pause so a person can clear a Cloudflare challenge in the visible window.
+// Returns true once the real grid appears, false on timeout / headless.
+async function waitForHuman(page) {
+    console.log("\n  ⚠  Cloudflare is challenging/blocking us.");
+    if (process.env.HEADLESS === "true") {
+        console.log("  Running headless, so it can't be solved — re-run visibly with:  npm run asda");
+        return false;
+    }
+    console.log("  👉 Solve it in the Chrome window (tick the box, or just wait it out).");
+    console.log("     Waiting up to 3 minutes for the real beer grid to appear...");
+    const deadline = Date.now() + 180000;
+    while (Date.now() < deadline) {
+        const ok = await page.locator(PRODUCT_SELECTOR).first()
+            .isVisible({ timeout: 1000 }).catch(() => false);
+        if (ok) { console.log("  ✅ Through — the grid loaded. Carrying on.\n"); return true; }
+        await page.waitForTimeout(2000);
+    }
+    console.log("  Timed out waiting for the challenge to clear.");
+    return false;
 }
 
 
@@ -204,6 +248,9 @@ async function readPage(page, query, pageNo) {
 
     if (pageNo === 1) await dismissCookies(page);
     await dismissModal(page);
+
+    // If Cloudflare is blocking/challenging, pause for a human to clear it.
+    if (await looksBlocked(page)) await waitForHuman(page);
 
     // Wait for the first product link to appear at all.
     await page.locator(PRODUCT_SELECTOR).first()
@@ -314,14 +361,22 @@ async function extractTiles(page) {
 
 async function crawl(query = "craft beer") {
 
-    const browser = await launchBrowser();
-    const context = await makeContext(browser);
-    const page = await context.newPage();
+    const { context, page } = await launchPersistent();
 
     const products = [];
     const seen = new Set();
 
     try {
+        // Warm up on the homepage first so Cloudflare can hand us a clearance
+        // cookie before we hit search. Once cleared, that cookie is saved in
+        // the profile, so later runs should skip the challenge entirely.
+        console.log("Warming up on the Asda homepage...");
+        await page.goto(BASE_URL, { waitUntil: "domcontentloaded", timeout: TUNING.navTimeoutMs })
+            .catch(() => {});
+        await dismissCookies(page);
+        if (await looksBlocked(page)) await waitForHuman(page);
+        await page.waitForTimeout(1500);
+
         for (let pageNo = 1; pageNo <= TUNING.maxPages; pageNo++) {
 
             console.log(`\n--- Asda page ${pageNo} ---`);
@@ -366,7 +421,9 @@ async function crawl(query = "craft beer") {
     }
 
     // Leave the browser open — the caller owns closing it (same as Morrisons).
-    return { products, browser };
+    // With a persistent profile the context IS the browser session; closing it
+    // shuts the window and saves the profile (incl. the Cloudflare cookie).
+    return { products, browser: context };
 }
 
 
