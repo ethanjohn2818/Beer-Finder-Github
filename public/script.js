@@ -878,11 +878,38 @@ function buildHopsList(beers) {
     }));
 
     const container = document.getElementById("hops-list");
-    const hops = Object.keys(hopMap).sort((a, b) => a.localeCompare(b));
+    const countEl = document.getElementById("hops-count");
+    let hops = Object.keys(hopMap).sort((a, b) => a.localeCompare(b));
 
     if (!hops.length) {
+        if (countEl) countEl.textContent = "";
         container.innerHTML =
             "<p class='searching'>No beers available yet — build the catalogue with <code>npm run build</code>.</p>";
+        return;
+    }
+
+    const total = hops.length;
+
+    // Search by hop name OR by any of its flavour notes (from hops.json).
+    const q = ((document.getElementById("hopSearch") || {}).value || "")
+        .trim().toLowerCase();
+    if (q) {
+        hops = hops.filter(hop => {
+            if (hop.toLowerCase().includes(q)) return true;
+            const p = hopProfile(hop);
+            return p && (p.flavours || []).some(f => f.toLowerCase().includes(q));
+        });
+    }
+
+    if (countEl) {
+        if (q) countEl.textContent = hops.length
+            ? `${hops.length} ${hops.length === 1 ? "hop" : "hops"} matching “${q}”`
+            : "";
+        else countEl.textContent = `${total} ${total === 1 ? "hop" : "hops"}`;
+    }
+    if (q && !hops.length) {
+        container.innerHTML =
+            `<p class="searching">No hops match “${q}”. Try a hop name or a flavour like “citrus” or “pine”.</p>`;
         return;
     }
 
@@ -977,6 +1004,13 @@ function buildBreweryList(beers) {
             </div>
         </details>`;
     }).join("");
+}
+
+// Clear the hop search box and rebuild the full list.
+function clearHopSearch() {
+    const input = document.getElementById("hopSearch");
+    if (input) input.value = "";
+    buildHopsList(allBeers);
 }
 
 // Clear the brewery search box and rebuild the full list.

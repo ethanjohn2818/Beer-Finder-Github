@@ -48,7 +48,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="Beer Finder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260828a">
+    <link rel="stylesheet" href="style.css?v=20260828b">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -238,7 +238,18 @@
         <!-- HOPS VIEW -->
         <section id="hops-view" class="view hidden">
             <h1>Hops we know 🌿</h1>
-            <p class="view-intro">Hops in the beers you can buy right now — tap a hop to see its beers.</p>
+            <p class="view-intro">Search by hop name or by flavour — try “citrus” or “pine” — or tap a hop to see its beers.</p>
+
+            <div class="brewery-search">
+                <input id="hopSearch" type="search"
+                       placeholder="Search a hop or a flavour — try “tropical”…"
+                       oninput="buildHopsList(allBeers)"
+                       aria-label="Search hops by name or flavour">
+                <button type="button" class="brewery-search-clear" aria-label="Clear search"
+                        onclick="clearHopSearch()">✕</button>
+            </div>
+
+            <p id="hops-count" class="results-count"></p>
             <div id="hops-list" class="accordion-list"></div>
         </section>
 
@@ -495,12 +506,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260828a"></script>
-    <script src="script.js?v=20260828a"></script>
-    <script src="ads.js?v=20260828a"></script>
+    <script src="beerlogic.js?v=20260828b"></script>
+    <script src="script.js?v=20260828b"></script>
+    <script src="ads.js?v=20260828b"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260828a"></script>
+    <script src="auth.js?v=20260828b"></script>
 
 </body>
 </html>
