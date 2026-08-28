@@ -267,10 +267,13 @@ async function readPage(page, query, pageNo) {
         for (const t of tiles) {
             if (!t.href) continue;
             const existing = collected.get(t.href);
-            const hasPrice = (t.text || "").includes("£");
-            if (!existing || (hasPrice && !(existing.text || "").includes("£"))) {
-                collected.set(t.href, t);
+            if (!existing) { collected.set(t.href, t); continue; }
+            // Upgrade a priceless skeleton to its priced version once the price
+            // loads in, and fill in the product image once it lazy-loads.
+            if ((t.text || "").includes("£") && !(existing.text || "").includes("£")) {
+                existing.text = t.text;
             }
+            if (t.image && !existing.image) existing.image = t.image;
         }
     };
     const pricedCount = () =>
@@ -327,6 +330,36 @@ async function readPage(page, query, pageNo) {
 async function extractTiles(page) {
     return page.evaluate((selector) => {
 
+        // Pick the real product photo from a tile. Asda serves product images
+        // from Scene7 (asdagroceries.scene7.com/is/image/...) and lazy-loads
+        // them, so the real URL is often in srcset / data-src rather than the
+        // plain src placeholder — and each tile can also contain a promo
+        // "Rollback"/offer-flash graphic we must NOT pick.
+        const pickImage = (tile) => {
+            const bad = /rollback|productflash|events|badge|flash|sponsor|placeholder|blank|spacer|1x1|loading/i;
+            const cands = [];
+
+            tile.querySelectorAll("img").forEach((img) => {
+                [img.currentSrc, img.getAttribute("src"), img.getAttribute("data-src")]
+                    .forEach((u) => { if (u) cands.push(u); });
+                const ss = img.getAttribute("srcset") || img.getAttribute("data-srcset");
+                if (ss) ss.split(",").forEach((p) => {
+                    const u = p.trim().split(/\s+/)[0]; if (u) cands.push(u);
+                });
+            });
+            tile.querySelectorAll("source").forEach((s) => {
+                const ss = s.getAttribute("srcset") || s.getAttribute("data-srcset");
+                if (ss) ss.split(",").forEach((p) => {
+                    const u = p.trim().split(/\s+/)[0]; if (u) cands.push(u);
+                });
+            });
+
+            // Prefer a real Scene7 product image that isn't a promo/offer badge.
+            return cands.find((u) => /scene7|\/is\/image\//i.test(u) && !bad.test(u))
+                || cands.find((u) => /^https?:/i.test(u) && !u.startsWith("data:") && !bad.test(u))
+                || null;
+        };
+
         const anchors = Array.from(document.querySelectorAll(selector));
         const seen = new Set();
         const out = [];
@@ -345,10 +378,7 @@ async function extractTiles(page) {
             }
 
             const text = (tile.innerText || "").trim();
-            const img = tile.querySelector("img");
-            const image = img
-                ? (img.getAttribute("src") || img.src || img.getAttribute("data-src"))
-                : null;
+            const image = pickImage(tile);
 
             out.push({ text, href, image });
         }
