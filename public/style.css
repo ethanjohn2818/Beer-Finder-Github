@@ -1879,3 +1879,43 @@ button.buy-btn {
     font: inherit;
     font-weight: 600;
 }
+
+/* ---- Brewery search bar ---------------------------------------- */
+.brewery-search {
+    position: relative;
+    max-width: 460px;
+    margin: 0 0 16px;
+}
+.brewery-search input {
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+}
+.brewery-search input::placeholder { color: var(--muted); }
+.brewery-search input:focus {
+    outline: none;
+    border-color: var(--amber);
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+}
+.brewery-search-clear {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 1rem;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    line-height: 1;
+}
+.brewery-search-clear:hover { color: var(--amber); background: var(--bg); }
+.brewery-search input:placeholder-shown + .brewery-search-clear { display: none; }

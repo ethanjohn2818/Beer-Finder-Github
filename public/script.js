@@ -917,12 +917,26 @@ function buildBreweryList(beers) {
     });
 
     const container = document.getElementById("brewery-list");
+    const countEl = document.getElementById("brewery-count");
     let breweries = Object.keys(breweryMap);
 
     if (!breweries.length) {
+        if (countEl) countEl.textContent = "";
         container.innerHTML =
             "<p class='searching'>No beers available yet — build the catalogue with <code>npm run build</code>.</p>";
         return;
+    }
+
+    const total = breweries.length;
+
+    // Search by brewery name OR by town/city/country (from breweries.json).
+    const q = ((document.getElementById("brewerySearch") || {}).value || "")
+        .trim().toLowerCase();
+    if (q) {
+        breweries = breweries.filter(b =>
+            b.toLowerCase().includes(q) ||
+            breweryLocation(b).toLowerCase().includes(q)
+        );
     }
 
     // Sort as chosen in the brewery-page control.
@@ -931,6 +945,19 @@ function buildBreweryList(beers) {
     else if (sort === "za") breweries.sort((a, b) => b.localeCompare(a));
     else if (sort === "most") breweries.sort((a, b) => breweryMap[b].length - breweryMap[a].length || a.localeCompare(b));
     else if (sort === "fewest") breweries.sort((a, b) => breweryMap[a].length - breweryMap[b].length || a.localeCompare(b));
+
+    // Result count / no-matches message.
+    if (countEl) {
+        if (q) countEl.textContent = breweries.length
+            ? `${breweries.length} ${breweries.length === 1 ? "brewery" : "breweries"} matching “${q}”`
+            : "";
+        else countEl.textContent = `${total} ${total === 1 ? "brewery" : "breweries"}`;
+    }
+    if (q && !breweries.length) {
+        container.innerHTML =
+            `<p class="searching">No breweries match “${q}”. Try a brewery name or a town/city.</p>`;
+        return;
+    }
 
     container.innerHTML = breweries.map(brewery => {
         const loc = breweryLocation(brewery);
@@ -950,6 +977,13 @@ function buildBreweryList(beers) {
             </div>
         </details>`;
     }).join("");
+}
+
+// Clear the brewery search box and rebuild the full list.
+function clearBrewerySearch() {
+    const input = document.getElementById("brewerySearch");
+    if (input) input.value = "";
+    buildBreweryList(allBeers);
 }
 
 // Jump to the search page showing just this brewery's beers.

@@ -48,7 +48,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="Beer Finder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260826b">
+    <link rel="stylesheet" href="style.css?v=20260828a">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -246,7 +246,16 @@
         <!-- BREWERY VIEW -->
         <section id="brewery-view" class="view hidden">
             <h1>Breweries we know 🏭</h1>
-            <p class="view-intro">Breweries whose beers you can buy right now — expand one, or jump straight to its beers.</p>
+            <p class="view-intro">Search by brewery name or by town/city, or expand one to jump straight to its beers.</p>
+
+            <div class="brewery-search">
+                <input id="brewerySearch" type="search"
+                       placeholder="Search a brewery or a city — try “Bristol”…"
+                       oninput="buildBreweryList(allBeers)"
+                       aria-label="Search breweries by name or city">
+                <button type="button" class="brewery-search-clear" aria-label="Clear search"
+                        onclick="clearBrewerySearch()">✕</button>
+            </div>
 
             <div class="toolbar">
                 <label class="toolbar-sort">
@@ -260,6 +269,7 @@
                 </label>
             </div>
 
+            <p id="brewery-count" class="results-count"></p>
             <div id="brewery-list" class="accordion-list"></div>
         </section>
 
@@ -485,12 +495,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260826b"></script>
-    <script src="script.js?v=20260826b"></script>
-    <script src="ads.js?v=20260826b"></script>
+    <script src="beerlogic.js?v=20260828a"></script>
+    <script src="script.js?v=20260828a"></script>
+    <script src="ads.js?v=20260828a"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260826b"></script>
+    <script src="auth.js?v=20260828a"></script>
 
 </body>
 </html>
