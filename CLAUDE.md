@@ -16,9 +16,15 @@ detection, so they only run locally (VS Code terminal), never in the cloud.
   `npm run sainsburys`, `npm run asda`.
 - Morrisons puts every beer on one virtualised page (slow ~3-min harvest).
   Sainsbury's and Asda both paginate (`?pageNumber=` / `?page=`), so their
-  scrapers walk the pages, slow-scrolling each. Asda reuses the Morrisons
-  browser tactic (real Chrome, close the cookie + delivery popups) with
-  Sainsbury's page-walking — `scrapers/asda.js`.
+  scrapers walk the pages, slow-scrolling each.
+- **Asda is behind Cloudflare** (harder than the others). `scrapers/asda.js`
+  uses a **persistent real-Chrome profile** (`launchPersistentContext`, saved
+  at `~/.beerfinder/asda-chrome-profile`, override with `ASDA_PROFILE_DIR`) so
+  it keeps Cloudflare's clearance cookie between runs, warms up on the homepage
+  first, and — if it detects a CF challenge/block — **pauses for you to solve it
+  by hand** in the visible window (up to 3 min). Solve it once and later runs
+  should skip it. Must run visibly (headless can't pass CF). If CF keeps
+  blocking, Asda may not be scrapable this way.
 - If `git pull` is blocked by local `catalog.json` changes: `git stash` then pull.
 
 ## The hop database — how beers get their flavour info
