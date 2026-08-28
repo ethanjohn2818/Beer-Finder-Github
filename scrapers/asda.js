@@ -330,33 +330,52 @@ async function readPage(page, query, pageNo) {
 async function extractTiles(page) {
     return page.evaluate((selector) => {
 
-        // Pick the real product photo from a tile. Asda serves product images
-        // from Scene7 (asdagroceries.scene7.com/is/image/...) and lazy-loads
-        // them, so the real URL is often in srcset / data-src rather than the
-        // plain src placeholder — and each tile can also contain a promo
-        // "Rollback"/offer-flash graphic we must NOT pick.
-        const pickImage = (tile) => {
-            const bad = /rollback|productflash|events|badge|flash|sponsor|placeholder|blank|spacer|1x1|loading|asdaprice|property[-_]?\d/i;
-            const cands = [];
+        // Asda serves product photos from Scene7, keyed by the product's EAN
+        // barcode, e.g.
+        //   https://asdagroceries.scene7.com/is/image/asdagroceries/5060299212534?$ProdListProd$
+        // The real one has a long DIGITS code (the EAN); promo/offer graphics
+        // (Rollback, AsdaPrice, EVENTS…) have word codes we must skip.
+        // Real EANs are 8+ digits (usually 13). Promo date-codes are 6 digits
+        // then a word (260121_EVENTS…), so require 8+ AND filter promo words.
+        const REAL = /is\/image\/asdagroceries\/\d{8,}(?:[?._-]|$)/i;
+        const bad = /rollback|productflash|events|badge|flash|sponsor|placeholder|blank|spacer|1x1|loading|asdaprice|property[-_]?\d/i;
 
-            tile.querySelectorAll("img").forEach((img) => {
-                [img.currentSrc, img.getAttribute("src"), img.getAttribute("data-src")]
-                    .forEach((u) => { if (u) cands.push(u); });
+        // Every image-ish URL inside a card (img src/currentSrc/srcset/data-*,
+        // and <source> srcset).
+        const urlsIn = (card) => {
+            const out = [];
+            const push = (u) => { if (u) out.push(u.trim()); };
+            card.querySelectorAll("img").forEach((img) => {
+                push(img.getAttribute("src")); push(img.currentSrc); push(img.getAttribute("data-src"));
                 const ss = img.getAttribute("srcset") || img.getAttribute("data-srcset");
-                if (ss) ss.split(",").forEach((p) => {
-                    const u = p.trim().split(/\s+/)[0]; if (u) cands.push(u);
-                });
+                if (ss) ss.split(",").forEach((p) => push(p.trim().split(/\s+/)[0]));
             });
-            tile.querySelectorAll("source").forEach((s) => {
+            card.querySelectorAll("source").forEach((s) => {
                 const ss = s.getAttribute("srcset") || s.getAttribute("data-srcset");
-                if (ss) ss.split(",").forEach((p) => {
-                    const u = p.trim().split(/\s+/)[0]; if (u) cands.push(u);
-                });
+                if (ss) ss.split(",").forEach((p) => push(p.trim().split(/\s+/)[0]));
             });
+            return out;
+        };
 
-            // Prefer a real Scene7 product image that isn't a promo/offer badge.
-            return cands.find((u) => /scene7|\/is\/image\//i.test(u) && !bad.test(u))
-                || cands.find((u) => /^https?:/i.test(u) && !u.startsWith("data:") && !bad.test(u))
+        // Last resort: pull the Scene7 product URL straight out of the card's
+        // HTML (covers URLs tucked in data-* / JSON / lazy attributes we didn't
+        // enumerate as img/source).
+        const fromHtml = (card) => {
+            const all = (card.innerHTML || "")
+                .match(/https?:\/\/[^"'\s)]*is\/image\/asdagroceries\/[^"'\s)]*/ig) || [];
+            const clean = all.map((u) => u.replace(/&amp;/g, "&"));
+            return clean.find((u) => REAL.test(u) && !bad.test(u)) || null;
+        };
+
+        const pickImage = (card) => {
+            const urls = urlsIn(card);
+            // Prefer the real EAN-keyed product image; then any non-promo Scene7
+            // image; then the URL embedded in the card HTML; then any non-promo
+            // http(s) image.
+            return urls.find((u) => REAL.test(u) && !bad.test(u))
+                || urls.find((u) => /scene7|\/is\/image\//i.test(u) && !bad.test(u))
+                || fromHtml(card)
+                || urls.find((u) => /^https?:/i.test(u) && !u.startsWith("data:") && !bad.test(u))
                 || null;
         };
 
@@ -369,18 +388,27 @@ async function extractTiles(page) {
             if (!href || seen.has(href)) continue;
             seen.add(href);
 
-            let tile = a.closest("li, article, [class*='tile'], [class*='product']")
-                || a.parentElement;
-            let node = a.parentElement;
-            for (let i = 0; i < 8 && node; i++) {
-                if ((node.innerText || "").includes("£")) { tile = node; break; }
-                node = node.parentElement;
+            // Climb until we reach the whole product CARD — the ancestor whose
+            // markup actually contains the real product image (or 12 levels up,
+            // whichever comes first). The old code stopped at the nearest node
+            // holding the price, which often excluded the image block.
+            let card = a.parentElement;
+            for (let i = 0; i < 12 && card; i++) {
+                if (REAL.test(card.innerHTML || "")) break;
+                if (!card.parentElement) break;
+                card = card.parentElement;
             }
+            card = card || a.parentElement;
 
-            const text = (tile.innerText || "").trim();
-            const image = pickImage(tile);
+            // Text (name + price): the smallest ancestor that shows a £ price.
+            let textNode = a.parentElement;
+            for (let i = 0; i < 8 && textNode; i++) {
+                if ((textNode.innerText || "").includes("£")) break;
+                textNode = textNode.parentElement;
+            }
+            const text = ((textNode && textNode.innerText) || (card && card.innerText) || "").trim();
 
-            out.push({ text, href, image });
+            out.push({ text, href, image: pickImage(card) });
         }
         return out;
     }, PRODUCT_SELECTOR).catch(() => []);
