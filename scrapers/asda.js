@@ -1,17 +1,22 @@
 // ---------------------------------------------------------------
-// Asda scraper — same tactic as Morrisons (real Chrome, slow scroll).
+// Asda scraper — same real-Chrome tactic as Morrisons, paginated like
+// Sainsbury's.
 //
-// Asda's groceries site is a React app that, like Morrisons, only serves the
-// real product grid to a browser that looks like a real shopper. So this
-// scraper reuses the exact Morrisons approach:
+// Asda's groceries site is a React app that, like Morrisons and Sainsbury's,
+// only serves the real product grid to a browser that looks like a real
+// shopper, and throws a cookie wall (and sometimes a delivery/postcode prompt)
+// in front of the results. So this scraper:
 //     • drives REAL Chrome (channel: "chrome") when installed — no automation
-//       fingerprints;
+//       fingerprint;
 //     • loads the FULL normal page (CSS, images, everything);
-//     • uses a real desktop fingerprint (user-agent, viewport, locale);
-//     • closes the cookie + delivery/postcode popups that hide the grid;
-//     • HARVESTS a single page by scrolling DOWN IN SMALL STEPS and collecting
-//       beers as they pass through the virtualised grid (Asda lazy-loads /
-//       virtualises results, so one read only ever holds a slice).
+//     • closes the cookie + delivery popups that hide the grid;
+//     • SLOW-SCROLLS each page in small steps so every tile lazy-loads,
+//       collecting beers by link as they pass through.
+//
+// THE DIFFERENCE FROM MORRISONS: Asda PAGINATES (?page=1, 2, 3 ...) rather
+// than putting every beer on one endless page. So — exactly like Sainsbury's —
+// we walk the pages one by one, slow-scrolling each, and stop when a page adds
+// no new beers (past the end of the real results).
 //
 // Run:
 //   npm run asda                (visible Chrome — the proving run)
@@ -39,24 +44,29 @@ const { mergeCatalog, CATALOG_FILE, META_FILE } = require("./catalog");
 const SHOT_FILE = path.join(__dirname, "../catalog-asda-page1.png");
 const BASE_URL  = "https://www.asda.com";
 
-// Asda uses a path-based search: /groceries/search/<query>. encodeURIComponent
-// gives the %20 spacing the site's own URL uses.
-const searchUrl = (query) =>
-    `${BASE_URL}/groceries/search/${encodeURIComponent(query)}`;
+// Asda uses a path-based search with a ?page=N query for pagination:
+//   https://www.asda.com/groceries/search/craft%20beer?page=2
+const searchUrl = (query, page) =>
+    `${BASE_URL}/groceries/search/${encodeURIComponent(query)}?page=${page}`;
 
 
-// ---- TUNING (same "make it faster until it breaks" knobs) ------
+// ---- TUNING ---------------------------------------------------
 const TUNING = {
-    // Asda shows its beers on one long, lazy-loading page — harvest it slowly.
-    harvestMs:       180000, // up to 3 minutes on the page
+    // Craft beer spans a handful of pages — plenty of headroom; we stop early
+    // when a page stops adding new beers.
+    maxPages:        20,
+    // Per PAGE (not the whole run): slow-scroll it to the bottom in small steps
+    // so every tile lazy-loads, collecting as we go. Cap the time per page so a
+    // slow page can't stall the whole crawl.
+    pageHarvestMs:   60000,  // up to 1 min per page (very slow, as asked)
     scrollStepPx:    450,    // small steps so the grid doesn't drop beers
-    scrollPauseMs:   900,    // pause after each small step (let tiles load)
+    scrollPauseMs:   1000,   // generous pause after each step (very slow scroll)
     gridTimeoutMs:   30000,  // how long to wait for the first product tile
     navTimeoutMs:    60000,  // how long to allow the page navigation itself
-    enoughBeers:     30,     // "we've probably got them all" threshold
-    stableRounds:    8,      // consecutive no-growth rounds that count as "done"
-    // A run with fewer than this many priced beers is almost certainly the
-    // bot wall / an empty grid, so we refuse to save it (can't wipe good data).
+    // On a page, once we've reached the bottom and the count hasn't grown for
+    // this many rounds, that page is fully read — move to the next.
+    stableRounds:    6,
+    // Don't save a run that got almost nothing (bot wall likely won).
     minOk:           10
 };
 
@@ -128,6 +138,7 @@ async function makeContext(browser) {
 async function dismissCookies(page) {
     const selectors = [
         "#onetrust-accept-btn-handler",
+        "button[data-testid='accept-all-cookies']",
         "button[aria-label*='accept' i]",
         "button:has-text('Accept all cookies')",
         "button:has-text('Accept All Cookies')",
@@ -146,10 +157,9 @@ async function dismissCookies(page) {
 }
 
 
-// Asda pops a delivery / postcode / "shop groceries" chooser over the results.
-// Until it's closed the real grid stays hidden. Close it the same best-effort
-// way as Morrisons: Escape, then click any X / close / "no thanks" control.
-async function dismissDeliveryModal(page) {
+// Best-effort: close any delivery / postcode / "shop groceries" chooser that
+// sits over the results. Safe to call repeatedly.
+async function dismissModal(page) {
 
     await page.keyboard.press("Escape").catch(() => {});
 
@@ -183,57 +193,28 @@ async function dismissDeliveryModal(page) {
 }
 
 
-// Some Asda result pages use a "Load more" / "Show more" button instead of (or
-// as well as) infinite scroll. Click it if it's there — best-effort, safe to
-// call every harvest round.
-async function clickLoadMore(page) {
-    const selectors = [
-        "button:has-text('Load more')",
-        "button:has-text('Show more')",
-        "button:has-text('View more')",
-        "a:has-text('Load more')",
-        "[data-testid*='load-more' i]"
-    ];
-    for (const selector of selectors) {
-        try {
-            const button = page.locator(selector).first();
-            if (await button.isVisible({ timeout: 400 })) {
-                await button.click({ timeout: 1500 });
-                await page.waitForTimeout(600);
-                return true;
-            }
-        } catch {
-            // not present — try the next
-        }
-    }
-    return false;
-}
+// ---- Read one search page (slow-scroll it to load every tile) --
 
+async function readPage(page, query, pageNo) {
 
-// ---- Read the search page (single-page slow-scroll harvest) ----
-
-async function readPage(page, query) {
-
-    console.log(`\n--- Asda search: "${query}" ---`);
-
-    await page.goto(searchUrl(query), {
+    await page.goto(searchUrl(query, pageNo), {
         waitUntil: "domcontentloaded",
         timeout: TUNING.navTimeoutMs
     });
 
-    await dismissCookies(page);
-    await dismissDeliveryModal(page);
+    if (pageNo === 1) await dismissCookies(page);
+    await dismissModal(page);
 
+    // Wait for the first product link to appear at all.
     await page.locator(PRODUCT_SELECTOR).first()
         .waitFor({ timeout: TUNING.gridTimeoutMs })
         .catch(() => {});
 
-    await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
+    await page.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {});
 
-    // HARVEST: scroll DOWN IN SMALL STEPS and COLLECT beers as they pass
-    // through, accumulating them by link. Survives the grid virtualising /
-    // dropping tiles you've scrolled past, and any self-refresh.
-    const collected = new Map();   // href -> tile (prefer the priced version)
+    // Slow-scroll this page to the bottom in small steps so every tile
+    // lazy-loads, collecting beers by link as they pass through.
+    const collected = new Map();
 
     const merge = (tiles) => {
         for (const t of tiles) {
@@ -245,64 +226,52 @@ async function readPage(page, query) {
             }
         }
     };
-
     const pricedCount = () =>
         [...collected.values()].filter(t => (t.text || "").includes("£")).length;
 
-    const harvestDeadline = Date.now() + TUNING.harvestMs;
+    const deadline = Date.now() + TUNING.pageHarvestMs;
     let stable = 0;
-    let lastPriced = 0;
-    let bottoms = 0;
+    let last = 0;
+    let reachedBottom = false;
 
-    while (Date.now() < harvestDeadline) {
+    while (Date.now() < deadline) {
 
-        await dismissDeliveryModal(page);
-
+        await dismissModal(page);
         merge(await extractTiles(page));
-
-        // Try a "load more" button (no-op if the page uses infinite scroll).
-        await clickLoadMore(page);
 
         const atBottom = await page.evaluate((stepPx) => {
             const nearBottom =
                 window.innerHeight + window.scrollY >= document.body.scrollHeight - 50;
-            if (nearBottom) {
-                window.scrollTo(0, 0);   // wrap back to top for another pass
-                return true;
-            }
-            window.scrollBy(0, stepPx);
-            return false;
+            if (!nearBottom) window.scrollBy(0, stepPx);
+            return nearBottom;
         }, TUNING.scrollStepPx);
 
         await page.waitForTimeout(TUNING.scrollPauseMs);
-
         merge(await extractTiles(page));
 
         const priced = pricedCount();
-        if (atBottom) bottoms++;
+        if (atBottom) reachedBottom = true;
 
-        const secsLeft = Math.max(0, Math.round((harvestDeadline - Date.now()) / 1000));
+        const secsLeft = Math.max(0, Math.round((deadline - Date.now()) / 1000));
         process.stdout.write(
-            `\r  harvesting (slow scroll)... ${priced} beers collected, ` +
-            `pass ${bottoms + 1}, ${secsLeft}s left      `
+            `\r  page ${pageNo}: slow-scrolling... ${priced} beers, ${secsLeft}s left    `
         );
 
-        if (priced === lastPriced) {
+        if (priced === last) {
             stable++;
-            if (bottoms >= 2 && stable >= TUNING.stableRounds &&
-                priced >= TUNING.enoughBeers) break;
+            if (reachedBottom && stable >= TUNING.stableRounds) break;
         } else {
             stable = 0;
         }
-        lastPriced = priced;
+        last = priced;
     }
     process.stdout.write("\n");
 
-    await page.screenshot({ path: SHOT_FILE, fullPage: true }).catch(() => {});
+    if (pageNo === 1) {
+        await page.screenshot({ path: SHOT_FILE, fullPage: true }).catch(() => {});
+    }
 
-    const result = [...collected.values()];
-    console.log(`  Collected ${pricedCount()} priced beers over ${bottoms} full pass(es).`);
-    return result;
+    return [...collected.values()];
 }
 
 
@@ -341,7 +310,7 @@ async function extractTiles(page) {
 }
 
 
-// ---- Crawl -----------------------------------------------------
+// ---- Crawl every page -----------------------------------------
 
 async function crawl(query = "craft beer") {
 
@@ -353,45 +322,50 @@ async function crawl(query = "craft beer") {
     const seen = new Set();
 
     try {
-        const tiles = await readPage(page, query);
+        for (let pageNo = 1; pageNo <= TUNING.maxPages; pageNo++) {
 
-        let kept = 0;
-        for (const tile of tiles) {
-            if (!looksLikeBeer(tile.text)) continue;      // drop non-beers
+            console.log(`\n--- Asda page ${pageNo} ---`);
+            const tiles = await readPage(page, query, pageNo);
 
-            const price = extractPrice(tile.text);
-            if (priceValue(price) <= 0) continue;         // no real price → skip
+            let kept = 0;
+            for (const tile of tiles) {
+                if (!looksLikeBeer(tile.text)) continue;   // drop non-beers
 
-            const link = absolute(BASE_URL, tile.href);
-            if (!link || seen.has(link)) continue;
-            seen.add(link);
+                const price = extractPrice(tile.text);
+                if (priceValue(price) <= 0) continue;
 
-            products.push({
-                supermarket: "Asda",
-                title: productName(tile.text),
-                text: tile.text,
-                price,
-                image: absolute(BASE_URL, tile.image),
-                link,
-                pack: detectPackLabel(tile.text)
-            });
-            kept++;
-        }
+                const link = absolute(BASE_URL, tile.href);
+                if (!link || seen.has(link)) continue;
+                seen.add(link);
 
-        console.log(
-            `Found ${tiles.length} tiles, kept ${kept} priced beers.`
-        );
-        if (kept < MIN_OK) {
+                products.push({
+                    supermarket: "Asda",
+                    title: productName(tile.text),
+                    text: tile.text,
+                    price,
+                    image: absolute(BASE_URL, tile.image),
+                    link,
+                    pack: detectPackLabel(tile.text)
+                });
+                kept++;
+            }
+
             console.log(
-                `  ⚠  Only ${kept} priced beers — that looks like the bot wall / empty grid, ` +
-                `not the real range.`
+                `Page ${pageNo}: found ${tiles.length} tiles, kept ${kept} new priced ` +
+                `(running total ${products.length}).`
             );
+
+            // No new beers on this page → we've walked past the last one.
+            if (kept === 0) {
+                console.log(`  Page ${pageNo} added nothing new — reached the end.`);
+                break;
+            }
         }
     } catch (error) {
         console.log("Crawl error:", error.message);
     }
 
-    // Leave the browser open — the caller owns closing it (see the runner).
+    // Leave the browser open — the caller owns closing it (same as Morrisons).
     return { products, browser };
 }
 
@@ -404,8 +378,8 @@ function mergeAsda(products) {
 
     if (products.length < MIN_OK) {
         console.log(
-            `\nOnly ${products.length} beers — that looks like the bot wall, not the\n` +
-            `real range, so NOT saving to the catalogue this time.`
+            `\nOnly ${products.length} beers — that looks like the cookie/bot wall won,\n` +
+            `so NOT saving to the catalogue this time (keeping existing data).`
         );
         return false;
     }
@@ -469,7 +443,7 @@ function printFound(products) {
         console.log(`  ${String(i + 1).padStart(2)}. ${p.price.padEnd(7)} ${p.title}`);
     });
     if (products.length > 40) console.log(`  ...and ${products.length - 40} more.`);
-    console.log(`\nScreenshot of the page: ${SHOT_FILE}`);
+    console.log(`\nScreenshot of page 1: ${SHOT_FILE}`);
 }
 
 
