@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<!--
+  ============================================================
+  PARTNER PAGE — DEMO / TEMPLATE
+  A private mock-up of a Beer Finder brewery partner page.
+  Not linked from the site, not in the sitemap, noindex.
+  To make a real one: copy this folder to /partners/<brewery>/,
+  swap the logo, text, contact details, blog posts and beers.
+  ============================================================
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+
+    <title>Hopvale Brewing Co. — partner demo | Beer Finder</title>
+    <meta name="description" content="Demo brewery partner page on Beer Finder.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#d97706">
+
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem("bf_theme") === "dark") {
+                    document.documentElement.setAttribute("data-theme", "dark");
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    <link rel="stylesheet" href="style.css?v=20260826b">
+
+    <style>
+        .demo-wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px 60px; }
+
+        /* Private-demo notice */
+        .demo-note {
+            display: flex; gap: 12px; align-items: flex-start;
+            background: #fff7ed; border: 1px solid #fed7aa; color: #7c2d12;
+            border-radius: 12px; padding: 14px 18px; margin: 20px 0 28px; font-size: 0.9rem;
+        }
+        html[data-theme="dark"] .demo-note { background: #2a1c0d; border-color: #5a3a12; color: #f2c99b; }
+        .demo-note b { font-weight: 700; }
+        .demo-note .mk { font-size: 1.1rem; line-height: 1.3; }
+
+        /* Brewery hero */
+        .brew-hero {
+            display: flex; gap: 28px; align-items: center;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 22px; padding: 30px; box-shadow: var(--shadow-md);
+        }
+        .brew-logo {
+            width: 148px; height: 148px; flex: none; border-radius: 20px;
+            background: radial-gradient(120% 120% at 30% 20%, #fbbf24 0%, #d97706 55%, #9a4d06 100%);
+            display: grid; place-items: center; text-align: center; color: #fff;
+            box-shadow: inset 0 2px 10px rgba(255,255,255,0.25), var(--shadow-sm);
+            position: relative; overflow: hidden;
+        }
+        .brew-logo svg { width: 62px; height: 62px; }
+        .brew-logo .lg-name { position: absolute; bottom: 14px; left: 0; right: 0;
+            font-weight: 800; letter-spacing: 0.14em; font-size: 0.62rem; }
+        .brew-logo .lg-tag { position: absolute; top: 16px; left: 0; right: 0;
+            font-weight: 600; letter-spacing: 0.2em; font-size: 0.5rem; opacity: 0.9; }
+        .brew-info h1 { font-size: 2rem; margin: 0 0 4px; }
+        .brew-info .brew-tag { color: var(--muted); font-size: 1.05rem; margin: 0 0 14px; }
+        .brew-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .brew-chip {
+            background: var(--bg); border: 1px solid var(--border); border-radius: 999px;
+            padding: 6px 13px; font-size: 0.85rem; font-weight: 600; color: var(--ink);
+        }
+        .brew-chip.amber { background: var(--amber); border-color: var(--amber); color: #fff; }
+
+        /* Sections */
+        .demo-section { margin-top: 40px; }
+        .demo-section > h2 {
+            font-size: 1.35rem; margin: 0 0 4px;
+            display: flex; align-items: center; gap: 9px;
+        }
+        .demo-section > .sub { color: var(--muted); margin: 0 0 18px; }
+        .about-copy { max-width: 68ch; }
+        .about-copy p { line-height: 1.7; margin: 0 0 14px; color: var(--ink); }
+
+        /* Contact + location */
+        .contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .contact-item {
+            display: flex; gap: 13px; align-items: flex-start;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-sm);
+        }
+        .contact-item .ic { font-size: 1.3rem; flex: none; }
+        .contact-item .k { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; }
+        .contact-item .v { font-weight: 600; color: var(--ink); }
+        .contact-item a { color: var(--amber-dark); text-decoration: none; }
+        html[data-theme="dark"] .contact-item a { color: var(--amber); }
+
+        /* Beer listings */
+        .demo-beer {
+            display: grid; grid-template-columns: 190px 1fr; gap: 26px;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 24px; box-shadow: var(--shadow-md);
+            margin-bottom: 22px;
+        }
+        .can {
+            border-radius: 16px; display: grid; place-items: center; position: relative;
+            min-height: 200px; color: #fff; box-shadow: var(--shadow-sm);
+        }
+        .can .em { font-size: 3.4rem; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25)); }
+        .can .abv { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center;
+            font-weight: 800; letter-spacing: 0.05em; font-size: 0.95rem; }
+        .can .new { position: absolute; top: 12px; right: 12px; background: #fff; color: var(--amber-dark);
+            font-size: 0.62rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+            padding: 3px 9px; border-radius: 999px; }
+        .can.c1 { background: linear-gradient(160deg, #f59e0b, #b45309); }
+        .can.c2 { background: linear-gradient(160deg, #ea9c26, #7c3d09); }
+        .can.c3 { background: linear-gradient(160deg, #fcd34d, #d97706); }
+        .can.c4 { background: linear-gradient(160deg, #6b4423, #2b1a0e); }
+
+        .beer-body h3 { font-size: 1.35rem; margin: 0 0 3px; }
+        .beer-sub { color: var(--amber-dark); font-weight: 700; margin: 0 0 2px; }
+        html[data-theme="dark"] .beer-sub { color: var(--amber); }
+        .beer-priceline { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 10px 0 12px; }
+        .price-badge {
+            background: var(--amber); color: #fff; font-weight: 800; border-radius: 10px;
+            padding: 5px 12px; font-size: 1.02rem; box-shadow: var(--shadow-sm);
+        }
+        .where { color: var(--muted); font-size: 0.9rem; }
+        .where b { color: var(--ink); }
+        .beer-desc { line-height: 1.65; color: var(--ink); margin: 0 0 6px; max-width: 62ch; }
+        .beer-sub-h {
+            font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em;
+            color: var(--muted); font-weight: 700; margin: 16px 0 2px;
+        }
+
+        @media (max-width: 720px) {
+            .brew-hero { flex-direction: column; text-align: center; }
+            .brew-chips { justify-content: center; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .demo-beer { grid-template-columns: 1fr; }
+            .can { min-height: 150px; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="nav">
+        <div class="nav-left">
+            <a class="nav-brand" href="/">
+                <svg class="brand-mug" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="64" height="64" rx="14" fill="#d97706"/>
+                    <path d="M44 24h6a7 7 0 0 1 7 7v6a7 7 0 0 1-7 7h-6z" fill="none" stroke="#ffffff" stroke-width="4"/>
+                    <rect x="14" y="20" width="30" height="30" rx="4" fill="#fcd34d" stroke="#ffffff" stroke-width="3"/>
+                    <rect x="14" y="30" width="30" height="20" rx="3" fill="#f59e0b"/>
+                    <path d="M15 22c1-4 5-5 7-3 2-3 7-3 8 0 3-2 7 0 6 4z" fill="#ffffff"/>
+                    <circle cx="20" cy="16" r="3" fill="#ffffff"/>
+                    <circle cx="29" cy="14" r="3.5" fill="#ffffff"/>
+                    <circle cx="37" cy="16" r="3" fill="#ffffff"/>
+                </svg>
+                <span>Beer Finder</span>
+            </a>
+        </div>
+        <a class="nav-btn" href="/">← Back to site</a>
+    </header>
+
+    <main>
+        <div class="demo-wrap">
+
+            <div class="demo-note">
+                <span class="mk">🔒</span>
+                <span><b>Private demo — this is a mock-up of your Beer Finder partner page.</b>
+                    It isn't linked anywhere on the site or shown to the public; only someone with this exact link can see it.
+                    Everything below (logo, words, contact details, news and beers) is placeholder content we'd swap for yours.</span>
+            </div>
+
+            <!-- BREWERY HERO -->
+            <div class="brew-hero">
+                <div class="brew-logo" title="Your logo goes here">
+                    <span class="lg-tag">EST. 2019</span>
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M20 8c0 8-8 10-8 18 0 7 4 10 4 14M32 6c0 9-9 11-9 20 0 8 5 11 5 16M44 8c0 8-8 10-8 18 0 7 4 10 4 14"
+                            fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" opacity="0.95"/>
+                        <ellipse cx="32" cy="50" rx="17" ry="5" fill="#fff" opacity="0.9"/>
+                    </svg>
+                    <span class="lg-name">HOPVALE</span>
+                </div>
+                <div class="brew-info">
+                    <h1>Hopvale Brewing Co.</h1>
+                    <p class="brew-tag">Small-batch modern beer from the West Country.</p>
+                    <div class="brew-chips">
+                        <span class="brew-chip amber">🤝 Beer Finder partner</span>
+                        <span class="brew-chip">📍 Bristol, England</span>
+                        <span class="brew-chip">🍺 Independent brewery</span>
+                        <span class="brew-chip">🌿 Hop-forward</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABOUT -->
+            <section class="demo-section">
+                <h2>About the brewery</h2>
+                <div class="about-copy">
+                    <p>Hopvale Brewing Co. is a small independent brewery tucked into a converted dairy on the edge of Bristol. Since 2019 we've been chasing one thing: bright, modern beer with the hops turned up and nothing to hide behind. Everything is brewed in small batches, unfined and unfiltered, so what lands in the glass is exactly what came out of the tank.</p>
+                    <p>We're a team of four who care a bit too much about water chemistry and dry-hop timing. You'll find our cans in independent bottle shops across the South West, poured at our Thursday-to-Sunday taproom, and — now — right here on Beer Finder, where drinkers can see exactly what each beer tastes like before they buy.</p>
+                </div>
+            </section>
+
+            <!-- CONTACT + LOCATION -->
+            <section class="demo-section">
+                <h2>Find &amp; contact us</h2>
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <span class="ic">📍</span>
+                        <div><div class="k">Where we are</div>
+                            <div class="v">Unit 5, Dovecote Yard,<br>Bristol, BS2 0XY</div></div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="ic">🍻</span>
+                        <div><div class="k">Taproom</div>
+                            <div class="v">Thursday – Sunday, 12–10pm</div></div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="ic">✉️</span>
+                        <div><div class="k">Email</div>
+                            <div class="v"><a href="mailto:hello@hopvalebrewing.co.uk">hello@hopvalebrewing.co.uk</a></div></div>
+                    </div>
+                    <div class="contact-item">
+                        <span class="ic">🌐</span>
+                        <div><div class="k">Online</div>
+                            <div class="v"><a href="#">hopvalebrewing.co.uk</a> · <a href="#">@hopvalebrewing</a></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NEWS / BLOG ABOUT THEM -->
+            <section class="demo-section">
+                <h2>📝 Hopvale on the Beer Finder blog</h2>
+                <p class="sub">Posts we write about you — new releases, events and what's brewing. Free with every partnership.</p>
+                <div class="blog-list">
+                    <a class="blog-card" href="#">
+                        <span class="blog-card-date">21 August 2026</span>
+                        <h2>Hopvale pours at the Bristol Craft Beer Festival</h2>
+                        <p>Catch the team — and three brand-new pours, including a first look at a peach sour — at this year's festival on the harbourside, 6–8 September.</p>
+                        <span class="blog-card-more">Read more →</span>
+                    </a>
+                    <a class="blog-card" href="#">
+                        <span class="blog-card-date">12 August 2026</span>
+                        <h2>Valley Haze is back for summer</h2>
+                        <p>Our flagship hazy pale returns, brewed with a fresh lot of Citra and Mosaic that's the juiciest we've tasted. Here's the story behind the recipe.</p>
+                        <span class="blog-card-more">Read more →</span>
+                    </a>
+                    <a class="blog-card" href="#">
+                        <span class="blog-card-date">2 August 2026</span>
+                        <h2>Meet the brewer: five minutes with founder Sam</h2>
+                        <p>From homebrew kit in a Bristol kitchen to a converted dairy — Sam on water chemistry, favourite hops, and why every batch is unfiltered.</p>
+                        <span class="blog-card-more">Read more →</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- BEERS -->
+            <section class="demo-section">
+                <h2>🍺 Our beers on Beer Finder</h2>
+                <p class="sub">Each beer shows its taste profile and hops — exactly how it appears everywhere else on the site.</p>
+
+                <!-- BEER 1 -->
+                <article class="demo-beer">
+                    <div class="can c1"><span class="new">New</span><span class="em">🍺</span><span class="abv">4.6% ABV</span></div>
+                    <div class="beer-body">
+                        <p class="beer-sub">Hazy Pale Ale</p>
+                        <h3>Valley Haze</h3>
+                        <div class="beer-priceline">
+                            <span class="price-badge">£2.40</span>
+                            <span class="where">cheapest · <b>440ml can</b> direct from Hopvale</span>
+                        </div>
+                        <p class="beer-desc">Our flagship. A soft, juicy pale ale that pours the colour of cloudy apple juice and drinks like a handful of tropical fruit. Big on aroma, gentle on bitterness — the one we'd hand anyone taking their first step into hazy beer.</p>
+
+                        <p class="beer-sub-h">What it tastes like</p>
+                        <div class="tag-row"><span class="tag">Tropical</span><span class="tag">Citrus</span><span class="tag">Stone Fruit</span><span class="tag">Juicy</span></div>
+
+                        <p class="beer-sub-h">Hops — and what each brings</p>
+                        <div class="hop-profiles">
+                            <div class="hop-profile"><h3>Citra</h3><p>Bright grapefruit, lime and tropical fruit — the workhorse of the hazy world.</p><div class="tag-row"><span class="tag">Grapefruit</span><span class="tag">Lime</span><span class="tag">Tropical</span></div></div>
+                            <div class="hop-profile"><h3>Mosaic</h3><p>Tropical fruit and blueberry with a hint of pine. Complex and a touch dank.</p><div class="tag-row"><span class="tag">Tropical</span><span class="tag">Blueberry</span><span class="tag">Pine</span></div></div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- BEER 2 -->
+                <article class="demo-beer">
+                    <div class="can c2"><span class="em">🍺</span><span class="abv">5.8% ABV</span></div>
+                    <div class="beer-body">
+                        <p class="beer-sub">West Coast IPA</p>
+                        <h3>West Country IPA</h3>
+                        <div class="beer-priceline">
+                            <span class="price-badge">£2.85</span>
+                            <span class="where">cheapest · <b>440ml can</b> direct from Hopvale</span>
+                        </div>
+                        <p class="beer-desc">Crisp, clear and properly bitter — a nod to the classic American West Coast IPA, brewed on West Country water. Resinous pine and grapefruit up front, a clean dry finish that asks for another. For the drinker who likes their IPA with a backbone.</p>
+
+                        <p class="beer-sub-h">What it tastes like</p>
+                        <div class="tag-row"><span class="tag">Pine</span><span class="tag">Grapefruit</span><span class="tag">Orange</span><span class="tag">Resinous</span></div>
+
+                        <p class="beer-sub-h">Hops — and what each brings</p>
+                        <div class="hop-profiles">
+                            <div class="hop-profile"><h3>Simcoe</h3><p>Pine, citrus and a resinous, earthy edge — the classic West Coast character.</p><div class="tag-row"><span class="tag">Pine</span><span class="tag">Citrus</span><span class="tag">Earthy</span></div></div>
+                            <div class="hop-profile"><h3>Amarillo</h3><p>Soft orange and floral notes, easy-going and aromatic.</p><div class="tag-row"><span class="tag">Orange</span><span class="tag">Floral</span></div></div>
+                            <div class="hop-profile"><h3>Cascade</h3><p>Grapefruit and floral — the hop that started American craft beer.</p><div class="tag-row"><span class="tag">Grapefruit</span><span class="tag">Floral</span></div></div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- BEER 3 -->
+                <article class="demo-beer">
+                    <div class="can c3"><span class="em">🍺</span><span class="abv">4.2% ABV</span></div>
+                    <div class="beer-body">
+                        <p class="beer-sub">Golden Ale</p>
+                        <h3>Golden Furrow</h3>
+                        <div class="beer-priceline">
+                            <span class="price-badge">£2.20</span>
+                            <span class="where">cheapest · <b>500ml bottle</b> direct from Hopvale</span>
+                        </div>
+                        <p class="beer-desc">A gentle, traditional English golden ale for when you want something easy. Honeyed malt, a whisper of floral, earthy English hops and a clean, biscuity finish. Sessionable at 4.2% — the pint we pour for friends who "don't really do craft".</p>
+
+                        <p class="beer-sub-h">What it tastes like</p>
+                        <div class="tag-row"><span class="tag">Honey</span><span class="tag">Floral</span><span class="tag">Earthy</span><span class="tag">Biscuit</span></div>
+
+                        <p class="beer-sub-h">Hops — and what each brings</p>
+                        <div class="hop-profiles">
+                            <div class="hop-profile"><h3>East Kent Goldings</h3><p>A classic English hop — earthy, herbal and gently floral.</p><div class="tag-row"><span class="tag">Earthy</span><span class="tag">Herbal</span><span class="tag">Floral</span></div></div>
+                            <div class="hop-profile"><h3>Fuggle</h3><p>Traditional and soft — woody, earthy, with a minty lift.</p><div class="tag-row"><span class="tag">Earthy</span><span class="tag">Woody</span><span class="tag">Mint</span></div></div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- BEER 4 -->
+                <article class="demo-beer">
+                    <div class="can c4"><span class="em">🖤</span><span class="abv">5.2% ABV</span></div>
+                    <div class="beer-body">
+                        <p class="beer-sub">Oatmeal Stout</p>
+                        <h3>Midnight Seam</h3>
+                        <div class="beer-priceline">
+                            <span class="price-badge">£2.60</span>
+                            <span class="where">cheapest · <b>440ml can</b> direct from Hopvale</span>
+                        </div>
+                        <p class="beer-desc">Smooth, dark and comforting. Oats give it a silky body, while the malt bill leans into chocolate and freshly-pulled espresso. Barely any hop bitterness — this one's all about roasted depth. Brilliant on a cold night, or poured over the top of a stout float.</p>
+
+                        <p class="beer-sub-h">What it tastes like</p>
+                        <div class="tag-row"><span class="tag">Chocolate</span><span class="tag">Coffee</span><span class="tag">Roasted</span><span class="tag">Smooth</span></div>
+
+                        <p class="beer-sub-h">Hops — and what each brings</p>
+                        <div class="hop-profiles">
+                            <div class="hop-profile"><h3>Fuggle</h3><p>Used only for a gentle, earthy balance — the roast does the talking here.</p><div class="tag-row"><span class="tag">Earthy</span><span class="tag">Woody</span></div></div>
+                        </div>
+                    </div>
+                </article>
+
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>🍺 Beer Finder — made for beer lovers.</p>
+        <p>
+            <a href="mailto:hello@mybeerfinder.co.uk">hello@mybeerfinder.co.uk</a>
+            &nbsp;·&nbsp;
+            <a href="/">Back to Beer Finder</a>
+            &nbsp;·&nbsp;
+            <a href="/privacy">Privacy</a>
+            &nbsp;·&nbsp;
+            <a href="/terms">Terms</a>
+        </p>
+    </footer>
+
+</body>
+</html>
