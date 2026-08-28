@@ -1,3 +1,14 @@
+// A tidy on-brand placeholder for beers with no image (or a broken one), so a
+// missing photo shows a little beer mug instead of the browser's broken-image
+// icon. `var` (not const) so inline onerror handlers can see it as a global.
+var NO_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>"
+    + "<rect width='160' height='160' rx='18' fill='%23fdebd3'/>"
+    + "<rect x='54' y='50' width='42' height='62' rx='6' fill='%23f59e0b'/>"
+    + "<rect x='54' y='50' width='42' height='18' rx='6' fill='%23fcd34d'/>"
+    + "<path d='M96 66h10a10 10 0 0 1 10 10v8a10 10 0 0 1-10 10h-10z' fill='none' stroke='%23f59e0b' stroke-width='6'/>"
+    + "</svg>";
+
+
 // ---------------------------------------------------------------
 // Age gate (18+) — shown once, remembered in localStorage
 // ---------------------------------------------------------------
@@ -480,7 +491,8 @@ function renderCard(result, index) {
 
     return `
         <div class="beer-card clickable" data-beer="${beer._id}">
-            <img id="img-${index}" src="${opt.image || ""}" alt="${beer.name}" loading="lazy" decoding="async">
+            <img id="img-${index}" src="${opt.image || NO_IMG}" alt="${beer.name}" loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src=NO_IMG">
             <h2>${beer.name}</h2>
             <p class="beer-style">
                 ${beer.style || "Craft beer"}
@@ -514,7 +526,10 @@ function refreshCard(index) {
     const opt = store.options[state.optIndex] || store.options[0];
 
     const img = document.getElementById("img-" + index);
-    if (img) img.src = opt.image || "";
+    if (img) {
+        img.onerror = function () { this.onerror = null; this.src = NO_IMG; };
+        img.src = opt.image || NO_IMG;
+    }
     const price = document.getElementById("price-" + index);
     if (price) price.textContent = cleanPrice(opt.price);
     const storeLabel = document.getElementById("store-" + index);
@@ -808,7 +823,7 @@ function openBeerDetail(id) {
         <button class="back-btn" onclick="showView('${detailReturnView}')">← Back</button>
         <div class="detail">
             <div class="detail-media">
-                ${img ? `<img src="${img}" alt="${beer.name}">` : `<div class="detail-noimg">🍺</div>`}
+                ${img ? `<img src="${img}" alt="${beer.name}" onerror="this.onerror=null;this.src=NO_IMG">` : `<div class="detail-noimg">🍺</div>`}
             </div>
             <div class="detail-body">
                 <h1>${beer.name}</h1>

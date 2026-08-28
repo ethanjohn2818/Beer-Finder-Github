@@ -336,7 +336,7 @@ async function extractTiles(page) {
         // plain src placeholder — and each tile can also contain a promo
         // "Rollback"/offer-flash graphic we must NOT pick.
         const pickImage = (tile) => {
-            const bad = /rollback|productflash|events|badge|flash|sponsor|placeholder|blank|spacer|1x1|loading/i;
+            const bad = /rollback|productflash|events|badge|flash|sponsor|placeholder|blank|spacer|1x1|loading|asdaprice|property[-_]?\d/i;
             const cands = [];
 
             tile.querySelectorAll("img").forEach((img) => {
