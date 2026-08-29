@@ -6053,7 +6053,7 @@
     "name": "Salt Vermont XPA Mosaic",
     "brewery": "Salt",
     "style": "Extra Pale Ale",
-    "abv": 5.0,
+    "abv": 5,
     "hops": [
       "Mosaic"
     ],
@@ -6109,7 +6109,7 @@
     "name": "Adnams Double Ghost IPA",
     "brewery": "Adnams",
     "style": "Double IPA",
-    "abv": 7.0,
+    "abv": 7,
     "hops": [
       "Citra"
     ],
@@ -6121,6 +6121,336 @@
       "Citrus",
       "Tropical",
       "Grapefruit"
+    ]
+  },
+  {
+    "name": "Lervig Tasty Juice",
+    "brewery": "Lervig",
+    "style": "DDH IPA",
+    "abv": 6,
+    "hops": [
+      "Mosaic",
+      "Ekuanot",
+      "Citra"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Grapefruit",
+      "Mango"
+    ]
+  },
+  {
+    "name": "Thornbridge West Side Glory",
+    "brewery": "Thornbridge",
+    "style": "West Coast IPA",
+    "abv": 7,
+    "hops": [
+      "Citra",
+      "Idaho 7",
+      "Centennial"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Pine",
+      "Grapefruit",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Tooth & Claw One Eye",
+    "brewery": "Tooth & Claw",
+    "style": "IPA",
+    "abv": 7,
+    "hops": [
+      "Nelson Sauvin",
+      "Vic Secret"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Gooseberry",
+      "Pineapple",
+      "Passionfruit"
+    ]
+  },
+  {
+    "name": "Gwei.lo Neon Jungle",
+    "brewery": "Gwei.lo",
+    "style": "IPA",
+    "abv": 5.9,
+    "hops": [
+      "Idaho 7",
+      "Citra"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Pineapple",
+      "Orange"
+    ]
+  },
+  {
+    "name": "Siren Playlist",
+    "brewery": "Siren",
+    "style": "Hazy IPA",
+    "abv": 6,
+    "hops": [
+      "Citra",
+      "Krush"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Mango",
+      "Citrus",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Seven Brothers Juicy IPA",
+    "brewery": "Seven Brothers",
+    "style": "Hazy IPA",
+    "abv": 6,
+    "hops": [
+      "Sabro",
+      "Azacca",
+      "Amarillo"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Stone Fruit",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Brew York Coney",
+    "brewery": "Brew York",
+    "style": "Session IPA",
+    "abv": 4.5,
+    "hops": [
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Mango",
+      "Stone Fruit"
+    ]
+  },
+  {
+    "name": "Bullhouse Hoppy Days",
+    "brewery": "Bullhouse",
+    "style": "Hazy IPA",
+    "abv": 5,
+    "hops": [
+      "Citra",
+      "Strata"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Mango",
+      "Passionfruit",
+      "Orange"
+    ]
+  },
+  {
+    "name": "Arbor Nashoba",
+    "brewery": "Arbor",
+    "style": "New England IPA",
+    "abv": 6.2,
+    "hops": [
+      "Citra",
+      "Motueka",
+      "Nelson Sauvin"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus",
+      "Lime"
+    ]
+  },
+  {
+    "name": "BrewDog Analogue Dream",
+    "brewery": "BrewDog",
+    "style": "Hazy IPA",
+    "abv": 8,
+    "hops": [
+      "Citra",
+      "Amarillo"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Mango",
+      "Stone Fruit"
+    ]
+  },
+  {
+    "name": "Ossett Excelsius",
+    "brewery": "Ossett",
+    "style": "Pale Ale",
+    "abv": 5,
+    "hops": [
+      "Citra",
+      "Galaxy"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Pineapple"
+    ]
+  },
+  {
+    "name": "Ossett King Rat",
+    "brewery": "Ossett",
+    "style": "Hazy IPA",
+    "abv": 7.4,
+    "hops": [
+      "Citra",
+      "Galaxy",
+      "Topaz"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Tropical",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Asda No7 West Coast Double IPA",
+    "brewery": "Asda",
+    "style": "Double IPA",
+    "abv": 8,
+    "hops": [
+      "Chinook",
+      "Citra",
+      "Mosaic",
+      "Simcoe"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Pine",
+      "Grapefruit",
+      "Tangerine"
+    ]
+  },
+  {
+    "name": "Asda Collab Salt Double IPA",
+    "brewery": "Asda",
+    "style": "Double IPA",
+    "abv": 8,
+    "hops": [
+      "Citra",
+      "Columbus"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Grapefruit",
+      "Lime",
+      "Tropical"
+    ]
+  },
+  {
+    "name": "Shepherd Neame India Pale Ale",
+    "brewery": "Shepherd Neame",
+    "style": "IPA",
+    "abv": 6.1,
+    "hops": [
+      "Fuggles",
+      "East Kent Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Marmalade",
+      "Spice",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Wainwright Golden",
+    "brewery": "Wainwright",
+    "style": "Golden Ale",
+    "abv": 4.1,
+    "hops": [
+      "Magnum",
+      "Tradition",
+      "Hersbrucker",
+      "Styrian Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Honey",
+      "Malty"
+    ]
+  },
+  {
+    "name": "Exeter Avocet",
+    "brewery": "Exeter",
+    "style": "Pale Ale",
+    "abv": 3.9,
+    "hops": [
+      "Goldings"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Floral"
+    ]
+  },
+  {
+    "name": "Badger Iron Hart",
+    "brewery": "Badger",
+    "style": "Pale Ale",
+    "abv": 5.2,
+    "hops": [
+      "Amarillo",
+      "Cascade"
+    ],
+    "malts": [
+      "Pale"
+    ],
+    "flavours": [
+      "Citrus",
+      "Honey",
+      "Biscuit"
     ]
   }
 ]

@@ -653,5 +653,13 @@
       "Blackcurrant"
     ],
     "notes": "American take on Fuggle — earthy, floral, mild dark fruit."
+  },
+  "Topaz": {
+    "flavours": [
+      "Tropical",
+      "Lychee",
+      "Resin"
+    ],
+    "notes": "High-alpha Australian hop — dank and resinous with tropical lychee and grassy notes."
   }
 }
