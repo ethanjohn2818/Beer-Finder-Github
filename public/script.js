@@ -833,6 +833,40 @@ function tagRow(tags) {
 }
 
 // Build and show the detail page for a beer id (index into allBeers).
+// Rules-based "possible allergens" — a GUIDE ONLY. We don't hold the packaging
+// data, so we infer the allergens a beer of this style usually contains from
+// its style + name (+ a brewery description if one has been scraped). Always
+// defers to the can. Covers the cereals-containing-gluten + milk allergens that
+// are realistically inferable for beer.
+function allergenInfo(beer) {
+    const text = `${beer.name || ""} ${beer.style || ""} ${beer.description || ""}`.toLowerCase();
+    if (/gluten[\s-]?free|\bgf\b/.test(text)) {
+        return { glutenFree: true, contains: [],
+            note: "Labelled gluten-free — but always check the can, especially if you're coeliac." };
+    }
+    const contains = ["Barley (gluten)"];   // nearly all beer is malted barley
+    if (/\bwheat\b|weisse|weizen|witbier|blanche|\bhefe|white ipa|\bwit\b/.test(text)) contains.push("Wheat (gluten)");
+    if (/\boat(s|meal)?\b/.test(text)) contains.push("Oats (gluten)");
+    if (/milk stout|milkshake|lactose|pastry|flat white|\blatte\b|cappuccino|mocha|smoothie/.test(text)) contains.push("Milk (lactose)");
+    return { glutenFree: false, contains,
+        note: "Typical for this style — recipes vary, so always check the can." };
+}
+
+function allergenSectionHtml(beer) {
+    const a = allergenInfo(beer);
+    const body = a.glutenFree
+        ? `<p class="allergen-ok">✅ Brewed gluten-free</p>`
+        : `<div class="allergen-tags">${a.contains.map(x => `<span class="allergen-tag">${x}</span>`).join("")}</div>`;
+    return `
+        <details class="detail-section allergen-box">
+            <summary class="allergen-summary">Possible allergens</summary>
+            <div class="allergen-body">
+                ${body}
+                <p class="allergen-note">${a.note} This is a guide from the beer's style — it is <strong>not</strong> the official ingredient list.</p>
+            </div>
+        </details>`;
+}
+
 function openBeerDetail(id) {
 
     const beer = allBeers[id];
@@ -895,6 +929,8 @@ function openBeerDetail(id) {
                     <h2>Hops <span class="muted">— and what each brings</span></h2>
                     <div class="hop-profiles">${hopsHtml}</div>
                 </div>
+
+                ${allergenSectionHtml(beer)}
 
                 <div class="detail-section">
                     <h2>Where to buy</h2>

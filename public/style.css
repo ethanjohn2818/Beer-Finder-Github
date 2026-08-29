@@ -1166,6 +1166,51 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
 }
 .detail-section h2 { font-size: 1.15rem; margin: 0 0 12px; }
 
+/* Allergen disclosure — a pressable summary that reveals possible allergens */
+.allergen-box { padding: 0; overflow: hidden; }
+.allergen-summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 22px;
+    font-family: "Arial Black", "Arial Bold", Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.allergen-summary::-webkit-details-marker { display: none; }
+.allergen-summary::before {
+    content: "⚠";
+    color: var(--amber);
+    font-size: 1.1rem;
+}
+.allergen-summary::after {
+    content: "▸";
+    margin-left: auto;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+}
+.allergen-box[open] .allergen-summary::after { transform: rotate(90deg); }
+.allergen-body { padding: 0 22px 20px; }
+.allergen-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.allergen-tag {
+    background: var(--pale-ale);
+    color: var(--amber-dark);
+    border: 1px solid var(--amber-ale);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.allergen-ok { margin: 0; font-weight: 700; color: var(--amber-dark); }
+.allergen-note { margin: 12px 0 0; font-size: 0.82rem; color: var(--muted); }
+html[data-theme="dark"] .allergen-tag {
+    background: rgba(240, 140, 27, 0.14);
+    border-color: rgba(240, 140, 27, 0.40);
+    color: var(--amber-ale);
+}
+
 .hop-profiles {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
