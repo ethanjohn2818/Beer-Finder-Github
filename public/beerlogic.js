@@ -109,8 +109,22 @@ function packRank(label) {
 // present, so a shortened shop name still matches.
 const BREWERY_SUFFIX = new Set([
     "brewery", "brewing", "brew", "beer", "beers", "company", "co",
-    "ltd", "town", "ales", "the", "and"
+    "ltd", "town", "ales", "the", "and", "craft"
 ]);
+
+// Some shops (Asda in particular) sneak Cyrillic look-alike letters into
+// product names — e.g. "Proper Јоb" uses a Cyrillic Ј and о — which stops the
+// beer matching its real spelling. Map the common homoglyphs back to Latin.
+const HOMOGLYPHS = {
+    "а": "a", "е": "e", "о": "o", "р": "p", "с": "c", "у": "y", "х": "x",
+    "ѕ": "s", "і": "i", "ј": "j", "А": "A", "Е": "E", "О": "O", "Р": "P",
+    "С": "C", "У": "Y", "Х": "X", "Ј": "J", "В": "B", "К": "K", "М": "M",
+    "Н": "H", "Т": "T"
+};
+const HG_RE = new RegExp("[" + Object.keys(HOMOGLYPHS).join("") + "]", "g");
+function deHomoglyph(s) {
+    return String(s || "").replace(HG_RE, ch => HOMOGLYPHS[ch] || ch);
+}
 
 function breweryTokens(brewery) {
     return words(brewery).filter(w => !BREWERY_SUFFIX.has(w));
@@ -187,6 +201,10 @@ const NAME_ALIASES = [
     // "Grapefruit". Drop that descriptor so all the regular Elvis listings
     // reduce to {elvis, juice} and stack (the AF "Elvis" stays separate).
     [/\belvis juice grapefruit\b/gi, "Elvis Juice"],
+    [/\belvis juice citrus\b/gi, "Elvis Juice"],   // Asda's wording for the same beer
+    // Asda descriptor quirks for beers other shops name more plainly.
+    [/\bfar out cosmic\b/gi, "Far Out"],           // Northern Monk Far Out
+    [/\bjudicious juicy\b/gi, "Judicious"],         // Kirkstall Judicious
     // BrewDog Double Hazy Jane: two shops shorten it to just "Double Hazy".
     // Only rewrite when "Double Hazy" is the WHOLE tail of the name (the
     // standalone product), so we don't touch "Double Hazy <something> IPA"
@@ -208,7 +226,7 @@ function applyAliases(s) {
 }
 
 function cleanName(title) {
-    const s = String(title || "")
+    const s = deHomoglyph(String(title || ""))
         .replace(/\d+\s*[x×]\s*\d+\s*ml/gi, " ")
         .replace(/\d+\s*(ml|cl|l|litre|litres|pint|pints)\b/gi, " ")
         // Standalone pack counts a shop tacks on ("... x4", "4 x", "x 6"),
@@ -217,6 +235,9 @@ function cleanName(title) {
         .replace(/\b\d+\s*[x×]\b/gi, " ")
         .replace(/\b[x×]\s*\d+\b/gi, " ")
         .replace(/\b(case|crate|pack|cans?|bottles?|multipack)\b/gi, " ")
+        // Collapse an accidentally doubled word ("BrewDog BrewDog Hazy Jane",
+        // "Hobgoblin Gold Gold Ale") that a shop's title sometimes carries.
+        .replace(/\b([A-Za-z]{2,})\s+\1\b/gi, "$1")
         .replace(/\s+/g, " ")
         .replace(/[-–,]\s*$/, "")
         .trim();
@@ -255,6 +276,9 @@ const STYLE_SUFFIX = new Set([
     // "opulent" (NM Oath), "cooler" (Fierce). Strength/flavour words are still
     // KEPT elsewhere on purpose.
     "amber", "sour", "ice", "cream", "lolly", "cut", "bold", "opulent", "cooler",
+    // Descriptors Asda's wording adds that others don't: "english"/"indian"
+    // (India Pale Ale), "pint" (packaging), "everyday" (marketing).
+    "english", "indian", "pint", "everyday", "craft",
     // Generic "brewery" words some shops append and others don't
     // ("Vocation Brewery ..." vs "Vocation ...").
     "brewery", "brewing", "brewers", "brewco", "company", "ltd", "town", "ales",
@@ -304,13 +328,20 @@ const IDENTITY_NOISE = new Set([
 function identityWords(clean, brewery) {
     const words = nameTokens(clean);
     for (const bw of nameTokens(brewery)) words.delete(bw);
-    const identity = new Set([...words].filter(w => !STYLE_SUFFIX.has(w)));
-    if (identity.size) return identity;
-    // Nothing left after stripping style words — the name is only brewery +
-    // style/packaging (e.g. "Camden Pale Ale", "Innis & Gunn Lager Beer").
-    // Fall back to those words but drop pure noise, so one shop's "Lager Beer
-    // (Abv 4.6%)" and another's "Lager Beer 10x330ml" both reduce to {lager}.
-    return new Set([...words].filter(w => !IDENTITY_NOISE.has(w)));
+    let identity = new Set([...words].filter(w => !STYLE_SUFFIX.has(w)));
+    if (!identity.size) {
+        // Nothing left after stripping style words — the name is only brewery +
+        // style/packaging (e.g. "Camden Pale Ale", "Innis & Gunn Lager Beer").
+        // Fall back to those words but drop pure noise, so one shop's "Lager
+        // Beer (Abv 4.6%)" and another's "Lager Beer 10x330ml" both reduce to
+        // {lager}.
+        identity = new Set([...words].filter(w => !IDENTITY_NOISE.has(w)));
+    }
+    // An alcohol-free / low-alcohol version is its own beer. A bare "0.5%" /
+    // "0.0%" doesn't create an "af" token by itself, so tag it here to keep it
+    // a separate card from the full-strength one.
+    if (looksAlcoholFree(clean)) identity.add("af");
+    return identity;
 }
 
 // Does this beer read as alcohol-free? (name says AF / alcohol-free / 0.0 / 0.5)
