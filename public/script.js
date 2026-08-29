@@ -409,6 +409,27 @@ function showAlcoholFree() {
     applyFiltersAndRender();
 }
 
+// A beer counts as gluten-free only if it's actually labelled so — we never
+// infer it (a wrong "gluten-free" claim is a real safety issue).
+function isGlutenFree(beer) {
+    const text = `${beer.name} ${beer.style || ""} ${beer.description || ""}`.toLowerCase();
+    return /gluten[\s-]?free|\bgf\b/.test(text);
+}
+
+function showGlutenFree() {
+    document.getElementById("hopInput").value = "";
+    setActiveQuickAction("qa-gf");
+    currentResults = allBeers.filter(isGlutenFree);
+    if (!currentResults.length) {
+        document.getElementById("results").innerHTML =
+            "<p class='searching'>No gluten-free beers in the listings right now — " +
+            "we only show ones the shop labels gluten-free. Check back as the catalogue grows.</p>";
+        document.getElementById("results-count").textContent = "";
+        return;
+    }
+    applyFiltersAndRender();
+}
+
 function clearSearch() {
     document.getElementById("hopInput").value = "";
     currentResults = [];
@@ -840,7 +861,7 @@ function tagRow(tags) {
 // are realistically inferable for beer.
 function allergenInfo(beer) {
     const text = `${beer.name || ""} ${beer.style || ""} ${beer.description || ""}`.toLowerCase();
-    if (/gluten[\s-]?free|\bgf\b/.test(text)) {
+    if (isGlutenFree(beer)) {
         return { glutenFree: true, contains: [],
             note: "Labelled gluten-free — but always check the can, especially if you're coeliac." };
     }
@@ -1155,7 +1176,8 @@ const BEER_TYPES = [
     { label: "Sour",            match: b => /\bsour\b|gose|berliner|kriek/.test(typeText(b)) },
     { label: "Bitter & Amber",  match: b => /bitter|amber|golden ale|brown ale|\bmild\b|red ale/.test(typeText(b)) },
     { label: "Wheat & Weisse",  match: b => /wheat|weisse|hefe|witbier/.test(typeText(b)) },
-    { label: "Alcohol-free",    match: b => isAlcoholFree(b) }
+    { label: "Alcohol-free",    match: b => isAlcoholFree(b) },
+    { label: "Gluten-free",     match: b => isGlutenFree(b) }
 ];
 
 // Beer type is a multi-select checklist: tick as many as you like.
