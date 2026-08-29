@@ -244,6 +244,13 @@ function cleanName(title) {
     return applyAliases(s);
 }
 
+// Supermarket own-brand beers are brewed by third parties but sold only under
+// the shop's name. We don't track the real brewer, so label the "brewery" as an
+// exclusive range rather than pretending the shop brews it.
+function displayBrewery(name) {
+    return /^asda$/i.test(String(name || "").trim()) ? "Asda Exclusive" : name;
+}
+
 function deriveBrewery(name, breweries) {
     const lower = name.toLowerCase();
     const hit = breweries
@@ -464,7 +471,7 @@ function buildCatalogBeers(catalog, curated, knownBreweries = []) {
 
         beers.push({
             name,
-            brewery: match ? match.brewery : (g.brewery || deriveBrewery(name, breweries)),
+            brewery: displayBrewery(match ? match.brewery : (g.brewery || deriveBrewery(name, breweries))),
             style,
             abv,
             hops: match ? (match.hops || []) : [],
