@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------
-// User accounts (Supabase): sign in, "beers I've had",
+// User accounts (Supabase): sign in, "beers I like",
 // recommendations and the leaderboard.
 //
 // The Supabase client is loaded from the CDN in index.html. The keys below
@@ -133,7 +133,7 @@ async function saveUsername() {
 }
 
 
-// ---- "I've had this" -------------------------------------------
+// ---- "I liked this" --------------------------------------------
 
 function hasHad(beer) { return hadKeys.has(beerKey(beer)); }
 
@@ -158,14 +158,14 @@ async function toggleHad(beerId) {
     if (currentView() === "account") renderAccount();
 }
 
-// Update every "I've had this" button currently on screen.
+// Update every "I liked this" button currently on screen.
 function refreshHadButtons() {
     document.querySelectorAll("[data-had]").forEach(btn => {
         const beer = allBeers.find(b => b._id === Number(btn.dataset.had));
         if (!beer) return;
         const had = hasHad(beer);
         btn.classList.toggle("on", had);
-        btn.innerHTML = had ? "✅ You've had this" : "🍺 I've had this";
+        btn.innerHTML = had ? "✅ You liked this" : "🍺 I liked this";
     });
 }
 
@@ -173,11 +173,11 @@ function refreshHadButtons() {
 function hadButtonHtml(beer) {
     const had = hasHad(beer);
     return `<button class="had-btn${had ? " on" : ""}" data-had="${beer._id}"
-        onclick="toggleHad(${beer._id})">${had ? "✅ You've had this" : "🍺 I've had this"}</button>`;
+        onclick="toggleHad(${beer._id})">${had ? "✅ You liked this" : "🍺 I liked this"}</button>`;
 }
 
 
-// ---- Recommendations (from what you've had) --------------------
+// ---- Recommendations (from what you like) ----------------------
 
 function myHadBeers() {
     return allBeers.filter(b => hadKeys.has(beerKey(b)));
@@ -188,7 +188,7 @@ function recommendBeers(limit) {
     const had = myHadBeers();
     if (!had.length) return [];
 
-    // Count how often each hop / flavour appears in beers you've had.
+    // Count how often each hop / flavour appears in beers you like.
     const weight = {};
     const bump = (arr) => (arr || []).forEach(x => {
         const k = x.toLowerCase(); weight[k] = (weight[k] || 0) + 1;
@@ -243,7 +243,7 @@ function renderAccount() {
         el.innerHTML = `
             <div class="auth-card">
                 <h2>Sign in / create an account</h2>
-                <p class="muted">Track the beers you've had, get recommendations, and climb the leaderboard.</p>
+                <p class="muted">Track the beers you like, get recommendations, and climb the leaderboard.</p>
                 <input id="auth-email" type="email" placeholder="you@email.com" autocomplete="email">
                 <button class="primary-btn" onclick="signInWithEmail()">✉️ Email me a login link</button>
                 <div class="auth-or"><span>or</span></div>
@@ -273,10 +273,10 @@ function renderAccount() {
             ? `<div id="account-recs">${recs.map((b, i) => renderCard({ beer: b, offers: b.offers }, 90000 + i)).join("")}</div>`
             : `<p class="muted">Tick a few beers as "had" and we'll recommend more based on their hops and flavours.</p>`}
 
-        <h3>Beers you've had</h3>
+        <h3>Beers you like</h3>
         ${mine.length
             ? `<ul class="had-list">${mine.map(b => `<li>${b.name} <span class="muted">— ${b.brewery || ""}</span></li>`).join("")}</ul>`
-            : `<p class="muted">None yet. Open a beer and tap "I've had this".</p>`}`;
+            : `<p class="muted">None yet. Open a beer and tap "I liked this".</p>`}`;
 }
 
 async function renderLeaderboard() {
@@ -339,7 +339,7 @@ async function renderLeaderboard() {
                         <span class="lb-count">${x.ticks} 🍺</span>
                     </li>`).join("")}
                </ol>`
-            : `<p class="muted">No beers ticked yet — be the first! Open a beer and tap "I've had this".</p>`}`;
+            : `<p class="muted">No beers ticked yet — be the first! Open a beer and tap "I liked this".</p>`}`;
 }
 
 // Boot once the page + Supabase client are ready.

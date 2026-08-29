@@ -52,7 +52,8 @@ function updateThemeIcon() {
     const btn = document.getElementById("theme-toggle");
     if (!btn) return;
     const dark = document.documentElement.getAttribute("data-theme") === "dark";
-    btn.textContent = dark ? "☀️" : "🌙";
+    // Show the mode you'll switch TO, in plain words.
+    btn.textContent = dark ? "☀ Light mode" : "☾ Dark mode";
     btn.title = dark ? "Switch to light mode" : "Switch to dark mode";
 }
 
@@ -104,28 +105,28 @@ const PATH_VIEWS = Object.fromEntries(
 // Per-view <title> + meta description, so each URL reads as its own page to
 // Google (the main SEO payoff of having separate URLs).
 const VIEW_META = {
-    search:  ["Beer Finder — Find craft beer by hop, brewery & flavour | UK supermarkets",
+    search:  ["MyBeerFinder — Find craft beer by hop, brewery & flavour | UK supermarkets",
               "Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets."],
-    find:    ["Find Your Beer by flavour | Beer Finder",
+    find:    ["Find Your Flavour | MyBeerFinder",
               "Pick the flavours you like and discover craft beers that match, with where to buy them."],
-    hops:    ["Hop flavour profiles | Beer Finder",
+    hops:    ["Hop flavour profiles | MyBeerFinder",
               "Explore the hops behind UK craft beer and what each one tastes like — citrus, pine, tropical and more."],
-    brewery: ["Breweries & where they're based | Beer Finder",
+    brewery: ["Breweries & where they're based | MyBeerFinder",
               "Browse craft breweries stocked at UK supermarkets, where each is based, and the beers we found."],
-    partners: ["Partner breweries | Beer Finder",
-              "The independent breweries we partner with — coming soon to Beer Finder."],
-    gifts:   ["Beer gifts & glassware | Beer Finder",
+    partners: ["Partner breweries | MyBeerFinder",
+              "The independent breweries we partner with — coming soon to MyBeerFinder."],
+    gifts:   ["Beer gifts & glassware | MyBeerFinder",
               "Craft beer gift ideas — glassware, merch and gift sets for beer lovers."],
-    giftshop: ["Gift shop (coming soon) | Beer Finder",
+    giftshop: ["Gift shop (coming soon) | MyBeerFinder",
               "Our beer gift shop — glassware, gift sets and merch — is coming soon."],
-    about:   ["About Beer Finder — how it works",
-              "How Beer Finder helps you discover craft beer and what it tastes like, right down to the hops."],
-    contact: ["Contact | Beer Finder",
-              "Get in touch with Beer Finder."],
-    account: ["Your account | Beer Finder",
-              "Track the beers you've had, get recommendations and climb the leaderboard."],
-    leaderboard: ["Leaderboard | Beer Finder",
-              "See who's tried the most craft beers on Beer Finder."]
+    about:   ["About MyBeerFinder — how it works",
+              "How MyBeerFinder helps you discover craft beer and what it tastes like, right down to the hops."],
+    contact: ["Contact | MyBeerFinder",
+              "Get in touch with MyBeerFinder."],
+    account: ["Your account | MyBeerFinder",
+              "Track the beers you like, get recommendations and climb the leaderboard."],
+    leaderboard: ["Leaderboard | MyBeerFinder",
+              "See who's tried the most craft beers on MyBeerFinder."]
 };
 
 function applyViewMeta(name) {
@@ -273,9 +274,10 @@ async function loadBeerData() {
         renderFlavourChips();
         renderGifts();
 
-        // Populate the homepage with every beer straight away, so the site
-        // never looks empty before you've searched.
-        showAllBeers();
+        // Don't preload the whole catalogue — show a prompt and let the user
+        // choose what to load (search, Show All Beers, etc.).
+        const results = document.getElementById("results");
+        if (results) results.innerHTML = promptEmptyState();
 
         // Then show whichever view the URL asks for (so a deep link or a
         // refresh on /hops, /brewery, etc. opens that page, not the homepage).
@@ -348,13 +350,46 @@ function searchBeers() {
         return;
     }
     currentResults = allBeers.filter(beer => beerMatchesQuery(beer, query));
+    setActiveQuickAction(null);   // a typed search isn't one of the "modes"
     applyFiltersAndRender();
 }
 
-// Debug/browse helper: show every beer we have.
+// Highlight whichever quick-action "mode" is currently showing (or none).
+function setActiveQuickAction(id) {
+    document.querySelectorAll(".quick-actions .qa-btn").forEach(b =>
+        b.classList.toggle("active", !!id && b.id === id));
+}
+
+// Show every (full-strength) beer — deliberately EXCLUDES alcohol-free, which
+// has its own button.
 function showAllBeers() {
     document.getElementById("hopInput").value = "";
-    currentResults = allBeers.slice();
+    currentResults = allBeers.filter(b => !isAlcoholFree(b));
+    setActiveQuickAction("qa-all");
+    applyFiltersAndRender();
+}
+
+// Independent / partner breweries. PARTNER_BREWERIES is empty for now — when a
+// brewery joins the Partners page, add its name here (or to the brewery's
+// "independent" flag) and its beers start showing up under this button.
+const PARTNER_BREWERIES = new Set([
+    // e.g. "hopvale brewing co"  (lower-case, matched against beer.brewery)
+]);
+function isIndependentBrewery(beer) {
+    return PARTNER_BREWERIES.has(String(beer.brewery || "").trim().toLowerCase());
+}
+function showIndependent() {
+    document.getElementById("hopInput").value = "";
+    setActiveQuickAction("qa-independent");
+    currentResults = allBeers.filter(isIndependentBrewery);
+    if (!currentResults.length) {
+        document.getElementById("results").innerHTML =
+            "<p class='searching'>We're signing up our first independent breweries — " +
+            "their beers will appear here soon. See who we're talking to on the " +
+            "<button class='link-btn' data-view='partners'>Partners</button> page.</p>";
+        document.getElementById("results-count").textContent = "";
+        return;
+    }
     applyFiltersAndRender();
 }
 
@@ -370,14 +405,22 @@ function isAlcoholFree(beer) {
 function showAlcoholFree() {
     document.getElementById("hopInput").value = "";
     currentResults = allBeers.filter(isAlcoholFree);
+    setActiveQuickAction("qa-af");
     applyFiltersAndRender();
 }
 
 function clearSearch() {
     document.getElementById("hopInput").value = "";
     currentResults = [];
-    document.getElementById("results").innerHTML = "";
+    setActiveQuickAction(null);
+    document.getElementById("results").innerHTML = promptEmptyState();
     document.getElementById("results-count").textContent = "";
+}
+
+// The friendly "nothing shown yet" prompt used on load and after Clear.
+function promptEmptyState() {
+    return "<p class='searching'>Search for a beer, hop or brewery above — " +
+        "or tap <strong>Show All Beers</strong> to browse everything.</p>";
 }
 
 
@@ -1100,7 +1143,7 @@ function checkedTypes() {
 
 
 // ---------------------------------------------------------------
-// Find your beer — interactive flavour chips (tap to toggle)
+// Find your flavour — interactive flavour chips (tap to toggle)
 // ---------------------------------------------------------------
 
 const FLAVOUR_CATEGORIES = [
@@ -1244,7 +1287,7 @@ function sendMessage(event) {
     const email = document.getElementById("c-email").value.trim();
     const message = document.getElementById("c-message").value.trim();
 
-    const subject = `Beer Finder enquiry from ${name || "a visitor"}`;
+    const subject = `MyBeerFinder enquiry from ${name || "a visitor"}`;
     const body =
         `${message}\n\n— ${name}${email ? " (" + email + ")" : ""}`;
 

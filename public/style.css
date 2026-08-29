@@ -590,6 +590,30 @@ main {
     text-decoration: none;
 }
 
+/* Branded footer: pin icon + wordmark + tagline */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.footer-icon { width: 44px; height: 44px; flex: 0 0 auto; display: block; }
+.footer-icon-dark { display: none; }
+html[data-theme="dark"] .footer-icon-light { display: none; }
+html[data-theme="dark"] .footer-icon-dark { display: block; }
+.footer-brand-text { text-align: left; line-height: 1.2; }
+.footer-word {
+    display: block;
+    font-family: "Arial Black", "Arial Bold", Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+}
+.footer-tagline { display: block; font-size: 0.82rem; color: var(--muted); }
+.footer-links { margin: 0; }
+
 
 /* ---------------------------------------------------------------
    Responsive
@@ -843,7 +867,13 @@ main {
 
 .qa-btn:hover { transform: translateY(-2px); border-color: var(--amber); }
 
-.qa-af { background: #ecfdf5; border-color: #a7f3d0; }
+/* The active "mode" button (Show all / Alcohol-free / Independent) */
+.qa-btn.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: #fff;
+}
+.qa-btn.active:hover { border-color: var(--amber); }
 .qa-clear { color: var(--muted); }
 
 
@@ -1340,7 +1370,7 @@ html[data-theme="dark"] .store-btn.active {
     color: #fff;
 }
 
-html[data-theme="dark"] .qa-af { background: #0f2e22; border-color: #1f5c46; }
+html[data-theme="dark"] .qa-btn.active { background: var(--amber); border-color: var(--amber); color: #fff; }
 
 html[data-theme="dark"] .search-bar input,
 html[data-theme="dark"] .contact-form input,
@@ -1374,25 +1404,26 @@ html[data-theme="dark"] .footer { box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.5); }
     right: 20px;
     bottom: 20px;
     z-index: 900;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
+    padding: 10px 16px;
+    border-radius: 999px;
     border: 1px solid var(--border);
     background: var(--card);
     color: var(--ink);
-    font-size: 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
     line-height: 1;
     cursor: pointer;
     box-shadow: var(--shadow-md);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .theme-toggle:hover {
-    transform: translateY(-3px) scale(1.05);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
+    border-color: var(--amber);
 }
 
 @media (max-width: 560px) {
-    .theme-toggle { right: 14px; bottom: 14px; width: 46px; height: 46px; font-size: 1.3rem; }
+    .theme-toggle { right: 14px; bottom: 14px; padding: 9px 14px; font-size: 0.85rem; }
 }
 
 
