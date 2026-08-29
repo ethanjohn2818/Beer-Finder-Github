@@ -30,10 +30,10 @@
     </script>
 
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260829j">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260829j">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260829j">
-    <link rel="stylesheet" href="style.css?v=20260829j">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260829k">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260829k">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260829k">
+    <link rel="stylesheet" href="style.css?v=20260829k">
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6022289335915022"
@@ -45,8 +45,8 @@
     <header class="nav">
         <div class="nav-left">
             <a class="nav-brand" href="/">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260829j" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829j" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260829k" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829k" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
         </div>
@@ -56,6 +56,19 @@
     <main>
         <h1>The MyBeerFinder Blog 📝</h1>
         <p class="view-intro">Guides, tasting notes and hop know-how — to help you find your next favourite craft beer.</p>
+
+        <div class="blog-controls">
+            <input type="search" id="blogSearch" class="blog-search"
+                   placeholder="Search the blog — try &ldquo;citra&rdquo;, &ldquo;lactose&rdquo;, &ldquo;hazy&rdquo;&hellip;"
+                   oninput="filterBlog()" aria-label="Search the blog">
+            <div class="blog-filters" role="group" aria-label="Filter by category">
+                <button type="button" class="blog-filter active" data-cat="all" onclick="setBlogCat('all', this)">All</button>
+                <button type="button" class="blog-filter" data-cat="hop" onclick="setBlogCat('hop', this)">Hop guides</button>
+                <button type="button" class="blog-filter" data-cat="style" onclick="setBlogCat('style', this)">Style guides</button>
+                <button type="button" class="blog-filter" data-cat="good" onclick="setBlogCat('good', this)">Good to know</button>
+            </div>
+        </div>
+        <p id="blog-noresults" class="searching" hidden>No posts match — try another word.</p>
 
         <!--
           HOW TO ADD A POST
@@ -69,279 +82,279 @@
         -->
         <div class="blog-list">
 
-            <a class="blog-card" href="/blog/citra-hops-guide">
-                <span class="blog-card-date">29 August 2026</span>
+            <a class="blog-card" href="/blog/citra-hops-guide" data-cat="hop" data-terms="citra hop citrus grapefruit tropical lime hazy ipa">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">29 August 2026</span></span>
                 <h2>Citra hops: the flavour that built modern IPA</h2>
                 <p>Grapefruit, lime and tropical fruit — meet the single most important hop in modern craft beer, and how to find beers built on it.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/mosaic-hops-guide">
-                <span class="blog-card-date">28 August 2026</span>
+            <a class="blog-card" href="/blog/mosaic-hops-guide" data-cat="hop" data-terms="mosaic hop tropical blueberry berry pine dank">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">28 August 2026</span></span>
                 <h2>Mosaic hops explained: berries, tropics and a hint of pine</h2>
                 <p>Complex, dank and fruity all at once — a guide to the hop brewers reach for when they want a beer with depth.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-hazy-ipa">
-                <span class="blog-card-date">27 August 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-hazy-ipa" data-cat="style" data-terms="hazy neipa new england juicy ipa cloudy oats unfiltered tropical">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">27 August 2026</span></span>
                 <h2>What is a hazy IPA? The juicy, cloudy beer explained</h2>
                 <p>Cloudy, soft and bursting with tropical fruit — everything you need to know about the style that took over craft beer.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-west-coast-ipa">
-                <span class="blog-card-date">26 August 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-west-coast-ipa" data-cat="style" data-terms="west coast ipa clear bitter pine resin dry grapefruit simcoe">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">26 August 2026</span></span>
                 <h2>What is a West Coast IPA? The original, done properly</h2>
                 <p>Clear, crisp and properly bitter — a guide to the classic American IPA and how it differs from the hazy stuff.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/stout-vs-porter">
-                <span class="blog-card-date">25 August 2026</span>
+            <a class="blog-card" href="/blog/stout-vs-porter" data-cat="style" data-terms="stout porter dark roasted coffee chocolate milk oatmeal imperial guinness">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">25 August 2026</span></span>
                 <h2>Stout vs porter: what's the actual difference?</h2>
                 <p>Two dark beers, one age-old argument. Here's the honest answer to how stout and porter really differ.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/gluten-free-beer-guide">
-                <span class="blog-card-date">24 August 2026</span>
+            <a class="blog-card" href="/blog/gluten-free-beer-guide" data-cat="good" data-terms="gluten free coeliac celiac gluten removed reduced barley wheat allergen">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">24 August 2026</span></span>
                 <h2>A beginner's guide to gluten-free beer</h2>
                 <p>Coeliac or just cutting down? How gluten-free beer is made, whether it tastes any good, and how to find it.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/alcohol-free-beer-guide">
-                <span class="blog-card-date">23 August 2026</span>
+            <a class="blog-card" href="/blog/alcohol-free-beer-guide" data-cat="good" data-terms="alcohol free 0.0 non alcoholic low alcohol de-alcoholised dry january">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">23 August 2026</span></span>
                 <h2>Alcohol-free beer has got good: where to start</h2>
                 <p>The 0.0% shelf has quietly become brilliant. How alcohol-free beer is made, and the ones worth trying.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/how-to-read-a-craft-beer-can">
-                <span class="blog-card-date">22 August 2026</span>
+            <a class="blog-card" href="/blog/how-to-read-a-craft-beer-can" data-cat="good" data-terms="abv ibu bitterness strength date label style hops reading can">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">22 August 2026</span></span>
                 <h2>How to read a craft beer can</h2>
                 <p>ABV, IBU, hop names, best-before dates — a quick guide to decoding a beer can before it's in your basket.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/session-beer-guide">
-                <span class="blog-card-date">21 August 2026</span>
+            <a class="blog-card" href="/blog/session-beer-guide" data-cat="style" data-terms="session low abv sessionable pale ale table beer light">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">21 August 2026</span></span>
                 <h2>Session beers: big flavour, low ABV</h2>
                 <p>All the flavour, half the strength. Why session beers are booming and which ones are worth your fridge space.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/beer-and-food-pairing-basics">
-                <span class="blog-card-date">20 August 2026</span>
+            <a class="blog-card" href="/blog/beer-and-food-pairing-basics" data-cat="good" data-terms="food pairing curry cheese steak bbq chocolate pairing match">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">20 August 2026</span></span>
                 <h2>Beer and food pairing for beginners</h2>
                 <p>Forget wine — beer is the better food match. A few simple rules for pairing pints with everything from curry to cheese.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/how-to-use-beer-finder">
-                <span class="blog-card-date">22 August 2026</span>
+            <a class="blog-card" href="/blog/how-to-use-beer-finder" data-cat="good" data-terms="beginner tutorial search filter compare account how to">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">22 August 2026</span></span>
                 <h2>How to use MyBeerFinder: a beginner's guide</h2>
                 <p>New to craft beer? A step-by-step walk through every feature of the site — searching, filtering, comparing prices, finding beers by flavour and tracking what you've tried.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-do-hops-actually-taste-like">
-                <span class="blog-card-date">22 August 2026</span>
+            <a class="blog-card" href="/blog/what-do-hops-actually-taste-like" data-cat="hop" data-terms="hops aroma bitterness dry hopping citra mosaic galaxy">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">22 August 2026</span></span>
                 <h2>What do hops actually taste like?</h2>
                 <p>Citra, Mosaic, Galaxy — the names are everywhere on a craft-beer can, but what do they mean for your pint? A plain-English guide to the flavours behind the hops.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/galaxy-hops-guide">
-                <span class="blog-card-date">19 August 2026</span>
+            <a class="blog-card" href="/blog/galaxy-hops-guide" data-cat="hop" data-terms="galaxy hop passionfruit peach tropical australian australia">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">19 August 2026</span></span>
                 <h2>Galaxy hops: the passionfruit bomb from Australia</h2>
                 <p>One of the loudest, most tropical hops in the world. A guide to Australia's Galaxy and the juicy beers built on it.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/simcoe-hops-guide">
-                <span class="blog-card-date">18 August 2026</span>
+            <a class="blog-card" href="/blog/simcoe-hops-guide" data-cat="hop" data-terms="simcoe hop pine resin grapefruit dank west coast">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">18 August 2026</span></span>
                 <h2>Simcoe hops: pine, grapefruit and the West Coast sound</h2>
                 <p>Pine, resin and grapefruit — the hop that defines the classic West Coast IPA, explained.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/amarillo-hops-guide">
-                <span class="blog-card-date">17 August 2026</span>
+            <a class="blog-card" href="/blog/amarillo-hops-guide" data-cat="hop" data-terms="amarillo hop orange floral marmalade citrus pale ale">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">17 August 2026</span></span>
                 <h2>Amarillo hops: orange, floral and easy to love</h2>
                 <p>Soft, orangey and floral — a friendly American hop that makes some of the most approachable pale ales around.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/nelson-sauvin-hops-guide">
-                <span class="blog-card-date">16 August 2026</span>
+            <a class="blog-card" href="/blog/nelson-sauvin-hops-guide" data-cat="hop" data-terms="nelson sauvin hop white wine gooseberry grape new zealand sauvignon">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">16 August 2026</span></span>
                 <h2>Nelson Sauvin hops: white wine in a beer</h2>
                 <p>Gooseberry and white wine — meet the New Zealand oddball you'll never forget once you've tried it.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/cascade-hops-guide">
-                <span class="blog-card-date">15 August 2026</span>
+            <a class="blog-card" href="/blog/cascade-hops-guide" data-cat="hop" data-terms="cascade hop grapefruit floral american pale ale sierra nevada">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">15 August 2026</span></span>
                 <h2>Cascade hops: the hop that started American craft beer</h2>
                 <p>Grapefruit and flowers — the humble hop that kicked off the entire American craft beer revolution.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/idaho-7-hops-guide">
-                <span class="blog-card-date">14 August 2026</span>
+            <a class="blog-card" href="/blog/idaho-7-hops-guide" data-cat="hop" data-terms="idaho 7 hop tropical pine black tea apricot mango citrus">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">14 August 2026</span></span>
                 <h2>Idaho 7 hops: tropical fruit with a piney twist</h2>
                 <p>Tropical fruit meets pine and black tea — a guide to one of the most exciting modern American hops.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/centennial-hops-guide">
-                <span class="blog-card-date">13 August 2026</span>
+            <a class="blog-card" href="/blog/centennial-hops-guide" data-cat="hop" data-terms="centennial hop citrus lemon grapefruit floral super cascade ipa">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">13 August 2026</span></span>
                 <h2>Centennial hops: the 'super Cascade'</h2>
                 <p>Bigger and bolder than Cascade — a guide to the citrus-and-floral hop at the heart of American IPA.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/sabro-hops-guide">
-                <span class="blog-card-date">12 August 2026</span>
+            <a class="blog-card" href="/blog/sabro-hops-guide" data-cat="hop" data-terms="sabro hop coconut tangerine tropical stone fruit cedar">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">12 August 2026</span></span>
                 <h2>Sabro hops: coconut, tangerine and something different</h2>
                 <p>Coconut and tangerine in a beer? A guide to Sabro, one of the most unusual and divisive modern hops.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/english-hops-guide">
-                <span class="blog-card-date">11 August 2026</span>
+            <a class="blog-card" href="/blog/english-hops-guide" data-cat="hop" data-terms="english hops fuggles goldings east kent challenger bramling cross bitter earthy">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">11 August 2026</span></span>
                 <h2>English hops explained: Fuggles, Goldings and the classic pint</h2>
                 <p>Earthy, herbal and gently floral — the traditional English hops behind every proper pint of bitter.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/new-zealand-hops-guide">
-                <span class="blog-card-date">10 August 2026</span>
+            <a class="blog-card" href="/blog/new-zealand-hops-guide" data-cat="hop" data-terms="new zealand nz hops motueka riwaka nectaron nelson tropical lime">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-hop">Hop guide</span><span class="blog-card-date">10 August 2026</span></span>
                 <h2>New Zealand hops: the southern hemisphere's fruit basket</h2>
                 <p>Lime, tropical fruit and white wine — why hops grown at the bottom of the world taste so distinctive.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
-            <a class="blog-card" href="/blog/what-is-a-pale-ale">
-                <span class="blog-card-date">9 August 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-pale-ale" data-cat="style" data-terms="pale ale hoppy balanced session gateway apa citrus">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">9 August 2026</span></span>
                 <h2>What is a pale ale? The gateway to craft beer</h2>
                 <p>Hoppy but not too much, easy but not boring — why pale ale is the perfect first step into craft beer.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-craft-lager">
-                <span class="blog-card-date">7 August 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-craft-lager" data-cat="style" data-terms="lager pilsner pils helles crisp clean bottom fermenting noble hops">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">7 August 2026</span></span>
                 <h2>Craft lager and pilsner: crisp, clean and underrated</h2>
                 <p>Not all lager is the yellow fizzy stuff. A guide to craft lager, pilsner and helles — and why they're booming.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-sour-beer">
-                <span class="blog-card-date">5 August 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-sour-beer" data-cat="style" data-terms="sour tart lactobacillus gose berliner weisse lambic fruited smoothie">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">5 August 2026</span></span>
                 <h2>Sour beer for beginners: tart, tangy and surprisingly moreish</h2>
                 <p>Deliberately tart and refreshing — a beginner's guide to sour beer and how to find one you'll actually love.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-gose">
-                <span class="blog-card-date">3 August 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-gose" data-cat="style" data-terms="gose salt coriander sour wheat german refreshing salty">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">3 August 2026</span></span>
                 <h2>What is a gose? The salty sour you didn't know you'd love</h2>
                 <p>Salty, tart and wonderfully refreshing — the story of gose, the German oddity that craft beer rediscovered.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-saison">
-                <span class="blog-card-date">1 August 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-saison" data-cat="style" data-terms="saison farmhouse belgian yeast dry spicy peppery seasonal">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">1 August 2026</span></span>
                 <h2>What is a saison? The farmhouse ale explained</h2>
                 <p>Dry, spicy and endlessly food-friendly — a guide to the Belgian farmhouse ale that brewers love to make.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/belgian-beer-styles">
-                <span class="blog-card-date">29 July 2026</span>
+            <a class="blog-card" href="/blog/belgian-beer-styles" data-cat="style" data-terms="belgian dubbel tripel quadrupel quad blonde trappist abbey strong yeast">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">29 July 2026</span></span>
                 <h2>Belgian beer styles explained: dubbel, tripel and quad</h2>
                 <p>Strong, fruity and dangerously smooth — a guide to Belgium's legendary dubbels, tripels and quads.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-wheat-beer">
-                <span class="blog-card-date">27 July 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-wheat-beer" data-cat="style" data-terms="wheat beer witbier hefeweizen banana clove orange coriander cloudy weissbier">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">27 July 2026</span></span>
                 <h2>Wheat beer explained: witbier, hefeweizen and the summer classic</h2>
                 <p>Cloudy, soft and summery — the difference between a German hefeweizen and a Belgian witbier, explained.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-red-ale">
-                <span class="blog-card-date">25 July 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-red-ale" data-cat="style" data-terms="red ale amber ale caramel toffee malty irish red biscuit">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">25 July 2026</span></span>
                 <h2>Red and amber ales: the malty middle ground</h2>
                 <p>Caramel, toffee and balance — a guide to red and amber ales, the underrated malty middle ground.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-barley-wine">
-                <span class="blog-card-date">23 July 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-barley-wine" data-cat="style" data-terms="barley wine strong sipping toffee dried fruit ageing cellar imperial">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">23 July 2026</span></span>
                 <h2>What is a barley wine? Beer's biggest, boldest style</h2>
                 <p>Strong, rich and made for sipping — a guide to barley wine, the grandest old style in beer.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-black-ipa">
-                <span class="blog-card-date">21 July 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-black-ipa" data-cat="style" data-terms="black ipa cascadian dark ale hoppy roasted debittered dark malt">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">21 July 2026</span></span>
                 <h2>What is a black IPA? Dark colour, hoppy soul</h2>
                 <p>Looks like a stout, drinks like an IPA — the clever contradiction of the black IPA, explained.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-is-a-cold-ipa">
-                <span class="blog-card-date">19 July 2026</span>
+            <a class="blog-card" href="/blog/what-is-a-cold-ipa" data-cat="style" data-terms="cold ipa lager yeast crisp dry clean hoppy ipl hybrid">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-style">Style guide</span><span class="blog-card-date">19 July 2026</span></span>
                 <h2>What is a cold IPA? The newest twist on the IPA</h2>
                 <p>An IPA brewed like a lager — the newest style on the shelf, explained, and why it's so crushable.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
-            <a class="blog-card" href="/blog/how-to-store-beer">
-                <span class="blog-card-date">17 July 2026</span>
+            <a class="blog-card" href="/blog/how-to-store-beer" data-cat="good" data-terms="store storage fridge cold dark light skunk upright shelf life fresh">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">17 July 2026</span></span>
                 <h2>How to store beer properly (and why it matters)</h2>
                 <p>Cold, dark and upright — the simple rules for storing beer so it tastes as good as the brewer intended.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/beer-serving-temperature">
-                <span class="blog-card-date">15 July 2026</span>
+            <a class="blog-card" href="/blog/beer-serving-temperature" data-cat="good" data-terms="serving temperature cold warm celsius fridge cellar how cold">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">15 July 2026</span></span>
                 <h2>What temperature should you serve beer?</h2>
                 <p>Ice-cold isn't always best. A simple guide to serving each beer style at the temperature that unlocks its flavour.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/beer-glassware-guide">
-                <span class="blog-card-date">13 July 2026</span>
+            <a class="blog-card" href="/blog/beer-glassware-guide" data-cat="good" data-terms="glass glassware tulip teku pint snifter weizen pour aroma">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">13 July 2026</span></span>
                 <h2>Does beer glassware actually matter?</h2>
                 <p>Tulip, pint or Teku? A no-nonsense guide to beer glassware and whether the shape really changes the drink.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/what-does-dry-hopped-mean">
-                <span class="blog-card-date">11 July 2026</span>
+            <a class="blog-card" href="/blog/what-does-dry-hopped-mean" data-cat="good" data-terms="dry hopped ddh double dry hopping aroma technique brewing">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">11 July 2026</span></span>
                 <h2>What does 'dry-hopped' mean?</h2>
                 <p>The secret behind every juicy IPA. Dry-hopping explained in plain English — no brewing degree required.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/is-beer-vegan">
-                <span class="blog-card-date">9 July 2026</span>
+            <a class="blog-card" href="/blog/is-beer-vegan" data-cat="good" data-terms="vegan vegetarian isinglass finings gelatin fish barnivore filtered">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">9 July 2026</span></span>
                 <h2>Is beer vegan? The finings question explained</h2>
                 <p>Beer is just grain, water, hops and yeast... isn't it? The surprising reason some beer isn't vegan.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/best-beers-for-beginners">
-                <span class="blog-card-date">7 July 2026</span>
+            <a class="blog-card" href="/blog/best-beers-for-beginners" data-cat="good" data-terms="beginner start new craft beer easy first introduction gateway">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">7 July 2026</span></span>
                 <h2>The best beers for beginners: where to start with craft</h2>
                 <p>New to craft beer and don't know where to start? A friendly, jargon-free roadmap to your first great beers.</p>
                 <span class="blog-card-more">Read more →</span>
             </a>
 
-            <a class="blog-card" href="/blog/craft-beer-on-a-budget">
-                <span class="blog-card-date">5 July 2026</span>
+            <a class="blog-card" href="/blog/craft-beer-on-a-budget" data-cat="good" data-terms="budget cheap value price compare supermarket own brand multipack">
+                <span class="blog-card-meta"><span class="blog-card-cat cat-good">Good to know</span><span class="blog-card-date">5 July 2026</span></span>
                 <h2>Craft beer on a budget: how to drink well for less</h2>
                 <p>Great beer doesn't have to be expensive. Smart ways to drink well for less at the supermarket.</p>
                 <span class="blog-card-more">Read more →</span>
@@ -351,8 +364,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260829j" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829j" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260829k" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829k" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -368,6 +381,35 @@
             <a href="/terms">Terms</a>
         </p>
     </footer>
+
+    <script>
+        // Blog category filter + full-text-ish search (matches title, summary
+        // and each post's beer-term keywords). No dependencies.
+        var blogCat = "all";
+        function setBlogCat(cat, btn) {
+            blogCat = cat;
+            var btns = document.querySelectorAll(".blog-filter");
+            for (var i = 0; i < btns.length; i++) btns[i].classList.toggle("active", btns[i] === btn);
+            filterBlog();
+        }
+        function filterBlog() {
+            var input = document.getElementById("blogSearch");
+            var q = (input && input.value || "").trim().toLowerCase();
+            var cards = document.querySelectorAll(".blog-card");
+            var shown = 0;
+            for (var i = 0; i < cards.length; i++) {
+                var card = cards[i];
+                var okCat = blogCat === "all" || card.getAttribute("data-cat") === blogCat;
+                var hay = (card.textContent + " " + (card.getAttribute("data-terms") || "")).toLowerCase();
+                var okQ = !q || hay.indexOf(q) !== -1;
+                var show = okCat && okQ;
+                card.hidden = !show;
+                if (show) shown++;
+            }
+            var nr = document.getElementById("blog-noresults");
+            if (nr) nr.hidden = shown > 0;
+        }
+    </script>
 
 </body>
 </html>

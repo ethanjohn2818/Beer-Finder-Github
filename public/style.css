@@ -1910,6 +1910,68 @@ html[data-theme="dark"] .lb-count { color: var(--amber); }
 }
 .blog-card-more { font-weight: 800; color: var(--amber-dark); }
 html[data-theme="dark"] .blog-card-more { color: var(--amber); }
+.blog-card[hidden] { display: none !important; }
+
+/* Blog search + category filter */
+.blog-controls {
+    max-width: 760px;
+    margin: 0 auto 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.blog-search {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.blog-search:focus {
+    border-color: var(--amber);
+    box-shadow: 0 0 0 3px rgba(240, 140, 27, 0.22);
+}
+.blog-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.blog-filter {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.blog-filter:hover { border-color: var(--amber); }
+.blog-filter.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: #fff;
+}
+
+/* Category badge on each card */
+.blog-card-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.blog-card-cat {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border-radius: 999px;
+}
+/* On-brand badges: shades of the palette, distinguished mainly by the label */
+.blog-card-cat.cat-hop   { background: var(--pale-ale);   color: var(--amber-dark); }
+.blog-card-cat.cat-style { background: var(--stout);      color: #fff; }
+.blog-card-cat.cat-good  { background: var(--blonde-ale); color: var(--amber-dark); border: 1px solid var(--pale-ale); }
+html[data-theme="dark"] .blog-card-cat.cat-hop   { background: rgba(240,140,27,0.16); color: var(--amber-ale); }
+html[data-theme="dark"] .blog-card-cat.cat-style { background: #3a3c49; color: #fff; }
+html[data-theme="dark"] .blog-card-cat.cat-good  { background: rgba(240,140,27,0.10); color: var(--amber-ale); border-color: rgba(240,140,27,0.3); }
 
 .blog-post {
     max-width: 720px;
