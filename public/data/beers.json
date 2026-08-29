@@ -6048,5 +6048,79 @@
       "Spice",
       "Dark Fruit"
     ]
+  },
+  {
+    "name": "Salt Vermont XPA Mosaic",
+    "brewery": "Salt",
+    "style": "Extra Pale Ale",
+    "abv": 5.0,
+    "hops": [
+      "Mosaic"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Tropical",
+      "Berry",
+      "Citrus"
+    ]
+  },
+  {
+    "name": "Wye Valley Butty Bach",
+    "brewery": "Wye Valley",
+    "style": "Premium Ale",
+    "abv": 4.5,
+    "hops": [
+      "Fuggles",
+      "Goldings",
+      "Bramling Cross"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Malty",
+      "Spice",
+      "Berry"
+    ]
+  },
+  {
+    "name": "Rooster's Little Hazy Assassin",
+    "brewery": "Rooster's",
+    "style": "Session Pale Ale",
+    "abv": 3.9,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Oats"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Grapefruit"
+    ]
+  },
+  {
+    "name": "Adnams Double Ghost IPA",
+    "brewery": "Adnams",
+    "style": "Double IPA",
+    "abv": 7.0,
+    "hops": [
+      "Citra"
+    ],
+    "malts": [
+      "Pale",
+      "Crystal"
+    ],
+    "flavours": [
+      "Citrus",
+      "Tropical",
+      "Grapefruit"
+    ]
   }
 ]

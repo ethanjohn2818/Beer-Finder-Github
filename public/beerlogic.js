@@ -404,6 +404,11 @@ function buildCatalogBeers(catalog, curated, knownBreweries = []) {
         const g = groups.get(sig);
         g.names.push(clean);
         if (match && !g.match) g.match = match;
+        // Keep the longest brewery description we've seen for this beer (if a
+        // scraper has captured a real product description, not the tile text).
+        if (product.description && product.description.length > (g.description || "").length) {
+            g.description = product.description;
+        }
 
         const store = product.supermarket || "Tesco";
         if (!g.stores.has(store)) g.stores.set(store, []);
@@ -447,13 +452,23 @@ function buildCatalogBeers(catalog, curated, knownBreweries = []) {
             }
         }
 
+        // Flavours come from the curated hop DB first. When a beer isn't in the
+        // DB (so we have no hops for it), fall back to any flavour words we can
+        // read off its name — and off a brewery `description` if the scraper has
+        // captured one — so it can still surface in Find Your Flavour even
+        // without a known hop bill.
+        let flavours = match ? (match.flavours || []) : [];
+        if (!flavours.length) {
+            flavours = deriveFlavours(`${name} ${g.description || ""}`);
+        }
+
         beers.push({
             name,
             brewery: match ? match.brewery : (g.brewery || deriveBrewery(name, breweries)),
             style,
             abv,
             hops: match ? (match.hops || []) : [],
-            flavours: match ? (match.flavours || []) : [],
+            flavours,
             offers
         });
     }
@@ -461,6 +476,51 @@ function buildCatalogBeers(catalog, curated, knownBreweries = []) {
     beers.sort((a, b) => a.name.localeCompare(b.name));
 
     return beers;
+}
+
+
+// Read flavour words out of free text (a beer name, or a brewery description).
+// Used as a fallback for beers with no known hop bill, so the brewery's own
+// stated flavours can still place them in Find Your Flavour. Deliberately
+// conservative: only maps clear, unambiguous flavour words to the tags the
+// flavour finder understands.
+const FLAVOUR_KEYWORDS = [
+    [/\btropical\b/,                 "Tropical"],
+    [/\bmango(es)?\b/,               "Mango"],
+    [/\bpassion\s?fruit\b|\bpassionfruit\b/, "Passionfruit"],
+    [/\bpineapple\b/,                "Pineapple"],
+    [/\bguava\b/,                    "Guava"],
+    [/\blychee\b/,                   "Lychee"],
+    [/\bpapaya\b/,                   "Tropical"],
+    [/\b(citrus|zest[y]?)\b/,        "Citrus"],
+    [/\bgrapefruit\b/,               "Grapefruit"],
+    [/\blemon\b/,                    "Lemon"],
+    [/\blime\b/,                     "Lime"],
+    [/\borange\b|\btangerine\b/,     "Orange"],
+    [/\b(juicy|juice)\b/,            "Juicy"],
+    [/\bhazy\b|\bneipa\b|new england/, "Juicy"],
+    [/\bberry|berries|raspberr|blackberr|blueberr\b/, "Berry"],
+    [/\bstrawberr/,                  "Strawberry"],
+    [/\bpeach|apricot\b/,            "Peach"],
+    [/\bpine\b|\bresin/,             "Pine"],
+    [/\bfloral\b/,                   "Floral"],
+    [/\bherbal\b/,                   "Herbal"],
+    [/\bcoffee|espresso|mocha\b/,    "Coffee"],
+    [/\bchocolate|\bchoc\b|cocoa\b/, "Chocolate"],
+    [/\b(caramel|toffee)\b/,         "Caramel"],
+    [/\bvanilla\b/,                  "Vanilla"],
+    [/\bbiscuit|bready|\bmalty\b/,   "Malty"],
+    [/\bhoney\b/,                    "Honey"],
+    [/\bcrisp\b/,                    "Crisp"],
+    [/\broast(ed|y)?\b/,             "Roasted"]
+];
+function deriveFlavours(text) {
+    const t = String(text || "").toLowerCase();
+    const out = [];
+    for (const [re, tag] of FLAVOUR_KEYWORDS) {
+        if (re.test(t) && !out.includes(tag)) out.push(tag);
+    }
+    return out;
 }
 
 
