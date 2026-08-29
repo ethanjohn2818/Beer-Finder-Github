@@ -2,10 +2,10 @@
 // missing photo shows a little beer mug instead of the browser's broken-image
 // icon. `var` (not const) so inline onerror handlers can see it as a global.
 var NO_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>"
-    + "<rect width='160' height='160' rx='18' fill='%23fdebd3'/>"
-    + "<rect x='54' y='50' width='42' height='62' rx='6' fill='%23f59e0b'/>"
-    + "<rect x='54' y='50' width='42' height='18' rx='6' fill='%23fcd34d'/>"
-    + "<path d='M96 66h10a10 10 0 0 1 10 10v8a10 10 0 0 1-10 10h-10z' fill='none' stroke='%23f59e0b' stroke-width='6'/>"
+    + "<rect width='160' height='160' rx='18' fill='%23f8e4cc'/>"
+    + "<rect x='54' y='50' width='42' height='62' rx='6' fill='%23f08c1b'/>"
+    + "<rect x='54' y='50' width='42' height='18' rx='6' fill='%23f8cc9e'/>"
+    + "<path d='M96 66h10a10 10 0 0 1 10 10v8a10 10 0 0 1-10 10h-10z' fill='none' stroke='%23f08c1b' stroke-width='6'/>"
     + "</svg>";
 
 

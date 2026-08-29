@@ -2,13 +2,21 @@
    Theme
 --------------------------------------------------------------- */
 :root {
-    --amber: #d97706;
-    --amber-dark: #b45309;
-    --ink: #1f2937;
+    /* Brand palette — MyBeerFinder Brand Guidelines v1.0 (a beer flight,
+       palest to darkest): Blonde Ale, Pale Ale, Amber Ale, IPA, Stout. */
+    --blonde-ale: #f8e4cc;
+    --pale-ale: #f8cc9e;
+    --amber-ale: #f3ac5d;
+    --ipa: #f08c1b;   /* signature brand colour */
+    --stout: #2d2e3a; /* text & dark UI */
+
+    --amber: var(--ipa);       /* primary: logo glass, CTAs, links, highlights */
+    --amber-dark: #d67d10;     /* deeper IPA for gradients / pressed states */
+    --ink: var(--stout);
     --muted: #6b7280;
-    --bg: #f4f4f5;
+    --bg: #faf3ea;             /* soft Blonde-Ale tint page canvas */
     --card: #ffffff;
-    --border: #e5e7eb;
+    --border: #ecdfce;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.10);
     --shadow-lg: 0 14px 34px rgba(0, 0, 0, 0.16);
@@ -19,11 +27,18 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     background: var(--bg);
     color: var(--ink);
     line-height: 1.5;
+}
+
+/* Headings & wordmark — Arial Black per brand guidelines */
+h1, h2, h3 {
+    font-family: "Arial Black", "Arial Bold", Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.01em;
 }
 
 h1 {
@@ -59,6 +74,25 @@ h1 {
     text-decoration: none;
 }
 
+/* Menu-bar logo: pin-and-glass icon (light/dark variants) + wordmark */
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    display: block;
+}
+.brand-icon-dark { display: none; }
+html[data-theme="dark"] .brand-icon-light { display: none; }
+html[data-theme="dark"] .brand-icon-dark { display: block; }
+
+.brand-word {
+    font-family: "Arial Black", "Arial Bold", Arial, Helvetica, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+.brand-word-accent { color: var(--amber); }
+
+/* Legacy mug icon (kept for any cached markup) */
 .brand-mug {
     width: 32px;
     height: 32px;
@@ -82,7 +116,7 @@ h1 {
     box-shadow: var(--shadow-sm);
     transition: background 0.15s ease;
 }
-.nav-toggle:hover { background: #fde9d0; }
+.nav-toggle:hover { background: #fbe6cf; }
 .nav-toggle-bar {
     display: block;
     width: 100%;
@@ -149,7 +183,7 @@ h1 {
 }
 
 .nav-btn:hover {
-    background: #fde9d0;
+    background: #fbe6cf;
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -222,7 +256,7 @@ main {
 
 .search-bar input:focus {
     border-color: var(--amber);
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+    box-shadow: 0 0 0 3px rgba(240, 140, 27, 0.22);
 }
 
 .search-bar button {
@@ -509,7 +543,7 @@ main {
 .contact-form input:focus,
 .contact-form textarea:focus {
     border-color: var(--amber);
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+    box-shadow: 0 0 0 3px rgba(240, 140, 27, 0.22);
 }
 
 .contact-form button {
@@ -910,7 +944,7 @@ main {
 
 .acc[open] summary::after { transform: rotate(90deg); }
 
-.acc summary:hover { background: #fff7ed; }
+.acc summary:hover { background: #fdf3e7; }
 
 .acc-title { color: var(--amber-dark); }
 
@@ -963,7 +997,7 @@ main {
 .finder-select select:focus {
     outline: none;
     border-color: var(--amber);
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+    box-shadow: 0 0 0 3px rgba(240, 140, 27, 0.22);
 }
 
 
@@ -1038,8 +1072,8 @@ main {
 }
 
 .tag {
-    background: #fff7ed;
-    border: 1px solid #fed7aa;
+    background: #fdf3e7;
+    border: 1px solid #f8cc9e;
     color: var(--amber-dark);
     border-radius: 999px;
     padding: 4px 12px;
@@ -1517,7 +1551,7 @@ html[data-theme="dark"] .compare-remove { background: rgba(255,255,255,0.12); }
 /* Cheapest-of-the-bunch highlight in the compare modal */
 .compare-col.best {
     border: 2px solid var(--amber);
-    background: #fff7ed;
+    background: #fdf3e7;
 }
 html[data-theme="dark"] .compare-col.best { background: #2a2417; }
 .compare-best-badge {
@@ -1900,7 +1934,7 @@ button.buy-btn {
 .brewery-search input:focus {
     outline: none;
     border-color: var(--amber);
-    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+    box-shadow: 0 0 0 3px rgba(240, 140, 27, 0.22);
 }
 .brewery-search-clear {
     position: absolute;
