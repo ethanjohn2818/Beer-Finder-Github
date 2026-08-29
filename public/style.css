@@ -10,13 +10,14 @@
     --ipa: #f08c1b;   /* signature brand colour */
     --stout: #2d2e3a; /* text & dark UI */
 
-    --amber: var(--ipa);       /* primary: logo glass, CTAs, links, highlights */
-    --amber-dark: #d67d10;     /* deeper IPA for gradients / pressed states */
+    --amber: var(--ipa);          /* primary: logo glass, CTAs, links, highlights */
+    --amber-dark: #a8560a;        /* deep IPA shade — accessible orange for link/accent
+                                     text & primary-button pressed/hover states */
     --ink: var(--stout);
     --muted: #6b7280;
-    --bg: #faf3ea;             /* soft Blonde-Ale tint page canvas */
+    --bg: var(--blonde-ale);      /* page background — lightest tint */
     --card: #ffffff;
-    --border: #ecdfce;
+    --border: var(--pale-ale);    /* subtle fills, borders, dividers */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.10);
     --shadow-lg: 0 14px 34px rgba(0, 0, 0, 0.16);
@@ -116,7 +117,7 @@ html[data-theme="dark"] .brand-icon-dark { display: block; }
     box-shadow: var(--shadow-sm);
     transition: background 0.15s ease;
 }
-.nav-toggle:hover { background: #fbe6cf; }
+.nav-toggle:hover { background: var(--amber-ale); }
 .nav-toggle-bar {
     display: block;
     width: 100%;
@@ -183,7 +184,7 @@ html[data-theme="dark"] .brand-icon-dark { display: block; }
 }
 
 .nav-btn:hover {
-    background: #fbe6cf;
+    background: var(--amber-ale);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -944,7 +945,7 @@ main {
 
 .acc[open] summary::after { transform: rotate(90deg); }
 
-.acc summary:hover { background: #fdf3e7; }
+.acc summary:hover { background: #f8e4cc; }
 
 .acc-title { color: var(--amber-dark); }
 
@@ -1072,7 +1073,7 @@ main {
 }
 
 .tag {
-    background: #fdf3e7;
+    background: #f8e4cc;
     border: 1px solid #f8cc9e;
     color: var(--amber-dark);
     border-radius: 999px;
@@ -1307,24 +1308,30 @@ main {
 html[data-theme="dark"] {
     --ink: #e6e8eb;
     --muted: #9aa3af;
-    --bg: #0f1216;
-    --card: #1a1f27;
-    --border: #2c333d;
+    --bg: #1c1d24;            /* canvas — a shade below Stout */
+    --card: var(--stout);     /* Stout carries dark UI surfaces */
+    --border: #3c3e4b;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
     --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.55);
     --shadow-lg: 0 14px 34px rgba(0, 0, 0, 0.6);
 }
+
+/* Hamburger: Stout chip with IPA-orange bars so it reads on dark UI */
+html[data-theme="dark"] .nav-toggle { background: #3a3c49; }
+html[data-theme="dark"] .nav-toggle:hover { background: rgba(240, 140, 27, 0.16); }
+html[data-theme="dark"] .nav-toggle-bar { background: var(--ipa); }
 
 /* Hardcoded light backgrounds that don't use the theme variables */
 html[data-theme="dark"] .nav-btn,
 html[data-theme="dark"] .qa-btn,
 html[data-theme="dark"] .store-btn,
 html[data-theme="dark"] .opt-btn {
-    background: #252c36;
+    background: #3a3c49;
     color: var(--ink);
 }
 html[data-theme="dark"] .nav-btn:hover,
-html[data-theme="dark"] .qa-btn:hover { background: #3a2f22; }
+html[data-theme="dark"] .qa-btn:hover { background: rgba(240, 140, 27, 0.16); }
+html[data-theme="dark"] .nav-btn.active { background: var(--amber); color: #fff; }
 
 html[data-theme="dark"] .store-btn { color: var(--muted); }
 html[data-theme="dark"] .store-btn.active {
@@ -1345,9 +1352,9 @@ html[data-theme="dark"] .finder-select select {
 }
 
 html[data-theme="dark"] .tag {
-    background: #3a2f22;
-    border-color: #5b4420;
-    color: #fcd9a6;
+    background: rgba(240, 140, 27, 0.14);
+    border-color: rgba(240, 140, 27, 0.40);
+    color: var(--amber-ale);
 }
 
 html[data-theme="dark"] .acc-count { background: #252c36; color: var(--muted); }
@@ -1497,7 +1504,7 @@ html[data-theme="dark"] .footer { box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.5); }
     min-width: 190px;
     padding: 16px 14px;
     border-radius: 14px;
-    background: var(--bg, #faf7f2);
+    background: var(--bg, #f8e4cc);
     text-align: center;
 }
 .compare-remove {
@@ -1551,9 +1558,9 @@ html[data-theme="dark"] .compare-remove { background: rgba(255,255,255,0.12); }
 /* Cheapest-of-the-bunch highlight in the compare modal */
 .compare-col.best {
     border: 2px solid var(--amber);
-    background: #fdf3e7;
+    background: #f8e4cc;
 }
-html[data-theme="dark"] .compare-col.best { background: #2a2417; }
+html[data-theme="dark"] .compare-col.best { background: rgba(240, 140, 27, 0.12); }
 .compare-best-badge {
     position: absolute;
     top: 8px;
