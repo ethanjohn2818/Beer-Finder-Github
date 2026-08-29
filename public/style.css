@@ -280,6 +280,7 @@ main {
 }
 
 .searching {
+    grid-column: 1 / -1;   /* span the whole results grid so it truly centres */
     text-align: center;
     color: var(--muted);
     font-size: 1.1rem;
