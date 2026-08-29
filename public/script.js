@@ -354,10 +354,16 @@ function searchBeers() {
     applyFiltersAndRender();
 }
 
-// Highlight whichever quick-action "mode" is currently showing (or none).
+// Highlight whichever quick-action "mode" is currently showing (or none), and
+// flip its label from "Show all…" to "Showing all…" while it's active.
 function setActiveQuickAction(id) {
-    document.querySelectorAll(".quick-actions .qa-btn").forEach(b =>
-        b.classList.toggle("active", !!id && b.id === id));
+    document.querySelectorAll(".quick-actions .qa-btn").forEach(b => {
+        const on = !!id && b.id === id;
+        b.classList.toggle("active", on);
+        if (b.dataset.labelOn && b.dataset.labelOff) {
+            b.textContent = on ? b.dataset.labelOn : b.dataset.labelOff;
+        }
+    });
 }
 
 // Show every (full-strength) beer — deliberately EXCLUDES alcohol-free, which

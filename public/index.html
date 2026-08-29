@@ -29,9 +29,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260829f">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260829f">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260829f">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260829g">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260829g">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260829g">
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="MyBeerFinder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260829f">
+    <link rel="stylesheet" href="style.css?v=20260829g">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -111,8 +111,8 @@
 
         <div class="nav-left">
             <a class="nav-brand" href="/" data-view="search">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260829f" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829f" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260829g" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829g" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
             <a class="nav-btn nav-search-btn" href="/" data-view="search">🔎 Search Beer</a>
@@ -161,10 +161,10 @@
                 </div>
 
                 <div class="quick-actions">
-                    <button class="qa-btn" id="qa-all" onclick="showAllBeers()">Show All Beers</button>
-                    <button class="qa-btn" id="qa-af" onclick="showAlcoholFree()">Show All Alcohol-Free</button>
-                    <button class="qa-btn" id="qa-gf" onclick="showGlutenFree()">Show All Gluten-Free</button>
-                    <button class="qa-btn" id="qa-independent" onclick="showIndependent()">Independent Brewers</button>
+                    <button class="qa-btn" id="qa-all" data-label-off="Show All Beers" data-label-on="Showing All Beers" onclick="showAllBeers()">Show All Beers</button>
+                    <button class="qa-btn" id="qa-af" data-label-off="Show All Alcohol-Free" data-label-on="Showing All Alcohol-Free" onclick="showAlcoholFree()">Show All Alcohol-Free</button>
+                    <button class="qa-btn" id="qa-gf" data-label-off="Show All Gluten-Free" data-label-on="Showing All Gluten-Free" onclick="showGlutenFree()">Show All Gluten-Free</button>
+                    <button class="qa-btn" id="qa-independent" data-label-off="Independent Brewers" data-label-on="Showing Independent Brewers" onclick="showIndependent()">Independent Brewers</button>
                     <button class="qa-btn qa-clear" onclick="clearSearch()">Clear</button>
                 </div>
 
@@ -454,8 +454,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260829f" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829f" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260829g" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260829g" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -512,12 +512,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260829f"></script>
-    <script src="script.js?v=20260829f"></script>
-    <script src="ads.js?v=20260829f"></script>
+    <script src="beerlogic.js?v=20260829g"></script>
+    <script src="script.js?v=20260829g"></script>
+    <script src="ads.js?v=20260829g"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260829f"></script>
+    <script src="auth.js?v=20260829g"></script>
 
 </body>
 </html>
