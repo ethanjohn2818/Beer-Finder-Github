@@ -214,6 +214,25 @@ main {
     margin-bottom: 28px;
 }
 
+/* Editorial content under the data views (helps readers and search engines) */
+.view-article {
+    max-width: 760px;
+    margin: 48px auto 0;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+}
+.view-article h2 {
+    font-size: 1.3rem;
+    margin: 24px 0 10px;
+}
+.view-article h2:first-child { margin-top: 0; }
+.view-article p {
+    color: var(--ink);
+    line-height: 1.7;
+    margin: 0 0 14px;
+}
+.view-article a { color: var(--amber-dark); font-weight: 600; }
+
 
 /* ---------------------------------------------------------------
    Hero / search
@@ -799,8 +818,10 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgba(31, 41, 55, 0.75);
-    backdrop-filter: blur(4px);
+    /* Lighter scrim so the real site is visible behind the gate — it's a
+       one-tap confirmation, not a wall that hides all the content. */
+    background: rgba(45, 46, 58, 0.55);
+    backdrop-filter: blur(2px);
 }
 
 /* Beat the generic .hidden (same specificity, but this comes later and is
