@@ -312,6 +312,8 @@ main {
 .welcome-go { color: var(--amber-dark); font-weight: 800; margin-top: 14px; }
 html[data-theme="dark"] .welcome-go { color: var(--amber); }
 
+.welcome .view-article { text-align: left; }
+
 @media (max-width: 620px) {
     .welcome-grid { grid-template-columns: 1fr; }
 }
