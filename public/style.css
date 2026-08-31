@@ -139,9 +139,10 @@ html[data-theme="dark"] .brand-icon-dark { display: block; }
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
-    min-width: 220px;
-    padding: 12px;
+    gap: 16px;
+    width: 340px;
+    max-width: calc(100vw - 28px);
+    padding: 16px;
     background: var(--card);
     border-radius: 16px;
     box-shadow: var(--shadow-md);
@@ -157,15 +158,38 @@ html[data-theme="dark"] .brand-icon-dark { display: block; }
     visibility: visible;
     transform: translateY(0);
 }
-/* Menu items: full-width rows */
+
+/* Categorised menu: a titled group with a two-wide grid of items */
+.nav-group { display: flex; flex-direction: column; gap: 8px; }
+.nav-group-title {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    padding: 0 4px;
+}
+.nav-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+/* Menu items: grid cells, centred */
 .nav-links .nav-btn {
-    display: block;
-    width: 100%;
-    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 11px 10px;
+    font-size: 0.9rem;
     border-radius: 10px;
     box-shadow: none;
 }
 .nav-links .nav-btn:hover { transform: none; box-shadow: none; }
+/* A lone third item stretches across both columns so the grid stays tidy */
+.nav-grid .nav-btn:last-child:nth-child(odd) { grid-column: 1 / -1; }
+/* Current page: clearly highlighted in the brand orange */
+.nav-links .nav-btn.active { background: var(--amber); color: #fff; }
 
 .nav-btn {
     display: inline-block;
