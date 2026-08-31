@@ -1,6 +1,7 @@
 # SPA routes: serve the app for these paths so deep links / refreshes work.
 # Real files (ads.txt, sitemap.xml, css, js, data/*) are served directly and
 # are unaffected because they exist as static assets.
+/search    /index.html   200
 /find      /index.html   200
 /hops      /index.html   200
 /brewery   /index.html   200

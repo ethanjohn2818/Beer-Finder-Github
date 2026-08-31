@@ -86,7 +86,8 @@ updateThemeIcon();
 // Top-level views that get their own real URL. (The beer "detail" view is a
 // transient overlay, it keeps whatever URL you opened it from.)
 const VIEW_PATHS = {
-    search:  "/",
+    welcome: "/",
+    search:  "/search",
     find:    "/find",
     hops:    "/hops",
     brewery: "/brewery",
@@ -105,8 +106,10 @@ const PATH_VIEWS = Object.fromEntries(
 // Per-view <title> + meta description, so each URL reads as its own page to
 // Google (the main SEO payoff of having separate URLs).
 const VIEW_META = {
-    search:  ["MyBeerFinder: Find craft beer by hop, brewery & flavour | UK supermarkets",
-              "Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets."],
+    welcome: ["MyBeerFinder: Find craft beer by hop, brewery & flavour | UK supermarkets",
+              "Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets. Discover what every beer tastes like from its hops."],
+    search:  ["Find a beer | MyBeerFinder",
+              "Search craft beer by name, brewery or hop, and see which UK supermarket has it cheapest."],
     find:    ["Find Your Flavour | MyBeerFinder",
               "Pick the flavours you like and discover craft beers that match, with where to buy them."],
     hops:    ["Hop flavour profiles | MyBeerFinder",
@@ -172,7 +175,7 @@ function navigate(name) {
 
 // Show whichever view matches the current URL (first load + back/forward).
 function routeFromUrl() {
-    showView(PATH_VIEWS[location.pathname] || "search");
+    showView(PATH_VIEWS[location.pathname] || "welcome");
 }
 window.addEventListener("popstate", routeFromUrl);
 

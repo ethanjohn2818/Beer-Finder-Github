@@ -259,6 +259,65 @@ main {
 
 
 /* ---------------------------------------------------------------
+   Welcome page (home) — a few big "where to start" cards
+--------------------------------------------------------------- */
+.welcome { max-width: 860px; margin: 0 auto; text-align: center; }
+.welcome-title { font-size: clamp(1.9rem, 1.2rem + 2.5vw, 2.8rem); margin: 8px 0 12px; }
+.welcome-lede {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 56ch;
+    margin: 0 auto 36px;
+    line-height: 1.6;
+}
+.welcome-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.welcome-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 26px 26px 22px;
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.welcome-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--amber);
+}
+.welcome-ic {
+    font-size: 1.55rem;
+    line-height: 1;
+    width: 54px;
+    height: 54px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(240, 140, 27, 0.12);
+    border-radius: 14px;
+    margin-bottom: 8px;
+}
+.welcome-card h2 { font-size: 1.25rem; margin: 2px 0; }
+.welcome-card p { color: var(--muted); line-height: 1.55; margin: 0; flex: 1; }
+.welcome-go { color: var(--amber-dark); font-weight: 800; margin-top: 14px; }
+html[data-theme="dark"] .welcome-go { color: var(--amber); }
+
+@media (max-width: 620px) {
+    .welcome-grid { grid-template-columns: 1fr; }
+}
+
+
+/* ---------------------------------------------------------------
    Hero / search
 --------------------------------------------------------------- */
 .hero {
