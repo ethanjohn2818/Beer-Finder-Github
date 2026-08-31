@@ -3,7 +3,7 @@
 // recommendations and the leaderboard.
 //
 // The Supabase client is loaded from the CDN in index.html. The keys below
-// are the PUBLIC (publishable) keys — safe to ship in the browser; the
+// are the PUBLIC (publishable) keys, safe to ship in the browser; the
 // database is protected by Row Level Security so a signed-in user can only
 // ever read/write their own beers.
 // ---------------------------------------------------------------
@@ -26,7 +26,7 @@ function beerKey(beer) {
 
 function initAuth() {
     if (!window.supabase || typeof window.supabase.createClient !== "function") {
-        console.warn("Supabase client not loaded — accounts disabled.");
+        console.warn("Supabase client not loaded, accounts disabled.");
         return;
     }
     sb = window.supabase.createClient(SB_URL, SB_KEY);
@@ -122,7 +122,7 @@ async function saveUsername() {
         .insert({ id: authUser.id, username: name });
     if (error) {
         if (msg) msg.textContent = /duplicate|unique/i.test(error.message)
-            ? "That username is taken — try another."
+            ? "That username is taken, try another."
             : ("Couldn't save: " + error.message);
         return;
     }
@@ -275,7 +275,7 @@ function renderAccount() {
 
         <h3>Beers you like</h3>
         ${mine.length
-            ? `<ul class="had-list">${mine.map(b => `<li>${b.name} <span class="muted">— ${b.brewery || ""}</span></li>`).join("")}</ul>`
+            ? `<ul class="had-list">${mine.map(b => `<li>${b.name}${b.brewery ? ' <span class="muted">· ' + b.brewery + '</span>' : ""}</li>`).join("")}</ul>`
             : `<p class="muted">None yet. Open a beer and tap "I liked this".</p>`}`;
 }
 
@@ -326,7 +326,7 @@ async function renderLeaderboard() {
                 ${topUsers.map((r, i) => userRow(r, i + 1)).join("")}
                 ${myTile}
                </ol>`
-            : `<p class="muted">No one's on the board yet — sign in and start ticking beers.</p>`}
+            : `<p class="muted">No one's on the board yet, sign in and start ticking beers.</p>`}
 
         <h2 style="margin-top:32px">🍺 Most-loved beers</h2>
         <p class="muted small">The beers ticked "had" by the most people right now.</p>
@@ -335,11 +335,11 @@ async function renderLeaderboard() {
                 ${popular.map((x, i) => `
                     <li class="beer-lb" onclick="openBeerDetail(${x.beer._id})">
                         <span class="lb-rank">${i + 1}</span>
-                        <span class="lb-name">${x.beer.name}<span class="muted"> — ${x.beer.brewery || ""}</span></span>
+                        <span class="lb-name">${x.beer.name}<span class="muted">, ${x.beer.brewery || ""}</span></span>
                         <span class="lb-count">${x.ticks} 🍺</span>
                     </li>`).join("")}
                </ol>`
-            : `<p class="muted">No beers ticked yet — be the first! Open a beer and tap "I liked this".</p>`}`;
+            : `<p class="muted">No beers ticked yet, be the first! Open a beer and tap "I liked this".</p>`}`;
 }
 
 // Boot once the page + Supabase client are ready.

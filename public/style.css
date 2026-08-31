@@ -2,7 +2,7 @@
    Theme
 --------------------------------------------------------------- */
 :root {
-    /* Brand palette — MyBeerFinder Brand Guidelines v1.0 (a beer flight,
+    /* Brand palette, MyBeerFinder Brand Guidelines v1.0 (a beer flight,
        palest to darkest): Blonde Ale, Pale Ale, Amber Ale, IPA, Stout. */
     --blonde-ale: #f8e4cc;
     --pale-ale: #f8cc9e;
@@ -11,11 +11,11 @@
     --stout: #2d2e3a; /* text & dark UI */
 
     --amber: var(--ipa);          /* primary: logo glass, CTAs, links, highlights */
-    --amber-dark: #a8560a;        /* deep IPA shade — accessible orange for link/accent
+    --amber-dark: #a8560a;        /* deep IPA shade, accessible orange for link/accent
                                      text & primary-button pressed/hover states */
     --ink: var(--stout);
     --muted: #6b7280;
-    --bg: var(--blonde-ale);      /* page background — lightest tint */
+    --bg: var(--blonde-ale);      /* page background, lightest tint */
     --card: #ffffff;
     --border: var(--pale-ale);    /* subtle fills, borders, dividers */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -35,7 +35,7 @@ body {
     line-height: 1.5;
 }
 
-/* Headings & wordmark — Arial Black per brand guidelines */
+/* Headings & wordmark, Arial Black per brand guidelines */
 h1, h2, h3 {
     font-family: "Arial Black", "Arial Bold", Arial, Helvetica, sans-serif;
     font-weight: 900;
@@ -666,7 +666,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
     .nav-brand span { display: none; }
     .nav-left { gap: 10px; }
 
-    /* Two-wide on phones — smaller than the old single column, but each card
+    /* Two-wide on phones, smaller than the old single column, but each card
        keeps everything (hops, buy, compare). */
     #results,
     #find-results {
@@ -678,7 +678,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
 
 
 /* ---------------------------------------------------------------
-   Find your beer — flavour chips
+   Find your beer, flavour chips
 --------------------------------------------------------------- */
 .flavour-chips {
     display: flex;
@@ -818,7 +818,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
     align-items: center;
     justify-content: center;
     padding: 20px;
-    /* Lighter scrim so the real site is visible behind the gate — it's a
+    /* Lighter scrim so the real site is visible behind the gate, it's a
        one-tap confirmation, not a wall that hides all the content. */
     background: rgba(45, 46, 58, 0.55);
     backdrop-filter: blur(2px);
@@ -1017,7 +1017,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
 
 
 /* ---------------------------------------------------------------
-   Find your beer — dropdowns
+   Find your beer, dropdowns
 --------------------------------------------------------------- */
 .finder-controls {
     display: flex;
@@ -1188,7 +1188,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
 }
 .detail-section h2 { font-size: 1.15rem; margin: 0 0 12px; }
 
-/* Allergen disclosure — a pressable summary that reveals possible allergens */
+/* Allergen disclosure, a pressable summary that reveals possible allergens */
 .allergen-box { padding: 0; overflow: hidden; }
 .allergen-summary {
     list-style: none;
@@ -1274,7 +1274,7 @@ html[data-theme="dark"] .allergen-tag {
 
 
 /* ---------------------------------------------------------------
-   Hops accordion — flavour profile extras
+   Hops accordion, flavour profile extras
 --------------------------------------------------------------- */
 .acc-flavour {
     color: var(--muted);
@@ -1405,7 +1405,7 @@ html[data-theme="dark"] .allergen-tag {
 html[data-theme="dark"] {
     --ink: #e6e8eb;
     --muted: #9aa3af;
-    --bg: #1c1d24;            /* canvas — a shade below Stout */
+    --bg: #1c1d24;            /* canvas, a shade below Stout */
     --card: var(--stout);     /* Stout carries dark UI surfaces */
     --border: #3c3e4b;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);

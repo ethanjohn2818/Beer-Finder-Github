@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------
 // Beer logic (runs in the browser).
 //
-// The live site is static: it loads two files — data/beers.json (our
-// hop database) and data/tesco-catalog.json (the crawled Tesco beers) —
+// The live site is static: it loads two files, data/beers.json (our
+// hop database) and data/tesco-catalog.json (the crawled Tesco beers),
 // and does all the matching / grouping here, so no server is needed.
 // ---------------------------------------------------------------
 
@@ -113,7 +113,7 @@ const BREWERY_SUFFIX = new Set([
 ]);
 
 // Some shops (Asda in particular) sneak Cyrillic look-alike letters into
-// product names — e.g. "Proper Јоb" uses a Cyrillic Ј and о — which stops the
+// product names, e.g. "Proper Јоb" uses a Cyrillic Ј and о, which stops the
 // beer matching its real spelling. Map the common homoglyphs back to Latin.
 const HOMOGLYPHS = {
     "а": "a", "е": "e", "о": "o", "р": "p", "с": "c", "у": "y", "х": "x",
@@ -160,7 +160,7 @@ function matchesBeer(name, brewery, productText) {
     }
 
     // If 2+ distinctive name words all matched, that's already a strong,
-    // specific hit — accept it even when the shop's title carries no style
+    // specific hit, accept it even when the shop's title carries no style
     // word or brewery name (e.g. "Old Speckled Hen Cans", brewery Greene King
     // never printed). The looksLikeDrink guard still covers weaker 0-1 word
     // cases.
@@ -182,7 +182,7 @@ function baseKey(title) {
         .trim();
 }
 
-// Known shop spelling quirks for the SAME beer — one shop writes it one way,
+// Known shop spelling quirks for the SAME beer, one shop writes it one way,
 // another slightly differently. Normalising these lets the same beer stack
 // instead of splitting into look-alike cards.
 const NAME_ALIASES = [
@@ -322,7 +322,7 @@ function nameTokens(name) {
 // the style/packaging words above. Two products are the SAME beer only if
 // these match exactly. Falls back to the un-stripped words if stripping
 // leaves nothing (e.g. a beer literally called "Pale Ale").
-// Pure "noise" words — packaging, "beer", brewery-suffix, stray label bits —
+// Pure "noise" words, packaging, "beer", brewery-suffix, stray label bits,
 // that carry no identity. Used only in the fallback below, when a name has
 // nothing BUT these plus style words.
 const IDENTITY_NOISE = new Set([
@@ -337,7 +337,7 @@ function identityWords(clean, brewery) {
     for (const bw of nameTokens(brewery)) words.delete(bw);
     let identity = new Set([...words].filter(w => !STYLE_SUFFIX.has(w)));
     if (!identity.size) {
-        // Nothing left after stripping style words — the name is only brewery +
+        // Nothing left after stripping style words, the name is only brewery +
         // style/packaging (e.g. "Camden Pale Ale", "Innis & Gunn Lager Beer").
         // Fall back to those words but drop pure noise, so one shop's "Lager
         // Beer (Abv 4.6%)" and another's "Lager Beer 10x330ml" both reduce to
@@ -361,8 +361,8 @@ function looksAlcoholFree(name) {
 //
 // Products are grouped by their IDENTITY (brewery + identity words). This
 // merges the SAME beer sold at different shops even when they word the style
-// differently — Morrisons "BrewDog Triple Hazy IPA" and Tesco "BrewDog Triple
-// Hazy New England IPA" both reduce to {triple} — while keeping genuinely
+// differently, Morrisons "BrewDog Triple Hazy IPA" and Tesco "BrewDog Triple
+// Hazy New England IPA" both reduce to {triple}, while keeping genuinely
 // different beers apart: "Hazy Jane" {jane}, "Hazy Jane Tropical" {jane,
 // tropical}, "Double Hazy Jane" {double, jane} and "Hazy Jane Guava" {jane,
 // guava} stay as separate cards.
@@ -444,7 +444,7 @@ function buildCatalogBeers(catalog, curated, knownBreweries = []) {
         // Cheapest shop first (card defaults to the best price).
         offers.sort((a, b) => priceValue(a.price) - priceValue(b.price));
 
-        // Keep the LONGEST name — the most detailed one (your rule).
+        // Keep the LONGEST name, the most detailed one (your rule).
         const name = g.names.slice().sort((a, b) => b.length - a.length)[0];
         const match = g.match;
 
@@ -461,8 +461,8 @@ function buildCatalogBeers(catalog, curated, knownBreweries = []) {
 
         // Flavours come from the curated hop DB first. When a beer isn't in the
         // DB (so we have no hops for it), fall back to any flavour words we can
-        // read off its name — and off a brewery `description` if the scraper has
-        // captured one — so it can still surface in Find Your Flavour even
+        // read off its name, and off a brewery `description` if the scraper has
+        // captured one, so it can still surface in Find Your Flavour even
         // without a known hop bill.
         let flavours = match ? (match.flavours || []) : [];
         if (!flavours.length) {

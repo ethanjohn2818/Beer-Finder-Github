@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------
 // Adverts (Google AdSense)
 //
-// The AdSense loader is in the page <head> (index.html) — that handles
+// The AdSense loader is in the page <head> (index.html), that handles
 // site verification and Google "Auto ads" (Google places ads for you
 // once you enable Auto ads in your AdSense dashboard).
 //

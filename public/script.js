@@ -10,7 +10,7 @@ var NO_IMG = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' wi
 
 
 // ---------------------------------------------------------------
-// Age gate (18+) — shown once, remembered in localStorage
+// Age gate (18+), shown once, remembered in localStorage
 // ---------------------------------------------------------------
 
 function confirmAge() {
@@ -84,7 +84,7 @@ updateThemeIcon();
 // ---------------------------------------------------------------
 
 // Top-level views that get their own real URL. (The beer "detail" view is a
-// transient overlay — it keeps whatever URL you opened it from.)
+// transient overlay, it keeps whatever URL you opened it from.)
 const VIEW_PATHS = {
     search:  "/",
     find:    "/find",
@@ -105,21 +105,21 @@ const PATH_VIEWS = Object.fromEntries(
 // Per-view <title> + meta description, so each URL reads as its own page to
 // Google (the main SEO payoff of having separate URLs).
 const VIEW_META = {
-    search:  ["MyBeerFinder — Find craft beer by hop, brewery & flavour | UK supermarkets",
+    search:  ["MyBeerFinder: Find craft beer by hop, brewery & flavour | UK supermarkets",
               "Find craft beer by hop, brewery or flavour and see where to buy it at UK supermarkets."],
     find:    ["Find Your Flavour | MyBeerFinder",
               "Pick the flavours you like and discover craft beers that match, with where to buy them."],
     hops:    ["Hop flavour profiles | MyBeerFinder",
-              "Explore the hops behind UK craft beer and what each one tastes like — citrus, pine, tropical and more."],
+              "Explore the hops behind UK craft beer and what each one tastes like, citrus, pine, tropical and more."],
     brewery: ["Breweries & where they're based | MyBeerFinder",
               "Browse craft breweries stocked at UK supermarkets, where each is based, and the beers we found."],
     partners: ["Partner breweries | MyBeerFinder",
-              "The independent breweries we partner with — coming soon to MyBeerFinder."],
+              "The independent breweries we partner with, coming soon to MyBeerFinder."],
     gifts:   ["Beer gifts & glassware | MyBeerFinder",
-              "Craft beer gift ideas — glassware, merch and gift sets for beer lovers."],
+              "Craft beer gift ideas, glassware, merch and gift sets for beer lovers."],
     giftshop: ["Gift shop (coming soon) | MyBeerFinder",
-              "Our beer gift shop — glassware, gift sets and merch — is coming soon."],
-    about:   ["About MyBeerFinder — how it works",
+              "Our beer gift shop, glassware, gift sets and merch, is coming soon."],
+    about:   ["About MyBeerFinder: how it works",
               "How MyBeerFinder helps you discover craft beer and what it tastes like, right down to the hops."],
     contact: ["Contact | MyBeerFinder",
               "Get in touch with MyBeerFinder."],
@@ -274,7 +274,7 @@ async function loadBeerData() {
         renderFlavourChips();
         renderGifts();
 
-        // Don't preload the whole catalogue — show a prompt and let the user
+        // Don't preload the whole catalogue, show a prompt and let the user
         // choose what to load (search, Show All Beers, etc.).
         const results = document.getElementById("results");
         if (results) results.innerHTML = promptEmptyState();
@@ -366,7 +366,7 @@ function setActiveQuickAction(id) {
     });
 }
 
-// Show every (full-strength) beer — deliberately EXCLUDES alcohol-free, which
+// Show every (full-strength) beer, deliberately EXCLUDES alcohol-free, which
 // has its own button.
 function showAllBeers() {
     document.getElementById("hopInput").value = "";
@@ -375,7 +375,7 @@ function showAllBeers() {
     applyFiltersAndRender();
 }
 
-// Independent / partner breweries. PARTNER_BREWERIES is empty for now — when a
+// Independent / partner breweries. PARTNER_BREWERIES is empty for now, when a
 // brewery joins the Partners page, add its name here (or to the brewery's
 // "independent" flag) and its beers start showing up under this button.
 const PARTNER_BREWERIES = new Set([
@@ -390,7 +390,7 @@ function showIndependent() {
     currentResults = allBeers.filter(isIndependentBrewery);
     if (!currentResults.length) {
         document.getElementById("results").innerHTML =
-            "<p class='searching'>We're signing up our first independent breweries — " +
+            "<p class='searching'>We're signing up our first independent breweries, " +
             "their beers will appear here soon. See who we're talking to on the " +
             "<button class='link-btn' data-view='partners'>Partners</button> page.</p>";
         document.getElementById("results-count").textContent = "";
@@ -415,7 +415,7 @@ function showAlcoholFree() {
     applyFiltersAndRender();
 }
 
-// A beer counts as gluten-free only if it's actually labelled so — we never
+// A beer counts as gluten-free only if it's actually labelled so, we never
 // infer it (a wrong "gluten-free" claim is a real safety issue).
 function isGlutenFree(beer) {
     const text = `${beer.name} ${beer.style || ""} ${beer.description || ""}`.toLowerCase();
@@ -428,7 +428,7 @@ function showGlutenFree() {
     currentResults = allBeers.filter(isGlutenFree);
     if (!currentResults.length) {
         document.getElementById("results").innerHTML =
-            "<p class='searching'>No gluten-free beers in the listings right now — " +
+            "<p class='searching'>No gluten-free beers in the listings right now, " +
             "we only show ones the shop labels gluten-free. Check back as the catalogue grows.</p>";
         document.getElementById("results-count").textContent = "";
         return;
@@ -446,7 +446,7 @@ function clearSearch() {
 
 // The friendly "nothing shown yet" prompt used on load and after Clear.
 function promptEmptyState() {
-    return "<p class='searching'>Search for a beer, hop or brewery above — " +
+    return "<p class='searching'>Search for a beer, hop or brewery above, " +
         "or tap <strong>Show All Beers</strong> to browse everything.</p>";
 }
 
@@ -466,7 +466,7 @@ function applyFiltersAndRender() {
         })
         .filter(Boolean);
 
-    // Beer-type filter (multi-select checklist) — a beer passes if it matches
+    // Beer-type filter (multi-select checklist), a beer passes if it matches
     // ANY of the ticked types.
     const types = checkedTypes();
     if (types.length) {
@@ -511,7 +511,7 @@ let cardState = [];
 
 function cleanPrice(text) {
     const match = String(text || "").match(/£\s?\d+(?:\.\d{1,2})?/);
-    return match ? match[0].replace(/\s/g, "") : "—";
+    return match ? match[0].replace(/\s/g, "") : "-";
 }
 
 function normalizeOffer(offer) {
@@ -640,7 +640,7 @@ document.addEventListener("click", event => {
         return;
     }
 
-    // Clicking the buy link should just buy — don't open the detail page.
+    // Clicking the buy link should just buy, don't open the detail page.
     if (event.target.closest(".buy-btn")) return;
 
     // The compare checkbox shouldn't open the detail page.
@@ -772,7 +772,7 @@ function compareColumn(beer, isBest) {
             </div>
             <div class="compare-section">
                 <p class="compare-label">Flavour</p>
-                ${flavours.length ? tagRow(flavours) : `<p class="compare-none">—</p>`}
+                ${flavours.length ? tagRow(flavours) : `<p class="compare-none">-</p>`}
             </div>
         </div>`;
 }
@@ -860,7 +860,7 @@ function tagRow(tags) {
 }
 
 // Build and show the detail page for a beer id (index into allBeers).
-// Rules-based "possible allergens" — a GUIDE ONLY. We don't hold the packaging
+// Rules-based "possible allergens", a GUIDE ONLY. We don't hold the packaging
 // data, so we infer the allergens a beer of this style usually contains from
 // its style + name (+ a brewery description if one has been scraped). Always
 // defers to the can. Covers the cereals-containing-gluten + milk allergens that
@@ -869,14 +869,14 @@ function allergenInfo(beer) {
     const text = `${beer.name || ""} ${beer.style || ""} ${beer.description || ""}`.toLowerCase();
     if (isGlutenFree(beer)) {
         return { glutenFree: true, contains: [],
-            note: "Labelled gluten-free — but always check the can, especially if you're coeliac." };
+            note: "Labelled gluten-free, but always check the can, especially if you're coeliac." };
     }
     const contains = ["Barley (gluten)"];   // nearly all beer is malted barley
     if (/\bwheat\b|weisse|weizen|witbier|blanche|\bhefe|white ipa|\bwit\b/.test(text)) contains.push("Wheat (gluten)");
     if (/\boat(s|meal)?\b/.test(text)) contains.push("Oats (gluten)");
     if (/milk stout|milkshake|lactose|pastry|flat white|\blatte\b|cappuccino|mocha|smoothie/.test(text)) contains.push("Milk (lactose)");
     return { glutenFree: false, contains,
-        note: "Typical for this style — recipes vary, so always check the can." };
+        note: "Typical for this style, recipes vary, so always check the can." };
 }
 
 function allergenSectionHtml(beer) {
@@ -889,7 +889,7 @@ function allergenSectionHtml(beer) {
             <summary class="allergen-summary">Possible allergens</summary>
             <div class="allergen-body">
                 ${body}
-                <p class="allergen-note">${a.note} This is a guide from the beer's style — it is <strong>not</strong> the official ingredient list.</p>
+                <p class="allergen-note">${a.note} This is a guide from the beer's style, it is <strong>not</strong> the official ingredient list.</p>
             </div>
         </details>`;
 }
@@ -918,7 +918,7 @@ function openBeerDetail(id) {
             <span class="detail-shop-name">${offer.supermarket}</span>
             <div class="detail-shop-opts">
                 ${(offer.options || []).map(o =>
-                    `<a class="opt-buy" href="${o.link || "#"}" target="_blank" rel="noopener">${o.label} — ${cleanPrice(o.price)}</a>`
+                    `<a class="opt-buy" href="${o.link || "#"}" target="_blank" rel="noopener">${o.label}, ${cleanPrice(o.price)}</a>`
                 ).join("")}
             </div>
         </div>`).join("");
@@ -953,7 +953,7 @@ function openBeerDetail(id) {
                 </div>
 
                 <div class="detail-section">
-                    <h2>Hops <span class="muted">— and what each brings</span></h2>
+                    <h2>Hops <span class="muted">and what each brings</span></h2>
                     <div class="hop-profiles">${hopsHtml}</div>
                 </div>
 
@@ -971,14 +971,14 @@ function openBeerDetail(id) {
 
 
 // ---------------------------------------------------------------
-// Hops & Brewery lists — compact, expandable accordions
+// Hops & Brewery lists, compact, expandable accordions
 // ---------------------------------------------------------------
 
 function renderAccordion(container, map) {
     const keys = Object.keys(map).sort((a, b) => a.localeCompare(b));
     if (keys.length === 0) {
         container.innerHTML =
-            "<p class='searching'>No beers available yet — build the catalogue with <code>npm run build</code>.</p>";
+            "<p class='searching'>No beers available yet, build the catalogue with <code>npm run build</code>.</p>";
         return;
     }
     container.innerHTML = keys.map(key => `
@@ -1005,7 +1005,7 @@ function buildHopsList(beers) {
     if (!hops.length) {
         if (countEl) countEl.textContent = "";
         container.innerHTML =
-            "<p class='searching'>No beers available yet — build the catalogue with <code>npm run build</code>.</p>";
+            "<p class='searching'>No beers available yet, build the catalogue with <code>npm run build</code>.</p>";
         return;
     }
 
@@ -1071,7 +1071,7 @@ function buildBreweryList(beers) {
     if (!breweries.length) {
         if (countEl) countEl.textContent = "";
         container.innerHTML =
-            "<p class='searching'>No beers available yet — build the catalogue with <code>npm run build</code>.</p>";
+            "<p class='searching'>No beers available yet, build the catalogue with <code>npm run build</code>.</p>";
         return;
     }
 
@@ -1166,7 +1166,7 @@ function styleIs(beer, words) {
     return words.some(w => s.includes(w));
 }
 
-// A beer's type is worked out from its style AND its name — many beers
+// A beer's type is worked out from its style AND its name, many beers
 // (sours, stouts) aren't in our hop DB so have no style, but their name
 // still says "Sour Beer", "Milk Stout", etc. Matching the name too is what
 // makes Sour and Stout actually return results.
@@ -1207,7 +1207,7 @@ function checkedTypes() {
 
 
 // ---------------------------------------------------------------
-// Find your flavour — interactive flavour chips (tap to toggle)
+// Find your flavour, interactive flavour chips (tap to toggle)
 // ---------------------------------------------------------------
 
 const FLAVOUR_CATEGORIES = [
@@ -1271,7 +1271,7 @@ function findByFlavour() {
     const matches = allBeers.filter(beer => chosen.every(cat => cat.match(beer)));
 
     if (matches.length === 0) {
-        resultsDiv.innerHTML = "<p class='searching'>No beers match all those flavours — try fewer 😔</p>";
+        resultsDiv.innerHTML = "<p class='searching'>No beers match all those flavours, try fewer 😔</p>";
         countEl.textContent = "";
         return;
     }
@@ -1282,17 +1282,17 @@ function findByFlavour() {
 
 
 // ---------------------------------------------------------------
-// Gifts — beer glassware, gift baskets & merch
-// (Placeholder items — swap the links for real products / affiliate URLs.)
+// Gifts, beer glassware, gift baskets & merch
+// (Placeholder items, swap the links for real products / affiliate URLs.)
 // ---------------------------------------------------------------
 
 const GIFTS = [
     { emoji: "🍺", title: "Craft Beer Glass Set", desc: "A set of tulip & pint glasses to serve your finds properly.", cta: "Browse glassware" },
-    { emoji: "🎁", title: "Craft Beer Gift Basket", desc: "A hamper of mixed craft cans — a great gift for any beer lover.", cta: "See gift baskets" },
+    { emoji: "🎁", title: "Craft Beer Gift Basket", desc: "A hamper of mixed craft cans, a great gift for any beer lover.", cta: "See gift baskets" },
     { emoji: "👕", title: "Beer Lover T-Shirts", desc: "Hoppy slogans and brewery-style tees for the beer obsessed.", cta: "Shop merch" },
     { emoji: "🧴", title: "Beer Making Kit", desc: "Everything to brew your own craft beer at home.", cta: "View home-brew kits" },
     { emoji: "📖", title: "Craft Beer Books", desc: "Guides to hops, styles and the world's best breweries.", cta: "Browse books" },
-    { emoji: "🍻", title: "Personalised Tankards", desc: "Engraved pint tankards — a keepsake gift.", cta: "See tankards" }
+    { emoji: "🍻", title: "Personalised Tankards", desc: "Engraved pint tankards, a keepsake gift.", cta: "See tankards" }
 ];
 
 function renderGifts() {
@@ -1309,22 +1309,22 @@ function renderGifts() {
     `).join("");
 }
 
-// A gift category was tapped — show the (coming-soon) gift shop, named for it.
+// A gift category was tapped, show the (coming-soon) gift shop, named for it.
 function openGiftShop(index) {
     const g = GIFTS[index];
     const title = document.getElementById("giftshop-title");
     const copy = document.getElementById("giftshop-copy");
-    if (g && title) title.textContent = g.title + " — coming soon";
+    if (g && title) title.textContent = g.title + ", coming soon";
     if (g && copy) {
         copy.innerHTML = `We're getting <strong>${g.title.toLowerCase()}</strong> ready for the shop.
-            This part isn't quite live yet — check back soon and it'll be here.`;
+            This part isn't quite live yet, check back soon and it'll be here.`;
     }
     navigate("giftshop");
 }
 
 
 // ---------------------------------------------------------------
-// Contact form — opens the visitor's email app addressed to us
+// Contact form, opens the visitor's email app addressed to us
 // ---------------------------------------------------------------
 
 const CONTACT_EMAIL = "hello@mybeerfinder.co.uk";
@@ -1353,7 +1353,7 @@ function sendMessage(event) {
 
     const subject = `MyBeerFinder enquiry from ${name || "a visitor"}`;
     const body =
-        `${message}\n\n— ${name}${email ? " (" + email + ")" : ""}`;
+        `${message}\n\nFrom ${name}${email ? " (" + email + ")" : ""}`;
 
     // Static site (no server), so hand off to the visitor's email client,
     // pre-addressed to us with their message filled in.
