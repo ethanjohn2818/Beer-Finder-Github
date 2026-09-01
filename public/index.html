@@ -29,9 +29,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901m">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901m">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901m">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901n">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901n">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901n">
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="MyBeerFinder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260901m">
+    <link rel="stylesheet" href="style.css?v=20260901n">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -111,8 +111,8 @@
 
         <div class="nav-left">
             <a class="nav-brand" href="/" data-view="welcome">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901m" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901m" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901n" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901n" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
             <a class="nav-btn nav-search-btn" href="/search" data-view="search">🔎 Search Beer</a>
@@ -168,14 +168,16 @@
         <section id="welcome-view" class="view">
 
             <div class="welcome hero-welcome">
-                <h1 class="welcome-title">Welcome To The #1 Beer Comparison Website</h1>
-                <p class="welcome-lede">Find the right beer for you, or for someone else. Compare prices, hops and flavour, with stock from the UK's leading supermarkets and independent breweries.</p>
+                <div class="hero-box">
+                    <h1 class="welcome-title">Welcome To The #1 Beer Comparison Website</h1>
+                    <p class="welcome-lede">Find the right beer for you, or for someone else. Compare prices, hops and flavour, with stock from the UK's leading supermarkets and independent breweries.</p>
 
-                <button type="button" class="hero-cta" onclick="navigate('search')">Find Beers</button>
+                    <button type="button" class="hero-cta" onclick="navigate('search')">Find Beers</button>
 
-                <div class="hero-secondary">
-                    <button type="button" class="qa-btn" onclick="navigate('find')">✨ Find By Flavour</button>
-                    <button type="button" class="qa-btn" onclick="navigate('account')">👤 Sign In</button>
+                    <div class="hero-secondary">
+                        <button type="button" class="qa-btn" onclick="navigate('find')">✨ Find By Flavour</button>
+                        <button type="button" class="qa-btn" onclick="navigate('account')">👤 Sign In</button>
+                    </div>
                 </div>
             </div>
 
@@ -536,8 +538,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901m" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901m" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901n" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901n" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -594,12 +596,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260901m"></script>
-    <script src="script.js?v=20260901m"></script>
-    <script src="ads.js?v=20260901m"></script>
+    <script src="beerlogic.js?v=20260901n"></script>
+    <script src="script.js?v=20260901n"></script>
+    <script src="ads.js?v=20260901n"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260901m"></script>
+    <script src="auth.js?v=20260901n"></script>
 
 </body>
 </html>

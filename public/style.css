@@ -337,6 +337,16 @@ main {
 /* Homepage hero: "Find Beers" is the one dominant call to action,
    everything else (find-by-flavour, sign in) is a smaller pill underneath. */
 .hero-welcome { padding-bottom: 8px; }
+/* Same card look as a beer listing (.beer-card/.slide-card): white
+   background, pale-ale border, soft shadow — one box behind the
+   headline, subhead and all three buttons. */
+.hero-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+    padding: 48px 40px;
+}
 .hero-cta {
     padding: 20px 48px;
     border: none;
