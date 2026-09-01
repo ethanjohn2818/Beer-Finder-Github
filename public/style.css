@@ -232,53 +232,6 @@ main {
     display: none;
 }
 
-/* Decorative floating emoji, shown only while hovering the "Find a beer"
-   or "Find your flavour" welcome cards. Fixed to the viewport and kept in
-   the gutter outside the 1100px content column, well below every real UI
-   layer (z-index: 0), so they never sit over content or controls. Hidden
-   below 1400px, where that gutter gets too narrow to hold them clear of
-   the page (also where hover isn't a real input anyway). */
-.emoji-decor {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    display: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease;
-}
-.emoji-decor span {
-    position: absolute;
-    line-height: 1;
-    user-select: none;
-    opacity: 0.32;
-}
-@media (min-width: 1400px) {
-    .emoji-decor { display: block; }
-    .welcome-grid > a:nth-child(1):hover ~ .emoji-decor-beer,
-    .welcome-grid > a:nth-child(2):hover ~ .emoji-decor-flavour {
-        opacity: 1;
-        visibility: visible;
-    }
-}
-.emoji-decor .e1  { top: 5%;  left: 2vw;    font-size: 2rem;   transform: rotate(-8deg); }
-.emoji-decor .e2  { top: 11%; right: 2.5vw; font-size: 1.7rem; transform: rotate(9deg); }
-.emoji-decor .e3  { top: 17%; left: 4vw;    font-size: 2.3rem; transform: rotate(5deg); }
-.emoji-decor .e4  { top: 23%; right: 3vw;   font-size: 1.9rem; transform: rotate(-7deg); }
-.emoji-decor .e5  { top: 29%; left: 2.5vw;  font-size: 1.6rem; transform: rotate(11deg); }
-.emoji-decor .e6  { top: 35%; right: 4.5vw; font-size: 2.5rem; transform: rotate(-4deg); }
-.emoji-decor .e7  { top: 41%; left: 3.5vw;  font-size: 1.8rem; transform: rotate(6deg); }
-.emoji-decor .e8  { top: 47%; right: 2vw;   font-size: 2.1rem; transform: rotate(-10deg); }
-.emoji-decor .e9  { top: 53%; left: 2vw;    font-size: 1.7rem; transform: rotate(8deg); }
-.emoji-decor .e10 { top: 59%; right: 3.5vw; font-size: 2.4rem; transform: rotate(-5deg); }
-.emoji-decor .e11 { top: 65%; left: 4.5vw;  font-size: 1.9rem; transform: rotate(4deg); }
-.emoji-decor .e12 { top: 71%; right: 2.5vw; font-size: 1.6rem; transform: rotate(-9deg); }
-.emoji-decor .e13 { top: 77%; left: 3vw;    font-size: 2.2rem; transform: rotate(7deg); }
-.emoji-decor .e14 { top: 83%; right: 2vw;   font-size: 1.8rem; transform: rotate(-6deg); }
-.emoji-decor .e15 { top: 89%; left: 2.5vw;  font-size: 2rem;   transform: rotate(10deg); }
-.emoji-decor .e16 { top: 95%; right: 4vw;   font-size: 1.7rem; transform: rotate(-8deg); }
-
 .view-intro {
     color: var(--muted);
     margin-top: 0;
@@ -370,10 +323,10 @@ main {
 
 
 /* ---------------------------------------------------------------
-   Welcome page (home) — a few big "where to start" cards
+   Welcome page (home) — search-first hero + editorial content below
 --------------------------------------------------------------- */
 .welcome { max-width: 860px; margin: 0 auto; text-align: center; }
-.welcome-title { font-size: clamp(1.9rem, 1.2rem + 2.5vw, 2.8rem); margin: 8px 0 12px; }
+.welcome-title { font-size: clamp(2.2rem, 1.2rem + 3.6vw, 3.6rem); line-height: 1.08; margin: 8px 0 14px; }
 .welcome-lede {
     color: var(--muted);
     font-size: 1.1rem;
@@ -381,53 +334,39 @@ main {
     margin: 0 auto 36px;
     line-height: 1.6;
 }
-.welcome-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-.welcome-card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    gap: 6px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 26px 26px 22px;
-    box-shadow: var(--shadow-sm);
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-}
-.welcome-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--amber);
-}
-.welcome-ic {
-    font-size: 1.55rem;
-    line-height: 1;
-    width: 54px;
-    height: 54px;
-    display: inline-flex;
-    align-items: center;
+/* Homepage hero: search is the one dominant call to action, everything
+   else (find-by-flavour, sign in) is a smaller pill underneath. */
+.hero-welcome { padding-bottom: 8px; }
+.hero-search {
     justify-content: center;
-    background: rgba(240, 140, 27, 0.12);
-    border-radius: 14px;
-    margin-bottom: 8px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 0 8px rgba(240, 140, 27, 0.08);
 }
-.welcome-card h2 { font-size: 1.25rem; margin: 2px 0; }
-.welcome-card p { color: var(--muted); line-height: 1.55; margin: 0; flex: 1; }
-.welcome-go { color: var(--amber-dark); font-weight: 800; margin-top: 14px; }
-html[data-theme="dark"] .welcome-go { color: var(--amber); }
+.hero-search input {
+    width: 420px;
+    max-width: 100%;
+    padding: 18px 22px;
+    font-size: 1.1rem;
+    border-radius: 14px;
+}
+.hero-search button {
+    padding: 18px 34px;
+    font-size: 1.1rem;
+    border-radius: 14px;
+}
+.hero-secondary {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
 
 .welcome .view-article { text-align: left; }
-
-@media (max-width: 620px) {
-    .welcome-grid { grid-template-columns: 1fr; }
-}
 
 
 /* ---------------------------------------------------------------

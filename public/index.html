@@ -29,9 +29,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901i">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901i">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901i">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901j">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901j">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901j">
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="MyBeerFinder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260901i">
+    <link rel="stylesheet" href="style.css?v=20260901j">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -111,8 +111,8 @@
 
         <div class="nav-left">
             <a class="nav-brand" href="/" data-view="welcome">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901i" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901i" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901j" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901j" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
             <a class="nav-btn nav-search-btn" href="/search" data-view="search">🔎 Search Beer</a>
@@ -167,6 +167,21 @@
         <!-- WELCOME VIEW (home) -->
         <section id="welcome-view" class="view">
 
+            <div class="welcome hero-welcome">
+                <h1 class="welcome-title">Find craft beer you'll actually love</h1>
+                <p class="welcome-lede">Search by taste, brewery or hop, then see who sells it cheapest at Tesco, Morrisons, Sainsbury's and Asda.</p>
+
+                <form class="search-bar hero-search" onsubmit="return heroSearch(event)">
+                    <input id="heroSearchInput" type="text" placeholder="Try Citra, BrewDog, Neck Oil..." autocomplete="off">
+                    <button type="submit">Find Beers</button>
+                </form>
+
+                <div class="hero-secondary">
+                    <button type="button" class="qa-btn" onclick="navigate('find')">✨ Find by flavour</button>
+                    <button type="button" class="qa-btn" onclick="navigate('account')">👤 Sign in</button>
+                </div>
+            </div>
+
             <!-- Slideshow of ~30 hand-picked beers (built from the live catalogue
                  in script.js: pickSlideshowBeers/renderSlideshowCards). -->
             <div class="beer-slideshow">
@@ -181,75 +196,6 @@
             </div>
 
             <div class="welcome">
-                <h1 class="welcome-title">Welcome to MyBeerFinder 🍺</h1>
-                <p class="welcome-lede">Craft beer, decoded. Find the beers you'll love and where to buy them. Where would you like to start?</p>
-                <div class="welcome-grid">
-                    <a class="welcome-card" href="/search" data-view="search">
-                        <span class="welcome-ic">🔎</span>
-                        <h2>Find a beer</h2>
-                        <p>Search by name, brewery or hop, and see which shop has it cheapest.</p>
-                        <span class="welcome-go">Start searching &rarr;</span>
-                    </a>
-                    <a class="welcome-card" href="/find" data-view="find">
-                        <span class="welcome-ic">✨</span>
-                        <h2>Find your flavour</h2>
-                        <p>Tell us the tastes you enjoy and we'll match you to beers you'll love.</p>
-                        <span class="welcome-go">Pick flavours &rarr;</span>
-                    </a>
-                    <!-- Decorative emoji, shown while hovering the two cards above
-                         (sibling-selector CSS below). Kept out of the cards themselves
-                         since their :hover transform would otherwise become the
-                         containing block for these position:fixed layers. -->
-                    <div class="emoji-decor emoji-decor-beer" aria-hidden="true">
-                        <span class="e1">🍺</span>
-                        <span class="e2">🍻</span>
-                        <span class="e3">🌾</span>
-                        <span class="e4">🍯</span>
-                        <span class="e5">🥨</span>
-                        <span class="e6">🧀</span>
-                        <span class="e7">🥜</span>
-                        <span class="e8">🌭</span>
-                        <span class="e9">🍺</span>
-                        <span class="e10">🍻</span>
-                        <span class="e11">🌾</span>
-                        <span class="e12">🍯</span>
-                        <span class="e13">🥨</span>
-                        <span class="e14">🧀</span>
-                        <span class="e15">🥜</span>
-                        <span class="e16">🌭</span>
-                    </div>
-                    <div class="emoji-decor emoji-decor-flavour" aria-hidden="true">
-                        <span class="e1">🍑</span>
-                        <span class="e2">🍋</span>
-                        <span class="e3">🥭</span>
-                        <span class="e4">🌿</span>
-                        <span class="e5">🍊</span>
-                        <span class="e6">🍇</span>
-                        <span class="e7">🍍</span>
-                        <span class="e8">🌲</span>
-                        <span class="e9">🍑</span>
-                        <span class="e10">🍋</span>
-                        <span class="e11">🥭</span>
-                        <span class="e12">🌿</span>
-                        <span class="e13">🍊</span>
-                        <span class="e14">🍇</span>
-                        <span class="e15">🍍</span>
-                        <span class="e16">🌲</span>
-                    </div>
-                    <a class="welcome-card" href="/account" data-view="account">
-                        <span class="welcome-ic">👤</span>
-                        <h2>Your account</h2>
-                        <p>Save the beers you like and get recommendations made just for you.</p>
-                        <span class="welcome-go">Sign in &rarr;</span>
-                    </a>
-                    <a class="welcome-card" href="/blog">
-                        <span class="welcome-ic">📝</span>
-                        <h2>Read the blog</h2>
-                        <p>Plain-English guides to hops, styles and getting into craft beer.</p>
-                        <span class="welcome-go">Read the guides &rarr;</span>
-                    </a>
-                </div>
-
                 <section class="view-article">
                     <h2>Find the craft beer you'll love, and where to buy it</h2>
                     <p>MyBeerFinder is a free tool that helps you discover craft beer by what it actually tastes like, then shows you where to buy it cheapest across the UK's biggest supermarkets, Tesco, Morrisons, Sainsbury's and Asda. Search by hop, brewery, beer name or flavour, and every beer we list comes decoded: its hops, the flavours those hops bring, its style and strength, possible allergens, and a price comparison across the shops that stock it.</p>
@@ -593,8 +539,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901i" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901i" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901j" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901j" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -651,12 +597,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260901i"></script>
-    <script src="script.js?v=20260901i"></script>
-    <script src="ads.js?v=20260901i"></script>
+    <script src="beerlogic.js?v=20260901j"></script>
+    <script src="script.js?v=20260901j"></script>
+    <script src="ads.js?v=20260901j"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260901i"></script>
+    <script src="auth.js?v=20260901j"></script>
 
 </body>
 </html>
