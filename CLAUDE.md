@@ -101,7 +101,7 @@ checking nothing distinct gets wrongly merged.
 
 ## Accounts, recommendations & leaderboard (Supabase)
 
-`public/auth.js` + Supabase project `vccbkemmnjqjxmzycooy`. Passwordless sign-in
+`public/auth.js` + Supabase project `xbjsmbnpcdtohutsofvg`. Passwordless sign-in
 (magic-link + Google OAuth), a chosen username, and an "I've had this" button on
 each beer. Tables `profiles` and `beers_had` (RLS: a user only reads/writes
 their own rows). The keys in `auth.js` are the PUBLIC publishable keys — safe in

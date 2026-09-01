@@ -8,8 +8,8 @@
 // ever read/write their own beers.
 // ---------------------------------------------------------------
 
-const SB_URL = "https://vccbkemmnjqjxmzycooy.supabase.co";
-const SB_KEY = "sb_publishable_UHVdiWYiBj9SghJgFjXVxw_laWHUkD2";
+const SB_URL = "https://xbjsmbnpcdtohutsofvg.supabase.co";
+const SB_KEY = "sb_publishable_2aRwmfSIeXzkDggu5x09qw_i_j4rT4s";
 
 let sb = null;
 let authUser = null;        // the logged-in auth user (has .email)
