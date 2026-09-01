@@ -227,6 +227,14 @@ async function fetchPopularBeers() {
     return data || [];
 }
 
+async function fetchUserCount() {
+    if (!sb) return null;
+    const { count, error } = await sb.from("profiles")
+        .select("id", { count: "exact", head: true });
+    if (error) { console.warn("user count error", error.message); return null; }
+    return count;
+}
+
 
 // ---- Views / UI -----------------------------------------------
 
@@ -283,6 +291,13 @@ async function renderLeaderboard() {
     const el = document.getElementById("leaderboard-body");
     if (!el) return;
     el.innerHTML = `<p class="muted">Loading…</p>`;
+
+    const countEl = document.getElementById("leaderboard-user-count");
+    if (countEl) {
+        fetchUserCount().then(count => {
+            if (count != null) countEl.textContent = `👥 ${count} user${count === 1 ? "" : "s"}`;
+        });
+    }
 
     // Map every beer currently on the site by its stable key, so a beer that's
     // been delisted simply drops out of the chart and the rest move up.
