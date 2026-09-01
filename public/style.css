@@ -1913,7 +1913,8 @@ html[data-theme="dark"] .auth-msg { color: var(--amber); }
 .had-list li { padding: 4px 0; break-inside: avoid; }
 
 /* Leaderboard */
-.leaderboard { list-style: none; padding: 0; margin: 0; max-width: 560px; }
+#leaderboard-view { text-align: center; }
+.leaderboard { list-style: none; padding: 0; margin: 0 auto; max-width: 560px; text-align: left; }
 .leaderboard li {
     display: flex;
     align-items: center;
