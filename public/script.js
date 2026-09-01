@@ -363,18 +363,6 @@ function searchBeers() {
     applyFiltersAndRender();
 }
 
-// The homepage hero search bar: hand its value to the real search input,
-// jump to the Search view, then run the search there.
-function heroSearch(event) {
-    event.preventDefault();
-    const heroInput = document.getElementById("heroSearchInput");
-    const input = document.getElementById("hopInput");
-    if (input) input.value = heroInput ? heroInput.value.trim() : "";
-    navigate("search");
-    searchBeers();
-    return false;
-}
-
 // Highlight whichever quick-action "mode" is currently showing (or none), and
 // flip its label from "Show all…" to "Showing all…" while it's active.
 function setActiveQuickAction(id) {

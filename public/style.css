@@ -334,29 +334,25 @@ main {
     margin: 0 auto 36px;
     line-height: 1.6;
 }
-/* Homepage hero: search is the one dominant call to action, everything
-   else (find-by-flavour, sign in) is a smaller pill underneath. */
+/* Homepage hero: "Find Beers" is the one dominant call to action,
+   everything else (find-by-flavour, sign in) is a smaller pill underneath. */
 .hero-welcome { padding-bottom: 8px; }
-.hero-search {
-    justify-content: center;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 10px;
-    border-radius: 20px;
-    box-shadow: 0 0 0 8px rgba(240, 140, 27, 0.08);
-}
-.hero-search input {
-    width: 420px;
-    max-width: 100%;
-    padding: 18px 22px;
-    font-size: 1.1rem;
+.hero-cta {
+    padding: 20px 48px;
+    border: none;
     border-radius: 14px;
+    background: var(--amber);
+    color: #fff;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-md), 0 0 0 8px rgba(240, 140, 27, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
-.hero-search button {
-    padding: 18px 34px;
-    font-size: 1.1rem;
-    border-radius: 14px;
+.hero-cta:hover {
+    background: var(--amber-dark);
+    transform: translateY(-2px);
 }
 .hero-secondary {
     display: flex;
