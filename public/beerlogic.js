@@ -20,7 +20,16 @@ const GENERIC_WORDS = new Set([
     // 0% Alcohol Free Beer" would key on "alcohol free" and match every AF beer,
     // or "Harbour Brewing Company …" would key on "brewing company".
     "vol", "alcohol", "free", "original", "brewing", "company",
-    "proper", "premium", "unfiltered"
+    "proper", "premium", "unfiltered",
+    // Style/marketing words shared by beers from many different breweries.
+    // Left un-generic, a curated entry like "Cloudwater DIPA" or "Shipyard
+    // American Pale Ale" reduces to just "dipa"/"american", so ANY other
+    // brewery's beer containing that one word (e.g. "Seven Bro7hers ... Krush
+    // Dipa", "Williams Bros. ... American Pale Ale") wrongly inherits
+    // Cloudwater's/Shipyard's brewery and hops. Generic-ing these forces a
+    // real brewery-name match instead (see matchesBeer's productWords===0
+    // branch), so only that brewery's own beers can still match.
+    "american", "apa", "dipa", "best", "citra", "gold"
 ]);
 
 const BEER_STYLE_WORDS = [
