@@ -29,9 +29,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901e">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901e">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901e">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901f">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901f">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901f">
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="MyBeerFinder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260901e">
+    <link rel="stylesheet" href="style.css?v=20260901f">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -111,8 +111,8 @@
 
         <div class="nav-left">
             <a class="nav-brand" href="/" data-view="welcome">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901e" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901e" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901f" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901f" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
             <a class="nav-btn nav-search-btn" href="/search" data-view="search">🔎 Search Beer</a>
@@ -166,16 +166,6 @@
 
         <!-- WELCOME VIEW (home) -->
         <section id="welcome-view" class="view">
-            <div class="emoji-decor" aria-hidden="true">
-                <span class="e1">🍺</span>
-                <span class="e2">🍻</span>
-                <span class="e3">🌾</span>
-                <span class="e4">🍯</span>
-                <span class="e5">🥨</span>
-                <span class="e6">🍺</span>
-                <span class="e7">🌾</span>
-                <span class="e8">🍻</span>
-            </div>
             <div class="welcome">
                 <h1 class="welcome-title">Welcome to MyBeerFinder 🍺</h1>
                 <p class="welcome-lede">Craft beer, decoded. Find the beers you'll love and where to buy them. Where would you like to start?</p>
@@ -192,6 +182,46 @@
                         <p>Tell us the tastes you enjoy and we'll match you to beers you'll love.</p>
                         <span class="welcome-go">Pick flavours &rarr;</span>
                     </a>
+                    <!-- Decorative emoji, shown while hovering the two cards above
+                         (sibling-selector CSS below). Kept out of the cards themselves
+                         since their :hover transform would otherwise become the
+                         containing block for these position:fixed layers. -->
+                    <div class="emoji-decor emoji-decor-beer" aria-hidden="true">
+                        <span class="e1">🍺</span>
+                        <span class="e2">🍻</span>
+                        <span class="e3">🌾</span>
+                        <span class="e4">🍯</span>
+                        <span class="e5">🥨</span>
+                        <span class="e6">🧀</span>
+                        <span class="e7">🥜</span>
+                        <span class="e8">🌭</span>
+                        <span class="e9">🍺</span>
+                        <span class="e10">🍻</span>
+                        <span class="e11">🌾</span>
+                        <span class="e12">🍯</span>
+                        <span class="e13">🥨</span>
+                        <span class="e14">🧀</span>
+                        <span class="e15">🥜</span>
+                        <span class="e16">🌭</span>
+                    </div>
+                    <div class="emoji-decor emoji-decor-flavour" aria-hidden="true">
+                        <span class="e1">🍑</span>
+                        <span class="e2">🍋</span>
+                        <span class="e3">🥭</span>
+                        <span class="e4">🌿</span>
+                        <span class="e5">🍊</span>
+                        <span class="e6">🍇</span>
+                        <span class="e7">🍍</span>
+                        <span class="e8">🌲</span>
+                        <span class="e9">🍑</span>
+                        <span class="e10">🍋</span>
+                        <span class="e11">🥭</span>
+                        <span class="e12">🌿</span>
+                        <span class="e13">🍊</span>
+                        <span class="e14">🍇</span>
+                        <span class="e15">🍍</span>
+                        <span class="e16">🌲</span>
+                    </div>
                     <a class="welcome-card" href="/account" data-view="account">
                         <span class="welcome-ic">👤</span>
                         <h2>Your account</h2>
@@ -281,16 +311,6 @@
 
         <!-- FIND YOUR BEER VIEW -->
         <section id="find-view" class="view hidden">
-            <div class="emoji-decor" aria-hidden="true">
-                <span class="e1">🍑</span>
-                <span class="e2">🍋</span>
-                <span class="e3">🥭</span>
-                <span class="e4">🌿</span>
-                <span class="e5">🍊</span>
-                <span class="e6">🍇</span>
-                <span class="e7">🍍</span>
-                <span class="e8">🌲</span>
-            </div>
             <h1>Find your flavour ✨</h1>
             <p class="view-intro">Tap the flavours you fancy, then hit “Show my beers”.</p>
 
@@ -559,8 +579,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901e" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901e" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901f" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901f" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -617,12 +637,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260901e"></script>
-    <script src="script.js?v=20260901e"></script>
-    <script src="ads.js?v=20260901e"></script>
+    <script src="beerlogic.js?v=20260901f"></script>
+    <script src="script.js?v=20260901f"></script>
+    <script src="ads.js?v=20260901f"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260901e"></script>
+    <script src="auth.js?v=20260901f"></script>
 
 </body>
 </html>
