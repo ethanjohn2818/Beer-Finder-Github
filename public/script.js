@@ -1201,6 +1201,7 @@ const BEER_TYPES = [
 // ---------------------------------------------------------------
 
 const SLIDESHOW_TOTAL = 30;
+const SLIDESHOW_MAX_PER_BREWERY = 4;
 let slideBeers = [];
 let slideIndex = 0;
 
@@ -1221,6 +1222,7 @@ function pickSlideshowBeers() {
     const styleTypes = BEER_TYPES.filter(t => t.label !== "Alcohol-free" && t.label !== "Gluten-free");
     const perType = Math.floor(SLIDESHOW_TOTAL / styleTypes.length);
     const used = new Set();
+    const breweryCount = {};
     const picked = [];
 
     const rank = beers => beers
@@ -1228,21 +1230,29 @@ function pickSlideshowBeers() {
         .filter(x => x.score >= 0)
         .sort((a, b) => b.score - a.score);
 
-    styleTypes.forEach(type => {
-        const candidates = rank(allBeers.filter(b => !used.has(b._id) && type.match(b)));
-        candidates.slice(0, perType).forEach(({ beer }) => {
+    // Take the best-ranked candidates up to `limit`, skipping any brewery
+    // that's already hit SLIDESHOW_MAX_PER_BREWERY (so one prolific brewery,
+    // e.g. BrewDog, can't crowd out everyone else).
+    function take(candidates, limit) {
+        let taken = 0;
+        for (const { beer } of candidates) {
+            if (taken >= limit) break;
+            const key = (beer.brewery || "").toLowerCase();
+            if ((breweryCount[key] || 0) >= SLIDESHOW_MAX_PER_BREWERY) continue;
             used.add(beer._id);
+            breweryCount[key] = (breweryCount[key] || 0) + 1;
             picked.push(beer);
-        });
+            taken++;
+        }
+    }
+
+    styleTypes.forEach(type => {
+        take(rank(allBeers.filter(b => !used.has(b._id) && type.match(b))), perType);
     });
 
     // Top up to the target with the next-best hopped beers overall.
     if (picked.length < SLIDESHOW_TOTAL) {
-        for (const { beer } of rank(allBeers.filter(b => !used.has(b._id)))) {
-            if (picked.length >= SLIDESHOW_TOTAL) break;
-            used.add(beer._id);
-            picked.push(beer);
-        }
+        take(rank(allBeers.filter(b => !used.has(b._id))), SLIDESHOW_TOTAL - picked.length);
     }
 
     // Shuffle so the same style doesn't always lead, keeping the mix we picked.
