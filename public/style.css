@@ -238,25 +238,6 @@ main {
     margin-bottom: 28px;
 }
 
-.leaderboard-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-}
-.leaderboard-head h1 { margin: 0; }
-.user-count-badge {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--muted);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 6px 14px;
-    white-space: nowrap;
-}
-
 /* Editorial content under the data views (helps readers and search engines) */
 .view-article {
     max-width: 760px;

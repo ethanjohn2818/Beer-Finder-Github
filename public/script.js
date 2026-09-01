@@ -160,6 +160,7 @@ function showView(name) {
     // Account / leaderboard content is built by auth.js (loaded after this).
     if (name === "account" && typeof renderAccount === "function") renderAccount();
     if (name === "leaderboard" && typeof renderLeaderboard === "function") renderLeaderboard();
+    if (name === "contact" && typeof renderUserCount === "function") renderUserCount();
 
     window.scrollTo(0, 0);
 }

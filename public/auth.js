@@ -235,6 +235,14 @@ async function fetchUserCount() {
     return count;
 }
 
+// Show the total number of signed-up users at the foot of the Contact page.
+async function renderUserCount() {
+    const el = document.getElementById("user-count-line");
+    if (!el) return;
+    const count = await fetchUserCount();
+    el.textContent = count != null ? `${count} users signed up` : "";
+}
+
 
 // ---- Views / UI -----------------------------------------------
 
@@ -291,13 +299,6 @@ async function renderLeaderboard() {
     const el = document.getElementById("leaderboard-body");
     if (!el) return;
     el.innerHTML = `<p class="muted">Loading…</p>`;
-
-    const countEl = document.getElementById("leaderboard-user-count");
-    if (countEl) {
-        fetchUserCount().then(count => {
-            if (count != null) countEl.textContent = `👥 ${count} user${count === 1 ? "" : "s"}`;
-        });
-    }
 
     // Map every beer currently on the site by its stable key, so a beer that's
     // been delisted simply drops out of the chart and the rest move up.

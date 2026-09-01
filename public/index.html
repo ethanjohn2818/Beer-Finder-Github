@@ -29,9 +29,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901b">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901b">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901b">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901c">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901c">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901c">
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="MyBeerFinder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260901b">
+    <link rel="stylesheet" href="style.css?v=20260901c">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -111,8 +111,8 @@
 
         <div class="nav-left">
             <a class="nav-brand" href="/" data-view="welcome">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901b" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901b" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901c" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901c" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
             <a class="nav-btn nav-search-btn" href="/search" data-view="search">🔎 Search Beer</a>
@@ -477,6 +477,7 @@
             </div>
 
             <p id="last-updated" class="last-updated"></p>
+            <p id="user-count-line" class="last-updated"></p>
         </section>
 
 
@@ -489,10 +490,7 @@
 
         <!-- LEADERBOARD VIEW (built by auth.js) -->
         <section id="leaderboard-view" class="view hidden">
-            <div class="leaderboard-head">
-                <h1>Leaderboard 🏆</h1>
-                <span id="leaderboard-user-count" class="user-count-badge"></span>
-            </div>
+            <h1>Leaderboard 🏆</h1>
             <p class="view-intro">Who's tried the most beers on MyBeerFinder.</p>
             <div id="leaderboard-body"></div>
         </section>
@@ -541,8 +539,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901b" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901b" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901c" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901c" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -599,12 +597,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260901b"></script>
-    <script src="script.js?v=20260901b"></script>
-    <script src="ads.js?v=20260901b"></script>
+    <script src="beerlogic.js?v=20260901c"></script>
+    <script src="script.js?v=20260901c"></script>
+    <script src="ads.js?v=20260901c"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260901b"></script>
+    <script src="auth.js?v=20260901c"></script>
 
 </body>
 </html>
