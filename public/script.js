@@ -1201,7 +1201,6 @@ const BEER_TYPES = [
 // ---------------------------------------------------------------
 
 const SLIDESHOW_TOTAL = 30;
-const SLIDESHOW_INDEX_BASE = 95000;   // keeps its cards out of cardData/cardState's 0..N range
 let slideBeers = [];
 let slideIndex = 0;
 
@@ -1255,13 +1254,28 @@ function pickSlideshowBeers() {
     slideBeers = picked;
 }
 
+// A lightweight promo card, not the full search-result card: image, name,
+// type, ABV and price, the whole thing a single link out to the cheapest
+// shop's listing (no store/pack toggles or compare checkbox here).
+function slideshowCardHtml(beer) {
+    const store = (beer.offers || [])[0];
+    if (!store) return "";
+    const opt = store.options[0];
+    return `
+        <a class="slide-card" href="${opt.link || "#"}" target="_blank" rel="noopener">
+            <img src="${opt.image || NO_IMG}" alt="${beer.name}" loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src=NO_IMG">
+            <h3>${beer.name}</h3>
+            <p class="slide-meta">${beer.style || "Craft beer"}${beer.abv ? " • " + beer.abv + "%" : ""}</p>
+            <p class="slide-price">${cleanPrice(opt.price)} at ${store.supermarket}</p>
+        </a>`;
+}
+
 function renderSlideshowCards() {
     const track = document.getElementById("slideshow-track");
     if (!track) return;
     slideIndex = 0;
-    track.innerHTML = slideBeers
-        .map((beer, i) => renderCard({ beer, offers: beer.offers }, SLIDESHOW_INDEX_BASE + i))
-        .join("");
+    track.innerHTML = slideBeers.map(slideshowCardHtml).join("");
     updateSlidePosition();
 }
 
