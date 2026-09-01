@@ -161,6 +161,9 @@ function showView(name) {
     if (name === "account" && typeof renderAccount === "function") renderAccount();
     if (name === "leaderboard" && typeof renderLeaderboard === "function") renderLeaderboard();
     if (name === "contact" && typeof renderUserCount === "function") renderUserCount();
+    // Re-render (not re-pick) on every visit, since another view's card grid
+    // resets the shared cardData/cardState arrays this slideshow also uses.
+    if (name === "welcome" && slideBeers.length) renderSlideshowCards();
 
     window.scrollTo(0, 0);
 }
@@ -277,6 +280,8 @@ async function loadBeerData() {
         buildBreweryList(allBeers);
         renderFlavourChips();
         renderGifts();
+        pickSlideshowBeers();
+        renderSlideshowCards();
 
         // Don't preload the whole catalogue, show a prompt and let the user
         // choose what to load (search, Show All Beers, etc.).
@@ -1189,6 +1194,116 @@ const BEER_TYPES = [
     { label: "Alcohol-free",    match: b => isAlcoholFree(b) },
     { label: "Gluten-free",     match: b => isGlutenFree(b) }
 ];
+
+
+// ---------------------------------------------------------------
+// Homepage slideshow: ~30 good examples, spread across beer styles
+// ---------------------------------------------------------------
+
+const SLIDESHOW_TOTAL = 30;
+const SLIDESHOW_INDEX_BASE = 95000;   // keeps its cards out of cardData/cardState's 0..N range
+let slideBeers = [];
+let slideIndex = 0;
+
+// A "good example" has hops (the hard requirement), and is better the more
+// shops sell it and the richer a taste description we can build for it.
+function slideshowScore(beer) {
+    if (!(beer.hops || []).length) return -1;
+    let score = (beer.offers || []).length * 2;
+    score += beerTasteTags(beer).length;
+    if (beer.brewery) score += 1;
+    if (beer.style) score += 1;
+    if (beer.offers[0] && beer.offers[0].image) score += 1;
+    return score;
+}
+
+function pickSlideshowBeers() {
+    // Cross-cutting labels, not beer styles, so they don't get their own slot.
+    const styleTypes = BEER_TYPES.filter(t => t.label !== "Alcohol-free" && t.label !== "Gluten-free");
+    const perType = Math.floor(SLIDESHOW_TOTAL / styleTypes.length);
+    const used = new Set();
+    const picked = [];
+
+    const rank = beers => beers
+        .map(beer => ({ beer, score: slideshowScore(beer) }))
+        .filter(x => x.score >= 0)
+        .sort((a, b) => b.score - a.score);
+
+    styleTypes.forEach(type => {
+        const candidates = rank(allBeers.filter(b => !used.has(b._id) && type.match(b)));
+        candidates.slice(0, perType).forEach(({ beer }) => {
+            used.add(beer._id);
+            picked.push(beer);
+        });
+    });
+
+    // Top up to the target with the next-best hopped beers overall.
+    if (picked.length < SLIDESHOW_TOTAL) {
+        for (const { beer } of rank(allBeers.filter(b => !used.has(b._id)))) {
+            if (picked.length >= SLIDESHOW_TOTAL) break;
+            used.add(beer._id);
+            picked.push(beer);
+        }
+    }
+
+    // Shuffle so the same style doesn't always lead, keeping the mix we picked.
+    for (let i = picked.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [picked[i], picked[j]] = [picked[j], picked[i]];
+    }
+
+    slideBeers = picked;
+}
+
+function renderSlideshowCards() {
+    const track = document.getElementById("slideshow-track");
+    if (!track) return;
+    slideIndex = 0;
+    track.innerHTML = slideBeers
+        .map((beer, i) => renderCard({ beer, offers: beer.offers }, SLIDESHOW_INDEX_BASE + i))
+        .join("");
+    updateSlidePosition();
+}
+
+function slideshowVisibleCount() {
+    const w = window.innerWidth;
+    if (w <= 640) return 1;
+    if (w <= 980) return 2;
+    return 4;
+}
+
+function updateSlidePosition() {
+    const track = document.getElementById("slideshow-track");
+    const prevBtn = document.getElementById("slide-prev");
+    const nextBtn = document.getElementById("slide-next");
+    if (!track) return;
+
+    const maxIndex = Math.max(0, slideBeers.length - slideshowVisibleCount());
+    if (slideIndex > maxIndex) slideIndex = maxIndex;
+
+    const card = track.children[0];
+    if (card) {
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        const step = card.getBoundingClientRect().width + gap;
+        track.style.transform = `translateX(-${slideIndex * step}px)`;
+    }
+    if (prevBtn) prevBtn.disabled = slideIndex <= 0;
+    if (nextBtn) nextBtn.disabled = slideIndex >= maxIndex;
+}
+
+function slidePrev() {
+    slideIndex = Math.max(0, slideIndex - 1);
+    updateSlidePosition();
+}
+
+function slideNext() {
+    const maxIndex = Math.max(0, slideBeers.length - slideshowVisibleCount());
+    slideIndex = Math.min(maxIndex, slideIndex + 1);
+    updateSlidePosition();
+}
+
+window.addEventListener("resize", updateSlidePosition);
+
 
 // Beer type is a multi-select checklist: tick as many as you like.
 function renderTypeFilter() {

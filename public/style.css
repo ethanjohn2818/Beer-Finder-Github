@@ -306,6 +306,48 @@ main {
 
 
 /* ---------------------------------------------------------------
+   Homepage beer slideshow (4 cards visible, one step at a time)
+--------------------------------------------------------------- */
+.beer-slideshow { margin-bottom: 44px; }
+.slideshow-title { text-align: center; margin: 0 0 16px; font-size: 1.4rem; }
+.slideshow-row { display: flex; align-items: center; gap: 10px; }
+.slideshow-viewport { flex: 1; overflow: hidden; }
+.slideshow-track {
+    display: flex;
+    gap: 16px;
+    transition: transform 0.35s ease;
+}
+.slideshow-track .beer-card {
+    flex: 0 0 calc((100% - 3 * 16px) / 4);
+    min-width: 0;
+}
+.slide-arrow {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.slide-arrow:hover:not(:disabled) { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.slide-arrow:disabled { opacity: 0.35; cursor: not-allowed; }
+
+@media (max-width: 980px) {
+    .slideshow-track .beer-card { flex-basis: calc((100% - 16px) / 2); }
+}
+@media (max-width: 640px) {
+    .slideshow-track .beer-card { flex-basis: 100%; }
+    .slide-arrow { width: 36px; height: 36px; font-size: 1.3rem; }
+}
+
+
+/* ---------------------------------------------------------------
    Welcome page (home) — a few big "where to start" cards
 --------------------------------------------------------------- */
 .welcome { max-width: 860px; margin: 0 auto; text-align: center; }
