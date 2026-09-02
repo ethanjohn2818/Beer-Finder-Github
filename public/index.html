@@ -29,9 +29,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901q">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901q">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901q">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901r">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901r">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901r">
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="MyBeerFinder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260901q">
+    <link rel="stylesheet" href="style.css?v=20260901r">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -111,8 +111,8 @@
 
         <div class="nav-left">
             <a class="nav-brand" href="/" data-view="welcome">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901q" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901q" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901r" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901r" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
             <a class="nav-btn nav-search-btn" href="/search" data-view="search">🔎 Search Beer</a>
@@ -266,28 +266,13 @@
                     <button class="qa-btn" id="qa-all" data-label-off="Show All Beers" data-label-on="Showing All Beers" onclick="showAllBeers()">Show All Beers</button>
                     <button class="qa-btn" id="qa-af" data-label-off="Show All Alcohol-Free" data-label-on="Showing All Alcohol-Free" onclick="showAlcoholFree()">Show All Alcohol-Free</button>
                     <button class="qa-btn" id="qa-gf" data-label-off="Show All Gluten-Free" data-label-on="Showing All Gluten-Free" onclick="showGlutenFree()">Show All Gluten-Free</button>
-                    <button type="button" class="qa-btn" id="qa-nearby" aria-expanded="false" aria-controls="nearby-panel" onclick="toggleNearbyPanel()">📍 Near You</button>
                     <button class="qa-btn qa-clear" onclick="clearSearch()">Clear</button>
-                </div>
-
-                <div id="nearby-panel" class="nearby-panel hidden">
-                    <p class="nearby-note">Find beer from our independent brewery partners near you.</p>
-                    <div class="nearby-controls">
-                        <input id="nearbyCity" type="text" class="nearby-input" placeholder="Enter a city or town, e.g. Leeds">
-                        <div class="nearby-radius-group" id="nearbyRadiusGroup">
-                            <button type="button" class="qa-btn radius-pill active" data-miles="5" onclick="setNearbyRadius(5, this)">5 miles</button>
-                            <button type="button" class="qa-btn radius-pill" data-miles="15" onclick="setNearbyRadius(15, this)">15 miles</button>
-                            <button type="button" class="qa-btn radius-pill" data-miles="25" onclick="setNearbyRadius(25, this)">25 miles</button>
-                            <button type="button" class="qa-btn radius-pill" data-miles="50" onclick="setNearbyRadius(50, this)">50 miles</button>
-                        </div>
-                        <button type="button" class="qa-btn" onclick="showIndependent()">Find Nearby Independents</button>
-                    </div>
                 </div>
 
                 <p class="hero-help">New here? <button class="link-btn" data-view="about">See how it works &rsaquo;</button></p>
             </div>
 
-            <!-- Sort + type + store filter toolbar -->
+            <!-- Sort + type + store + near-you filter toolbar -->
             <div class="toolbar" id="toolbar">
                 <label class="toolbar-sort">
                     <span>Sort</span>
@@ -309,6 +294,18 @@
                 <div class="toolbar-stores" id="storeFilters">
                     <span class="toolbar-label">Stores</span>
                     <!-- store checkboxes injected by JS -->
+                </div>
+
+                <div class="toolbar-nearby">
+                    <span class="toolbar-label">📍 Near You</span>
+                    <input id="nearbyCity" type="text" class="nearby-input" placeholder="City or town">
+                    <select id="nearbyRadius" onchange="setNearbyRadius(this.value)">
+                        <option value="5" selected>5 miles</option>
+                        <option value="15">15 miles</option>
+                        <option value="25">25 miles</option>
+                        <option value="50">50 miles</option>
+                    </select>
+                    <button type="button" class="qa-btn" onclick="showIndependent()">Find Independents</button>
                 </div>
             </div>
 
@@ -606,8 +603,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901q" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901q" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901r" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901r" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -664,12 +661,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260901q"></script>
-    <script src="script.js?v=20260901q"></script>
-    <script src="ads.js?v=20260901q"></script>
+    <script src="beerlogic.js?v=20260901r"></script>
+    <script src="script.js?v=20260901r"></script>
+    <script src="ads.js?v=20260901r"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260901q"></script>
+    <script src="auth.js?v=20260901r"></script>
 
 </body>
 </html>
