@@ -232,6 +232,53 @@ main {
     display: none;
 }
 
+/* Decorative floating emoji, shown only while hovering "Find Beers" or
+   "Find By Flavour" in the hero. Fixed to the viewport and kept in the
+   gutter outside the 1100px content column, well below every real UI
+   layer (z-index: 0), so they never sit over content or controls. Hidden
+   below 1400px, where that gutter gets too narrow to hold them clear of
+   the page (also where hover isn't a real input anyway). */
+.emoji-decor {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+.emoji-decor span {
+    position: absolute;
+    line-height: 1;
+    user-select: none;
+    opacity: 0.32;
+}
+@media (min-width: 1400px) {
+    .emoji-decor { display: block; }
+    .hero-box > .hero-cta:hover ~ .emoji-decor-beer,
+    .hero-secondary > .qa-btn:first-child:hover ~ .emoji-decor-flavour {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+.emoji-decor .e1  { top: 5%;  left: 2vw;    font-size: 2rem;   transform: rotate(-8deg); }
+.emoji-decor .e2  { top: 11%; right: 2.5vw; font-size: 1.7rem; transform: rotate(9deg); }
+.emoji-decor .e3  { top: 17%; left: 4vw;    font-size: 2.3rem; transform: rotate(5deg); }
+.emoji-decor .e4  { top: 23%; right: 3vw;   font-size: 1.9rem; transform: rotate(-7deg); }
+.emoji-decor .e5  { top: 29%; left: 2.5vw;  font-size: 1.6rem; transform: rotate(11deg); }
+.emoji-decor .e6  { top: 35%; right: 4.5vw; font-size: 2.5rem; transform: rotate(-4deg); }
+.emoji-decor .e7  { top: 41%; left: 3.5vw;  font-size: 1.8rem; transform: rotate(6deg); }
+.emoji-decor .e8  { top: 47%; right: 2vw;   font-size: 2.1rem; transform: rotate(-10deg); }
+.emoji-decor .e9  { top: 53%; left: 2vw;    font-size: 1.7rem; transform: rotate(8deg); }
+.emoji-decor .e10 { top: 59%; right: 3.5vw; font-size: 2.4rem; transform: rotate(-5deg); }
+.emoji-decor .e11 { top: 65%; left: 4.5vw;  font-size: 1.9rem; transform: rotate(4deg); }
+.emoji-decor .e12 { top: 71%; right: 2.5vw; font-size: 1.6rem; transform: rotate(-9deg); }
+.emoji-decor .e13 { top: 77%; left: 3vw;    font-size: 2.2rem; transform: rotate(7deg); }
+.emoji-decor .e14 { top: 83%; right: 2vw;   font-size: 1.8rem; transform: rotate(-6deg); }
+.emoji-decor .e15 { top: 89%; left: 2.5vw;  font-size: 2rem;   transform: rotate(10deg); }
+.emoji-decor .e16 { top: 95%; right: 4vw;   font-size: 1.7rem; transform: rotate(-8deg); }
+
 .view-intro {
     color: var(--muted);
     margin-top: 0;
