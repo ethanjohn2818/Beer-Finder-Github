@@ -1569,6 +1569,11 @@ html[data-theme="dark"] .allergen-tag {
     flex-wrap: wrap;
     align-items: center;
     gap: 12px;
+    flex-basis: 100%;
+}
+.toolbar-types .toolbar-label {
+    flex-basis: 100%;
+    margin-bottom: 2px;
 }
 .type-check {
     display: inline-flex;
