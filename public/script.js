@@ -415,8 +415,7 @@ function showIndependent() {
     if (!currentResults.length) {
         document.getElementById("results").innerHTML =
             "<p class='searching'>We're signing up our first independent breweries, " +
-            "their beers will appear here soon. See who we're talking to on the " +
-            "<button class='link-btn' data-view='partners'>Partners</button> page.</p>";
+            "their beers will appear here soon.</p>";
         document.getElementById("results-count").textContent = "";
         return;
     }
