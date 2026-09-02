@@ -1134,9 +1134,12 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
+    flex-basis: 100%;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
 }
 .nearby-input {
-    width: 150px;
+    width: 220px;
     max-width: 100%;
     padding: 8px 12px;
     font-size: 0.9rem;
@@ -1151,7 +1154,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
     box-shadow: 0 0 0 3px rgba(240, 140, 27, 0.22);
 }
 #nearbyRadius {
-    padding: 8px 12px;
+    padding: 8px 16px;
     border: 1px solid var(--border);
     border-radius: 10px;
     font-size: 0.9rem;
