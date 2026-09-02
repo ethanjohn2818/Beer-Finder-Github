@@ -393,9 +393,35 @@ const PARTNER_BREWERIES = new Set([
 function isIndependentBrewery(beer) {
     return PARTNER_BREWERIES.has(String(beer.brewery || "").trim().toLowerCase());
 }
+
+// "Near You": city + mile-radius search over independent brewery partners.
+// PARTNER_BREWERIES has no members yet (and none have a location on file),
+// so there's nothing to filter by distance against, showIndependent() below
+// always falls through to the same waiting message regardless of what's
+// typed here. Once real partners are signed up with a town/location, this
+// is where the distance filtering plugs in: geocode nearbyCity against a
+// static UK town lookup, then keep only partner breweries within
+// nearbyRadiusMiles of it.
+let nearbyRadiusMiles = 5;
+
+function toggleNearbyPanel() {
+    const panel = document.getElementById("nearby-panel");
+    const btn = document.getElementById("qa-nearby");
+    if (!panel) return;
+    const open = panel.classList.toggle("hidden") === false;
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+function setNearbyRadius(miles, btn) {
+    nearbyRadiusMiles = miles;
+    document.querySelectorAll("#nearbyRadiusGroup .radius-pill").forEach(b => {
+        b.classList.toggle("active", b === btn);
+    });
+}
+
 function showIndependent() {
     document.getElementById("hopInput").value = "";
-    setActiveQuickAction("qa-independent");
+    setActiveQuickAction("qa-nearby");
     currentResults = allBeers.filter(isIndependentBrewery);
     if (!currentResults.length) {
         document.getElementById("results").innerHTML =
