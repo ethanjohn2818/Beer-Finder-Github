@@ -29,7 +29,17 @@ const GENERIC_WORDS = new Set([
     // Cloudwater's/Shipyard's brewery and hops. Generic-ing these forces a
     // real brewery-name match instead (see matchesBeer's productWords===0
     // branch), so only that brewery's own beers can still match.
-    "american", "apa", "dipa", "best", "citra", "gold"
+    "american", "apa", "dipa", "best", "citra", "gold",
+    // Same problem, different words: each is the sole leftover word for one
+    // curated entry, and each also turns up in an unrelated brewery's real
+    // product name, so it was wrongly inheriting that curated entry's
+    // brewery + hops (Verdant Pulp -> Brooklyn's "Pulp Art", Camden Easy IPA
+    // -> Northern Monk's "Easy Juice", BrewDog Triple Hazy -> Vault City's
+    // "Triple Fruited Mango", Leffe Blonde Abbey Beer -> Northern Monk's
+    // "Bobbi Abbey", Kirkstall Mango IPA -> that same Vault City beer again
+    // once "triple" stopped being the culprit, Seven Brothers Juicy IPA is
+    // the same risk class even though no live mismatch was found for it).
+    "pulp", "easy", "triple", "abbey", "mango", "juicy"
 ]);
 
 const BEER_STYLE_WORDS = [
