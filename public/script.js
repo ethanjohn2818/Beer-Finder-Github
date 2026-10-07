@@ -470,16 +470,35 @@ function showGlutenFree() {
 // so this matches real Bavarian/festival signals only. The set stays small
 // and honest, and grows as the catalogue does.
 // ---------------------------------------------------------------
+// The six official Munich Oktoberfest breweries, these always qualify.
 const OKTOBERFEST_BREWERIES =
     /paulaner|spaten|hofbr[äa]u|l[öo]wenbr[äa]u|augustiner|hacker[\s-]?pschorr/i;
-const OKTOBERFEST_STYLES =
-    /oktoberfest|m[äa]rzen|festbier|\bhelles\b|\bdunkel\b|\bbock\b|keller|wei[sß]{1,2}bier|hefe\s?weizen|\bweizen\b|m[üu]nchn|munich|bavarian|\bk[öo]lsch\b|radler/i;
+// Explicitly a festival beer by name, origin not needed (unambiguous terms).
+const OKTOBERFEST_EXPLICIT = /oktoberfest|m[äa]rzen|festbier/i;
+// Bavarian/German festival STYLES. On their own these describe a style that
+// British and other brewers also make (e.g. a London or Cornish "Helles"), so
+// we only count them when the beer is genuinely German or Austrian, see below.
+const BAVARIAN_STYLES =
+    /\bhelles\b|\bdunkel\b|\bbock\b|keller|wei[sß]{1,2}bier|hefe\s?weizen|\bweizen\b|m[üu]nchn|m[üu]nich|bavarian|\bradler\b/i;
+// Famous German/Austrian beer names, used as a fallback when a brewery has no
+// location on file in breweries.json.
+const GERMAN_BRANDS =
+    /erdinger|franziskaner|weihenstephan|ayinger|schneider|weltenburger|k[öo]nig\s?ludwig|tucher|maisel|bitburger|krombacher|warsteiner|k[öo]stritzer|stiegl|g[öo]sser|paulaner|spaten|hofbr[äa]u|l[öo]wenbr[äa]u|augustiner|hacker|pschorr/i;
+
+// Is this beer actually from Germany or Austria? Checks the brewery's location
+// (breweryData: "Town, Country"), then falls back to known German/Austrian
+// brand names. This is what stops a British Helles being tagged Oktoberfest.
+function isGermanOrAustrian(beer) {
+    const loc = (breweryData[String(beer.brewery || "").toLowerCase()] || "").toLowerCase();
+    if (/germany|deutschland|austria|[öo]sterreich|bavaria|munich|m[ü]nchen/.test(loc)) return true;
+    return GERMAN_BRANDS.test(`${beer.brewery || ""} ${beer.name || ""}`);
+}
 
 function isOktoberfest(beer) {
     const name = `${beer.name || ""} ${beer.style || ""}`;
-    return OKTOBERFEST_BREWERIES.test(name) ||
-           OKTOBERFEST_BREWERIES.test(beer.brewery || "") ||
-           OKTOBERFEST_STYLES.test(name);
+    if (OKTOBERFEST_BREWERIES.test(name) || OKTOBERFEST_BREWERIES.test(beer.brewery || "")) return true;
+    if (OKTOBERFEST_EXPLICIT.test(name)) return true;
+    return BAVARIAN_STYLES.test(name) && isGermanOrAustrian(beer);
 }
 
 // Build the standalone Oktoberfest page: filter the catalogue, sort by
