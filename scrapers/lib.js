@@ -378,7 +378,7 @@ async function dismissCookieBanner(page) {
 // "New\nBeavertown Rumble DIPA 440ml\n(0)\nRating,...". Taking line 0 blindly
 // gave dozens of beers the name "New". So skip those noise lines and return
 // the first line that actually looks like a product name.
-const NAME_NOISE_EXACT = /^(new|sponsored|vegan|best ?seller|bestseller|more like this|reduced|new lower price|add|price|new in)$/i;
+const NAME_NOISE_EXACT = /^(new|sponsored|vegan|best ?seller|bestseller|more like this|reduced|new lower price|add|price|new in|add to favourites?|nectar price)$/i;
 const NAME_NOISE_START = /^(these are ads|rating,|offer name:|buy \d|any \d|save \d|ordinarily |£\d|now £|was £)/i;
 
 function productName(text) {
