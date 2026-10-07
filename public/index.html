@@ -29,9 +29,9 @@
 
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20260901v">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20260901v">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20260901v">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=20261007a">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=20261007a">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261007a">
 
     <!-- Open Graph / social sharing -->
     <meta property="og:type" content="website">
@@ -50,7 +50,7 @@
     <meta name="twitter:image" content="https://mybeerfinder.co.uk/logo.png">
     <meta name="twitter:image:alt" content="MyBeerFinder logo">
 
-    <link rel="stylesheet" href="style.css?v=20260901v">
+    <link rel="stylesheet" href="style.css?v=20261007a">
 
     <!-- Structured data (helps Google understand the site) -->
     <script type="application/ld+json">
@@ -111,8 +111,8 @@
 
         <div class="nav-left">
             <a class="nav-brand" href="/" data-view="welcome">
-                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20260901v" alt="" width="36" height="36" aria-hidden="true">
-                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901v" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-light" src="/logo/mbf-icon-light.png?v=20261007a" alt="" width="36" height="36" aria-hidden="true">
+                <img class="brand-icon brand-icon-dark" src="/logo/mbf-icon-dark.png?v=20261007a" alt="" width="36" height="36" aria-hidden="true">
                 <span class="brand-word">My<span class="brand-word-accent">Beer</span>Finder</span>
             </a>
             <a class="nav-btn nav-search-btn" href="/search" data-view="search">🔎 Search Beer</a>
@@ -133,6 +133,7 @@
                     <a class="nav-btn" href="/find" data-view="find">Find Your Flavour</a>
                     <a class="nav-btn" href="/hops" data-view="hops">Hops</a>
                     <a class="nav-btn" href="/brewery" data-view="brewery">Brewery</a>
+                    <a class="nav-btn" href="/oktoberfest" data-view="oktoberfest">Oktoberfest</a>
                 </div>
             </div>
             <div class="nav-group">
@@ -222,6 +223,16 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Seasonal Oktoberfest banner (links to the Oktoberfest beers page) -->
+            <aside class="okt-banner">
+                <div class="okt-banner-text">
+                    <span class="okt-banner-kicker">🍺 Seasonal</span>
+                    <h2>It's Oktoberfest</h2>
+                    <p>Raise a stein without leaving home. Browse the Bavarian and festival-style beers you can buy in the UK right now, plus our guides to the six Munich breweries behind the world's biggest beer festival.</p>
+                </div>
+                <button type="button" class="okt-banner-btn" onclick="navigate('oktoberfest')">See Oktoberfest beers &rsaquo;</button>
+            </aside>
 
             <!-- Slideshow of ~30 hand-picked beers (built from the live catalogue
                  in script.js: pickSlideshowBeers/renderSlideshowCards). -->
@@ -314,6 +325,41 @@
             <p id="results-count" class="results-count"></p>
             <div id="results"></div>
 
+        </section>
+
+
+        <!-- OKTOBERFEST VIEW -->
+        <section id="oktoberfest-view" class="view hidden">
+            <div class="okt-page-hero">
+                <h1>Oktoberfest beers 🍺🥨</h1>
+                <p class="view-intro">Prost! A hand-picked flight of Bavarian and festival-style beers you can buy in the UK, from soft Munich Helles and cloudy wheat beer to the breweries behind the world's biggest beer festival.</p>
+            </div>
+
+            <div class="ad-slot" data-ad="okt-top"></div>
+
+            <p id="okt-count" class="results-count"></p>
+            <div id="okt-results"></div>
+
+            <section class="view-article">
+                <h2>A taste of Munich, on a UK shelf</h2>
+                <p>Only six breweries, all inside the city of Munich, are allowed to pour at Oktoberfest: Augustiner, Hacker-Pschorr, Hofbr&auml;u, L&ouml;wenbr&auml;u, Paulaner and Spaten. True imported Oktoberfestbier is seasonal and hard to find in Britain, but the festival's own breweries sell Munich lagers and wheat beers here all year, and other brewers make beer squarely in the same spirit. The beers above are the Bavarian and festival-style drinks we have found on UK supermarket shelves, with the cheapest shop for each. We only list beers that genuinely fit the style, so the selection is small and honest, and it grows as we find more.</p>
+                <p>New to the style? A proper Oktoberfest beer is a strong, smooth lager of around 6%, either pale golden Festbier or amber M&auml;rzen, brewed to the German purity law. Munich Helles is its gentler everyday cousin, and Weissbier is the cloudy, banana-and-clove wheat beer that shares the beer-garden table.</p>
+
+                <h2>Read up on Oktoberfest</h2>
+                <p>Ten guides to the festival, its beer and the breweries behind it:</p>
+                <ul class="okt-blog-links">
+                    <li><a href="/blog/what-is-oktoberfest">What is Oktoberfest? The festival explained</a></li>
+                    <li><a href="/blog/oktoberfestbier-and-marzen">Oktoberfestbier and M&auml;rzen: the beer in the stein</a></li>
+                    <li><a href="/blog/inside-oktoberfest">Inside Oktoberfest: tents, steins and traditions</a></li>
+                    <li><a href="/blog/oktoberfest-at-home-uk">How to celebrate Oktoberfest at home in the UK</a></li>
+                    <li><a href="/blog/augustiner-brewery">Augustiner: Munich's oldest brewery</a></li>
+                    <li><a href="/blog/hacker-pschorr-brewery">Hacker-Pschorr: the Heaven of the Bavarians</a></li>
+                    <li><a href="/blog/hofbrau-brewery">Hofbr&auml;u: Munich's royal brewery</a></li>
+                    <li><a href="/blog/lowenbrau-brewery">L&ouml;wenbr&auml;u: the roaring lion of Munich</a></li>
+                    <li><a href="/blog/paulaner-brewery">Paulaner: the monks' brewery</a></li>
+                    <li><a href="/blog/spaten-brewery">Spaten: the brewery that shaped modern lager</a></li>
+                </ul>
+            </section>
         </section>
 
 
@@ -603,8 +649,8 @@
 
     <footer class="footer">
         <div class="footer-brand">
-            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20260901v" alt="" width="44" height="44" aria-hidden="true">
-            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20260901v" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-light" src="/logo/mbf-icon-light.png?v=20261007a" alt="" width="44" height="44" aria-hidden="true">
+            <img class="footer-icon footer-icon-dark" src="/logo/mbf-icon-dark.png?v=20261007a" alt="" width="44" height="44" aria-hidden="true">
             <span class="footer-brand-text">
                 <span class="footer-word">My<span class="brand-word-accent">Beer</span>Finder</span>
                 <span class="footer-tagline">Craft beer, decoded by its hops.</span>
@@ -661,12 +707,12 @@
 
     <!-- ?v= is a cache-buster: bump it whenever these files change so
          returning visitors never get a stale JS/CSS mix. -->
-    <script src="beerlogic.js?v=20260901v"></script>
-    <script src="script.js?v=20260901v"></script>
-    <script src="ads.js?v=20260901v"></script>
+    <script src="beerlogic.js?v=20261007a"></script>
+    <script src="script.js?v=20261007a"></script>
+    <script src="ads.js?v=20261007a"></script>
     <!-- User accounts (Supabase) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js?v=20260901v"></script>
+    <script src="auth.js?v=20261007a"></script>
 
 </body>
 </html>

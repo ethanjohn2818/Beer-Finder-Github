@@ -91,6 +91,7 @@ const VIEW_PATHS = {
     find:    "/find",
     hops:    "/hops",
     brewery: "/brewery",
+    oktoberfest: "/oktoberfest",
     partners: "/partners",
     gifts:   "/gifting",
     giftshop: "/gift-shop",
@@ -116,6 +117,8 @@ const VIEW_META = {
               "Explore the hops behind UK craft beer and what each one tastes like, citrus, pine, tropical and more."],
     brewery: ["Breweries & where they're based | MyBeerFinder",
               "Browse craft breweries stocked at UK supermarkets, where each is based, and the beers we found."],
+    oktoberfest: ["Oktoberfest beers you can buy in the UK | MyBeerFinder",
+              "Bavarian and festival-style beers to buy in the UK, Munich Helles, wheat beer and the six Oktoberfest breweries, with where each is cheapest."],
     partners: ["Partner breweries | MyBeerFinder",
               "The independent breweries we partner with, coming soon to MyBeerFinder."],
     gifts:   ["Gifting: craft beer gifts & glassware | MyBeerFinder",
@@ -161,6 +164,7 @@ function showView(name) {
     if (name === "account" && typeof renderAccount === "function") renderAccount();
     if (name === "leaderboard" && typeof renderLeaderboard === "function") renderLeaderboard();
     if (name === "contact" && typeof renderUserCount === "function") renderUserCount();
+    if (name === "oktoberfest") buildOktoberfest();
     // Re-render (not re-pick) on every visit, since another view's card grid
     // resets the shared cardData/cardState arrays this slideshow also uses.
     if (name === "welcome" && slideBeers.length) renderSlideshowCards();
@@ -457,6 +461,49 @@ function showGlutenFree() {
         return;
     }
     applyFiltersAndRender();
+}
+
+// ---------------------------------------------------------------
+// Oktoberfest: the six official Munich festival breweries, plus the German
+// lager and wheat styles poured at (or squarely in the spirit of) the Wiesn.
+// Deliberately conservative, we never want to mislabel a beer as Oktoberfest,
+// so this matches real Bavarian/festival signals only. The set stays small
+// and honest, and grows as the catalogue does.
+// ---------------------------------------------------------------
+const OKTOBERFEST_BREWERIES =
+    /paulaner|spaten|hofbr[äa]u|l[öo]wenbr[äa]u|augustiner|hacker[\s-]?pschorr/i;
+const OKTOBERFEST_STYLES =
+    /oktoberfest|m[äa]rzen|festbier|\bhelles\b|\bdunkel\b|\bbock\b|keller|wei[sß]{1,2}bier|hefe\s?weizen|\bweizen\b|m[üu]nchn|munich|bavarian|\bk[öo]lsch\b|radler/i;
+
+function isOktoberfest(beer) {
+    const name = `${beer.name || ""} ${beer.style || ""}`;
+    return OKTOBERFEST_BREWERIES.test(name) ||
+           OKTOBERFEST_BREWERIES.test(beer.brewery || "") ||
+           OKTOBERFEST_STYLES.test(name);
+}
+
+// Build the standalone Oktoberfest page: filter the catalogue, sort by
+// brewery then name, and render into the page's own grid. Falls back to a
+// friendly message if nothing Bavarian is in stock right now.
+function buildOktoberfest() {
+    const grid = document.getElementById("okt-results");
+    const count = document.getElementById("okt-count");
+    if (!grid) return;
+
+    const beers = allBeers.filter(isOktoberfest).sort((a, b) =>
+        (a.brewery || "").localeCompare(b.brewery || "") ||
+        (a.name || "").localeCompare(b.name || ""));
+
+    if (!beers.length) {
+        grid.innerHTML = "<p class='searching'>No Bavarian beers in the listings right now. " +
+            "Check back soon, the catalogue grows every week. In the meantime, read our " +
+            "<a href='/blog/what-is-oktoberfest'>Oktoberfest guides</a> below.</p>";
+        if (count) count.textContent = "";
+        return;
+    }
+
+    if (count) count.textContent = `${beers.length} beer${beers.length === 1 ? "" : "s"}`;
+    renderBeerCards(beers, grid);
 }
 
 function clearSearch() {

@@ -16,7 +16,8 @@ const ADSENSE_CLIENT = "ca-pub-6022289335915022";
 const AD_SLOTS = {
     // container data-ad name : AdSense ad-unit "slot" id (digits)
     "search-top": "",   // e.g. "1234567890"
-    "find-top": ""
+    "find-top": "",
+    "okt-top": ""
 };
 
 

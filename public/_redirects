@@ -5,6 +5,7 @@
 /find      /index.html   200
 /hops      /index.html   200
 /brewery   /index.html   200
+/oktoberfest /index.html 200
 /partners  /index.html   200
 /gifting   /index.html   200
 /gifts     /gifting      301
