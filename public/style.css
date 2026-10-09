@@ -1615,7 +1615,12 @@ html[data-theme="dark"] .allergen-tag {
     display: grid;
     gap: 20px;
     max-width: 820px;
+    margin: 0 auto;
 }
+/* About reads as one centred column: centre the page header too (cards keep
+   their left-aligned body text for readability). */
+#about-view > h1,
+#about-view > .view-intro { text-align: center; }
 .about-card {
     background: var(--card);
     border-radius: 16px;
