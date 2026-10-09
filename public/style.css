@@ -2279,6 +2279,113 @@ html[data-theme="dark"] .okt-banner { color: #1f2027; }
     .okt-blog-links { grid-template-columns: 1fr; }
 }
 
+
+/* ---------------------------------------------------------------
+   About: "from shelf to screen" scrape flow (fun + light)
+--------------------------------------------------------------- */
+.flow-section {
+    margin: 44px auto 8px;
+    max-width: 1100px;
+    text-align: center;
+}
+.flow-kicker {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--amber-dark);
+    background: var(--blonde-ale);
+    border: 1px solid var(--pale-ale);
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+}
+.flow-section > h2 { margin: 0 0 8px; }
+.flow-intro {
+    max-width: 62ch;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    line-height: 1.55;
+}
+.flow {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: nowrap;              /* one clean row on desktop (stacks on mobile) */
+    align-items: stretch;
+    justify-content: center;
+    gap: 10px;
+}
+.flow-step {
+    flex: 1 1 0;                    /* share the row equally, shrink to fit */
+    min-width: 0;
+    max-width: 190px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--amber-ale);
+    border-radius: 16px;
+    padding: 20px 14px 16px;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    position: relative;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.flow-step:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+/* A beer-flight gradient of accent colours, palest to richest, across the steps.
+   Steps sit at odd list positions because arrows are interleaved <li>s. */
+.flow-step:nth-child(1)  { border-top-color: var(--blonde-ale); }
+.flow-step:nth-child(3)  { border-top-color: var(--pale-ale); }
+.flow-step:nth-child(5)  { border-top-color: var(--pale-ale); }
+.flow-step:nth-child(7)  { border-top-color: var(--amber-ale); }
+.flow-step:nth-child(9)  { border-top-color: var(--amber-ale); }
+.flow-step.flow-step-final {
+    border-top-color: var(--ipa);
+    background: linear-gradient(180deg, rgba(240, 140, 27, 0.10), var(--card));
+}
+.flow-num {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: var(--ipa);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow-sm);
+}
+.flow-emoji { font-size: 2rem; display: block; margin: 6px 0 10px; line-height: 1; }
+.flow-step h3 { margin: 0 0 6px; font-size: 1rem; }
+.flow-step p { margin: 0; font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
+.flow-arrow {
+    align-self: center;
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--amber);
+}
+.flow-footnote {
+    margin: 28px auto 0;
+    font-weight: 700;
+    color: var(--ink);
+}
+@media (max-width: 900px) {
+    .flow { flex-direction: column; flex-wrap: wrap; align-items: stretch; }
+    .flow-step { max-width: none; }
+    .flow-arrow { transform: rotate(90deg); padding: 2px 0; }
+}
+html[data-theme="dark"] .flow-kicker {
+    background: rgba(240, 140, 27, 0.12);
+    color: var(--amber-ale);
+    border-color: rgba(240, 140, 27, 0.3);
+}
+
 .blog-post {
     max-width: 720px;
     margin: 0 auto;
