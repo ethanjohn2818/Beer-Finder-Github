@@ -325,7 +325,12 @@ function detectPackLabel(text) {
 // always carries a drink volume (ml/cl/litre/pint) OR a beer style word, and
 // never the obvious household/nav phrases below. Anything failing this is
 // dropped before it reaches the catalogue.
-const NON_BEER = /(drynites|dry nites|incontinence|bed[\s-]?mat|bed[\s-]?wetting|huggies|nappy|nappies|baby wipes|skip to content|pepsi|coca.cola|fentimans|dandelion\s*&?\s*burdock|lemonade|schweppes)/i;
+// Drop Tesco "Marketplace" third-party listings (gift hampers, advent
+// calendars, even whiskey) whose tiles carry the "Sold by Marketplace seller"
+// line and a useless "Marketplace." title; and groceries that sneak onto a
+// beer search, milk is sold in "pints" so it trips the volume check below.
+// The milk pattern deliberately spares "milk stout" and "milkshake" beers.
+const NON_BEER = /(drynites|dry nites|incontinence|bed[\s-]?mat|bed[\s-]?wetting|huggies|nappy|nappies|baby wipes|skip to content|pepsi|coca.cola|fentimans|dandelion\s*&?\s*burdock|lemonade|schweppes|sold by marketplace seller|\bmilk\b(?!\s*(?:stout|shake))|semi[\s-]?skimmed|skimmed milk|whole milk)/i;
 
 function looksLikeBeer(text) {
     if (!text) return false;

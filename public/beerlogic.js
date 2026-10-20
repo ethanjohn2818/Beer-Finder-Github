@@ -210,6 +210,12 @@ const NAME_ALIASES = [
     // beer in two. Normalise to the one-word brand so they stack.
     [/\bbrew\s+dog\b/gi, "BrewDog"],
     [/innis\s*&\s*gun\b/gi, "Innis & Gunn"],   // shop typo: missing final "n"
+    // A bare "Innis & Gunn (ABV 4.6%)" with no style word is the 4.6% Lager
+    // (the Original is 6.6%); name it so it stacks with the other Lager cards.
+    [/innis\s*&\s*gunn\s*\(abv\s*4\.6\s*%\)/gi, "Innis & Gunn Lager"],
+    // Siren list their brewery as "Siren Craft Brew" at some shops; the extra
+    // "Craft Brew" leaks into the beer's identity and splits it. Normalise.
+    [/\bsiren craft brew\b/gi, "Siren"],
     [/\bpin ball\b/gi, "Pinball"],             // BrewDog Pinball
     [/\bdouble dry[\s-]?hopped\b/gi, "DDH"],   // process descriptor, not strength
     [/\btiger'?s? blood\b/gi, "Tigerblood"],   // Tiny Rebel Tigerblood
@@ -296,6 +302,10 @@ const STYLE_SUFFIX = new Set([
     // "India Pale Ale" == "IPA"; and BrewDog's "Post Modern Classic" tagline
     // (plus shops' "Modern Pale Ale" wording) doesn't change a beer's identity.
     "india", "post", "modern",
+    // Marketing tails shops add to the SAME beer: "cali" (Siren Every Minute
+    // Matters Cali), "citrusy"/"sessionable" (Sierra Nevada California IPA's
+    // tagline), "transcending" (Northern Monk Above The Clouds).
+    "cali", "citrusy", "sessionable", "transcending",
     // More style / format / marketing words shops add inconsistently:
     // "amber" (amber ale), "sour"/"ice"/"cream"/"lolly" (Vault City's ice-cream
     // sours), "cut" (Jubel "beer cut with peach"), "bold" (Northern Monk),
