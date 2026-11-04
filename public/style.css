@@ -499,7 +499,7 @@ main {
 --------------------------------------------------------------- */
 #results,
 #find-results,
-#okt-results {
+#xmas-results {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
@@ -830,7 +830,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
 @media (max-width: 900px) {
     #results,
     #find-results,
-    #okt-results {
+    #xmas-results {
         grid-template-columns: repeat(2, 1fr);
     }
     .list-grid {
@@ -860,7 +860,7 @@ html[data-theme="dark"] .footer-icon-dark { display: block; }
        keeps everything (hops, buy, compare). */
     #results,
     #find-results,
-    #okt-results {
+    #xmas-results {
         grid-template-columns: repeat(2, 1fr);
         gap: 14px;
     }
@@ -2207,17 +2207,25 @@ html[data-theme="dark"] .blog-card-more { color: var(--amber); }
 .blog-card-cat.cat-hop   { background: var(--pale-ale);   color: var(--amber-dark); }
 .blog-card-cat.cat-style { background: var(--stout);      color: #fff; }
 .blog-card-cat.cat-good  { background: var(--blonde-ale); color: var(--amber-dark); border: 1px solid var(--pale-ale); }
-.blog-card-cat.cat-oktoberfest { background: var(--ipa); color: #fff; }
+.blog-card-cat.cat-christmas { background: var(--xmas-red); color: #fff; }
 html[data-theme="dark"] .blog-card-cat.cat-hop   { background: rgba(240,140,27,0.16); color: var(--amber-ale); }
 html[data-theme="dark"] .blog-card-cat.cat-style { background: #3a3c49; color: #fff; }
 html[data-theme="dark"] .blog-card-cat.cat-good  { background: rgba(240,140,27,0.10); color: var(--amber-ale); border-color: rgba(240,140,27,0.3); }
-html[data-theme="dark"] .blog-card-cat.cat-oktoberfest { background: var(--ipa); color: #1f2027; }
+html[data-theme="dark"] .blog-card-cat.cat-christmas { background: var(--xmas-red); color: #fff; }
 
 
 /* ---------------------------------------------------------------
-   Oktoberfest: home-page banner + the Oktoberfest beers page
+   Christmas: home-page banner + the Christmas beers page.
+   Festive accent tokens, kept local to these seasonal components so the
+   rest of the site stays on the amber brand palette.
 --------------------------------------------------------------- */
-.okt-banner {
+:root {
+    --xmas-green: #1e6b4f;   /* pine */
+    --xmas-green-deep: #14503b;
+    --xmas-red: #b23a2e;     /* warm cranberry */
+    --xmas-gold: #e8b84b;
+}
+.xmas-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -2227,27 +2235,28 @@ html[data-theme="dark"] .blog-card-cat.cat-oktoberfest { background: var(--ipa);
     margin: 8px auto 0;
     padding: 24px 28px;
     border-radius: 18px;
-    background: linear-gradient(135deg, var(--amber-ale), var(--ipa));
-    color: var(--stout);
+    background: linear-gradient(135deg, var(--xmas-green), var(--xmas-green-deep));
+    color: #fff;
     box-shadow: var(--shadow-md);
 }
-.okt-banner-text { flex: 1 1 320px; }
-.okt-banner-kicker {
+.xmas-banner-text { flex: 1 1 320px; }
+.xmas-banner-kicker {
     display: inline-block;
     font-size: 0.72rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    background: rgba(45, 46, 58, 0.14);
+    color: var(--xmas-green-deep);
+    background: var(--xmas-gold);
     padding: 3px 10px;
     border-radius: 999px;
     margin-bottom: 8px;
 }
-.okt-banner-text h2 { margin: 0 0 6px; font-size: 1.6rem; }
-.okt-banner-text p { margin: 0; max-width: 60ch; line-height: 1.5; }
-.okt-banner-btn {
+.xmas-banner-text h2 { margin: 0 0 6px; font-size: 1.6rem; }
+.xmas-banner-text p { margin: 0; max-width: 60ch; line-height: 1.5; }
+.xmas-banner-btn {
     flex: 0 0 auto;
-    background: var(--stout);
+    background: var(--xmas-red);
     color: #fff;
     border: none;
     border-radius: 999px;
@@ -2258,17 +2267,16 @@ html[data-theme="dark"] .blog-card-cat.cat-oktoberfest { background: var(--ipa);
     box-shadow: var(--shadow-sm);
     transition: transform 0.15s ease, background 0.15s ease;
 }
-.okt-banner-btn:hover { transform: translateY(-2px); background: #1f2027; }
-html[data-theme="dark"] .okt-banner { color: #1f2027; }
+.xmas-banner-btn:hover { transform: translateY(-2px); background: #933025; }
 
-.okt-page-hero {
+.xmas-page-hero {
     text-align: center;
     max-width: 760px;
     margin: 0 auto 10px;
 }
-.okt-page-hero h1 { margin-bottom: 8px; }
+.xmas-page-hero h1 { margin-bottom: 8px; }
 
-.okt-blog-links {
+.xmas-blog-links {
     list-style: none;
     padding: 0;
     margin: 12px 0 0;
@@ -2276,12 +2284,12 @@ html[data-theme="dark"] .okt-banner { color: #1f2027; }
     grid-template-columns: repeat(2, 1fr);
     gap: 8px 24px;
 }
-.okt-blog-links li { padding: 4px 0; }
+.xmas-blog-links li { padding: 4px 0; }
 
 @media (max-width: 640px) {
-    .okt-banner { padding: 20px; }
-    .okt-banner-btn { width: 100%; }
-    .okt-blog-links { grid-template-columns: 1fr; }
+    .xmas-banner { padding: 20px; }
+    .xmas-banner-btn { width: 100%; }
+    .xmas-blog-links { grid-template-columns: 1fr; }
 }
 
 

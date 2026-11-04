@@ -91,7 +91,7 @@ const VIEW_PATHS = {
     find:    "/find",
     hops:    "/hops",
     brewery: "/brewery",
-    oktoberfest: "/oktoberfest",
+    christmas: "/christmas",
     partners: "/partners",
     gifts:   "/gifting",
     giftshop: "/gift-shop",
@@ -117,8 +117,8 @@ const VIEW_META = {
               "Explore the hops behind UK craft beer and what each one tastes like, citrus, pine, tropical and more."],
     brewery: ["Breweries & where they're based | MyBeerFinder",
               "Browse craft breweries stocked at UK supermarkets, where each is based, and the beers we found."],
-    oktoberfest: ["Oktoberfest beers you can buy in the UK | MyBeerFinder",
-              "Bavarian and festival-style beers to buy in the UK, Munich Helles, wheat beer and the six Oktoberfest breweries, with where each is cheapest."],
+    christmas: ["Christmas beers to buy in the UK | MyBeerFinder",
+              "Festive winter beers to buy in the UK, spiced ales, winter warmers and Christmas stouts, plus guides to the Christmas beers of the world, with where each is cheapest."],
     partners: ["Partner breweries | MyBeerFinder",
               "The independent breweries we partner with, coming soon to MyBeerFinder."],
     gifts:   ["Gifting: craft beer gifts & glassware | MyBeerFinder",
@@ -164,7 +164,7 @@ function showView(name) {
     if (name === "account" && typeof renderAccount === "function") renderAccount();
     if (name === "leaderboard" && typeof renderLeaderboard === "function") renderLeaderboard();
     if (name === "contact" && typeof renderUserCount === "function") renderUserCount();
-    if (name === "oktoberfest") buildOktoberfest();
+    if (name === "christmas") buildChristmas();
     // Re-render (not re-pick) on every visit, since another view's card grid
     // resets the shared cardData/cardState arrays this slideshow also uses.
     if (name === "welcome" && slideBeers.length) renderSlideshowCards();
@@ -464,59 +464,44 @@ function showGlutenFree() {
 }
 
 // ---------------------------------------------------------------
-// Oktoberfest: the six official Munich festival breweries, plus the German
-// lager and wheat styles poured at (or squarely in the spirit of) the Wiesn.
-// Deliberately conservative, we never want to mislabel a beer as Oktoberfest,
-// so this matches real Bavarian/festival signals only. The set stays small
-// and honest, and grows as the catalogue does.
+// Christmas: festive and winter beers, spiced ales, winter warmers, rich
+// Christmas stouts, Belgian Noel ales and Scandinavian julebryg. Deliberately
+// conservative, we never want to mislabel an everyday beer as festive, so this
+// matches clear Christmas/winter/spice signals plus a short list of classic
+// winter beers. The set stays honest, and fills out as festive stock lands.
 // ---------------------------------------------------------------
-// The six official Munich Oktoberfest breweries, these always qualify.
-const OKTOBERFEST_BREWERIES =
-    /paulaner|spaten|hofbr[äa]u|l[öo]wenbr[äa]u|augustiner|hacker[\s-]?pschorr/i;
-// Explicitly a festival beer by name, origin not needed (unambiguous terms).
-const OKTOBERFEST_EXPLICIT = /oktoberfest|m[äa]rzen|festbier/i;
-// Bavarian/German festival STYLES. On their own these describe a style that
-// British and other brewers also make (e.g. a London or Cornish "Helles"), so
-// we only count them when the beer is genuinely German or Austrian, see below.
-const BAVARIAN_STYLES =
-    /\bhelles\b|\bdunkel\b|\bbock\b|keller|wei[sß]{1,2}bier|hefe\s?weizen|\bweizen\b|m[üu]nchn|m[üu]nich|bavarian|\bradler\b/i;
-// Famous German/Austrian beer names, used as a fallback when a brewery has no
-// location on file in breweries.json.
-const GERMAN_BRANDS =
-    /erdinger|franziskaner|weihenstephan|ayinger|schneider|weltenburger|k[öo]nig\s?ludwig|tucher|maisel|bitburger|krombacher|warsteiner|k[öo]stritzer|stiegl|g[öo]sser|paulaner|spaten|hofbr[äa]u|l[öo]wenbr[äa]u|augustiner|hacker|pschorr/i;
+// Clear festive / winter / mulling-spice words. A beer with any of these in
+// its name or style is genuinely seasonal.
+const CHRISTMAS_WORDS =
+    /\bchristmas\b|\bxmas\b|\bfestive\b|no[eë]l|\byule\b|yuletide|\badvent\b|\bsanta\b|reindeer|mince ?pie|gingerbread|mulled|cranberr|plum pudding|christmas pudding|figgy|egg ?nog|wassail|\bspiced\b|cinnamon|nutmeg|\bclove\b|mistletoe|\bwinter\b|snowball|\bfrost(y|bite)?\b|\bsnow\b/i;
+// A short allowlist of classic winter / Christmas beers whose names don't
+// contain an obvious festive word (Old Tom, King Goblin, Samichlaus, the
+// Belgian Noels, Anchor's Our Special Ale, Sierra Nevada Celebration...).
+const WINTER_CLASSICS =
+    /old tom|king goblin|winter warmer|samichlaus|our special ale|sierra nevada celebration|st\.? ?bernardus (christmas|xmas)|gouden carolus no[eë]l|delirium no[eë]l|bush de no[eë]l|corsendonk christmas|affligem no[eë]l|n[oø]gne ø/i;
 
-// Is this beer actually from Germany or Austria? Checks the brewery's location
-// (breweryData: "Town, Country"), then falls back to known German/Austrian
-// brand names. This is what stops a British Helles being tagged Oktoberfest.
-function isGermanOrAustrian(beer) {
-    const loc = (breweryData[String(beer.brewery || "").toLowerCase()] || "").toLowerCase();
-    if (/germany|deutschland|austria|[öo]sterreich|bavaria|munich|m[ü]nchen/.test(loc)) return true;
-    return GERMAN_BRANDS.test(`${beer.brewery || ""} ${beer.name || ""}`);
-}
-
-function isOktoberfest(beer) {
+function isChristmas(beer) {
     const name = `${beer.name || ""} ${beer.style || ""}`;
-    if (OKTOBERFEST_BREWERIES.test(name) || OKTOBERFEST_BREWERIES.test(beer.brewery || "")) return true;
-    if (OKTOBERFEST_EXPLICIT.test(name)) return true;
-    return BAVARIAN_STYLES.test(name) && isGermanOrAustrian(beer);
+    return CHRISTMAS_WORDS.test(name) ||
+           WINTER_CLASSICS.test(`${name} ${beer.brewery || ""}`);
 }
 
-// Build the standalone Oktoberfest page: filter the catalogue, sort by
-// brewery then name, and render into the page's own grid. Falls back to a
-// friendly message if nothing Bavarian is in stock right now.
-function buildOktoberfest() {
-    const grid = document.getElementById("okt-results");
-    const count = document.getElementById("okt-count");
+// Build the standalone Christmas page: filter the catalogue, sort by brewery
+// then name, and render into the page's own grid. Falls back to a friendly
+// message if no festive beers are in stock yet.
+function buildChristmas() {
+    const grid = document.getElementById("xmas-results");
+    const count = document.getElementById("xmas-count");
     if (!grid) return;
 
-    const beers = allBeers.filter(isOktoberfest).sort((a, b) =>
+    const beers = allBeers.filter(isChristmas).sort((a, b) =>
         (a.brewery || "").localeCompare(b.brewery || "") ||
         (a.name || "").localeCompare(b.name || ""));
 
     if (!beers.length) {
-        grid.innerHTML = "<p class='searching'>No Bavarian beers in the listings right now. " +
-            "Check back soon, the catalogue grows every week. In the meantime, read our " +
-            "<a href='/blog/what-is-oktoberfest'>Oktoberfest guides</a> below.</p>";
+        grid.innerHTML = "<p class='searching'>No festive beers in the listings just yet. " +
+            "The Christmas stock starts landing through November and December, so check back soon. " +
+            "In the meantime, unwrap our <a href='/blog/christmas-beers-around-the-world'>Christmas beer guides</a> below.</p>";
         if (count) count.textContent = "";
         return;
     }
