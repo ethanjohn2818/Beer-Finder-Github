@@ -1,0 +1,30 @@
+# Cloudflare Pages response headers.
+#
+# Pages (HTML) must always revalidate, so a content change, like swapping the
+# seasonal banner from Oktoberfest to Christmas, shows up straight away instead
+# of being served from a stale browser cache. Without this, returning visitors
+# can keep seeing an old page for days.
+#
+# Our CSS / JS / images all carry a ?v=YYYYMMDD cache-buster in their URL, so
+# those are safe to cache hard and forever (a new ?v= simply fetches a fresh
+# copy). Data files (catalog.json, meta.json) have no ?v=, so they fall under
+# the revalidate rule below and stay fresh too.
+
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Versioned, effectively immutable assets (the ?v= query busts them on change).
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/logo/*
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
